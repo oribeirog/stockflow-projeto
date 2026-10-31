@@ -1,0 +1,25 @@
+appId: br.com.mnrsoftware.mnrperfumes
+productName: MNR Perfumes
+asar: true
+# better-sqlite3 13 ships Node-API binaries; do not force a node-gyp rebuild.
+npmRebuild: false
+asarUnpack:
+  - node_modules/better-sqlite3/**
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/electron/**
+  - dist/shared/**
+  - dist/renderer/browser/**
+  - package.json
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  signAndEditExecutable: false
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false

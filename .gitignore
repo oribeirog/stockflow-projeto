@@ -1,0 +1,14 @@
+node_modules/
+dist/
+release/
+.angular/
+.cache/
+.local-data/
+coverage/
+*.log
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+!.env.example
