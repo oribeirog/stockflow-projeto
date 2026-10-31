@@ -20,13 +20,15 @@
     "postinstall": "node scripts/native.mjs",
     "pack": "npm run build && node scripts/package.mjs --dir",
     "dist": "npm run build && node scripts/package.mjs",
-    "test": "npm run build && node --test tests/*.test.cjs && node scripts/smoke.mjs"
+    "test": "npm run build && node --test tests/*.test.cjs && node scripts/smoke.mjs",
+    "test:ui": "npm run build && node scripts/ui-smoke.mjs"
   },
   "dependencies": {
     "@angular/common": "22.2.4",
     "@angular/compiler": "22.2.4",
     "@angular/core": "22.2.4",
     "@angular/platform-browser": "22.2.4",
+    "@angular/router": "22.2.4",
     "better-sqlite3": "13.0.3",
     "rxjs": "7.8.2",
     "tslib": "2.8.1"

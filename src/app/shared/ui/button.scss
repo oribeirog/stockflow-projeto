@@ -1,0 +1,36 @@
+:host {
+  display: inline-block;
+}
+button {
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: var(--action);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background: var(--action-hover);
+  }
+  &:active {
+    background: var(--action-pressed);
+  }
+  &.secondary {
+    background: var(--surface);
+    border-color: var(--control-border);
+    color: var(--text);
+  }
+  &.secondary:hover {
+    background: var(--surface-raised);
+  }
+  &.secondary:active {
+    background: var(--selection);
+  }
+  &:disabled {
+    background: var(--surface-raised);
+    color: var(--text-secondary);
+    border-color: var(--border);
+    cursor: not-allowed;
+  }
+}

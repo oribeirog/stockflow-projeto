@@ -1,0 +1,8 @@
+<div [attr.role]="kind() === 'error' ? 'alert' : 'status'" [class]="kind()">
+  <mnr-icon [name]="icons[kind()]" />
+  <div>
+    <h3>{{ title() }}</h3>
+    <p>{{ description() }}</p>
+    <ng-content />
+  </div>
+</div>

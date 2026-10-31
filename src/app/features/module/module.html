@@ -1,0 +1,14 @@
+<section class="stack" [attr.aria-label]="page()?.['title']">
+  <div class="intro stack">
+    <mnr-badge tone="warning">Módulo em preparação</mnr-badge>
+    <h2>{{ page()?.['title'] }}</h2>
+    <p>{{ page()?.['description'] }}</p>
+  </div>
+  <mnr-card
+    ><mnr-content-state
+      kind="upcoming"
+      title="Disponível em uma próxima etapa"
+      description="A navegação já está disponível. Cadastros, consultas e operações deste módulo ainda não foram implementados."
+  /></mnr-card>
+  <p class="scope-note">Nesta etapa, nenhum dado comercial é consultado ou gravado.</p>
+</section>

@@ -1,0 +1,53 @@
+<section class="stack" aria-labelledby="diagnostic-title">
+  <div>
+    <h2 id="diagnostic-title">Diagnóstico do ambiente</h2>
+    <p>Informações reais fornecidas pelo aplicativo neste computador.</p>
+  </div>
+  <mnr-card>
+    @let result = diagnostic(); @if (result.state === 'loading') {
+    <mnr-content-state
+      kind="loading"
+      title="Verificando ambiente"
+      description="Consultando a conexão local com Electron e SQLite."
+    />
+    } @else if (result.state === 'error') {
+    <mnr-content-state
+      kind="error"
+      title="Não foi possível verificar o ambiente"
+      [description]="result.message"
+      ><mnr-button (pressed)="refresh()">Tentar novamente</mnr-button></mnr-content-state
+    >
+    } @else {
+    <div class="stack">
+      <div class="row">
+        <h3>Aplicativo desktop</h3>
+        <mnr-badge tone="success">Conectado</mnr-badge>
+      </div>
+      <p role="status">Electron e SQLite conectados.</p>
+      <dl>
+        <div>
+          <dt>Versão do aplicativo</dt>
+          <dd>{{ result.data.version }}</dd>
+        </div>
+        <div>
+          <dt>Banco de dados</dt>
+          <dd>SQLite pronto</dd>
+        </div>
+        <div>
+          <dt>Execução</dt>
+          <dd>Local · neste computador</dd>
+        </div>
+      </dl>
+    </div>
+    }
+    <div class="refresh">
+      <mnr-button variant="secondary" [disabled]="result.state === 'loading'" (pressed)="refresh()"
+        >Atualizar diagnóstico</mnr-button
+      >
+    </div>
+  </mnr-card>
+  <p>
+    O diagnóstico verifica a conexão técnica. Preferências e configurações comerciais serão
+    disponibilizadas em uma próxima etapa.
+  </p>
+</section>

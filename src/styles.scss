@@ -1,1 +1,85 @@
 @use './styles/theme';
+:root {
+  color-scheme: dark;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  background: var(--background);
+  color: var(--text);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+a {
+  color: var(--focus);
+  text-underline-offset: 3px;
+}
+button,
+a {
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1 {
+  font-size: var(--text-title);
+  line-height: 1.2;
+  font-weight: 650;
+}
+h2 {
+  font-size: var(--text-subtitle);
+  font-weight: 600;
+}
+h3 {
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+p {
+  color: var(--text-secondary);
+}
+.eyebrow {
+  font-size: var(--text-small);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.stack {
+  display: grid;
+  gap: var(--space-6);
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.muted {
+  color: var(--text-secondary);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,64 @@
+<a class="skip-link" href="#main-content" (click)="$event.preventDefault(); heading.focus()"
+  >Pular para o conteúdo</a
+>
+<div class="shell" [class.expanded]="expanded()">
+  <button
+    class="nav-backdrop"
+    tabindex="-1"
+    type="button"
+    aria-label="Recolher navegação"
+    (click)="closeNavigation()"
+  ></button>
+  <aside class="sidebar" (keydown.escape)="closeNavigation()" (focusout)="leaveNavigation($event)">
+    <button
+      #closeButton
+      class="sidebar-toggle"
+      type="button"
+      aria-label="Recolher navegação"
+      (click)="closeNavigation()"
+    >
+      <mnr-icon name="menu" />
+    </button>
+    <a class="brand" routerLink="/dashboard" aria-label="MNR Perfumes — Dashboard"
+      ><span class="brand-mark">M</span
+      ><span class="nav-label"><strong>MNR Perfumes</strong><small>MNR SOFTWARE</small></span></a
+    >
+    <span class="nav-caption nav-label">Área de trabalho</span>
+    <nav aria-label="Navegação principal" id="main-navigation">
+      @for (item of navigation; track item.path) {
+      <a
+        [routerLink]="'/' + item.path"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        [attr.aria-label]="item.title"
+        [title]="item.title"
+        ><mnr-icon [name]="item.icon" /><span class="nav-label">{{ item.title }}</span></a
+      >
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <span class="local-dot"></span><span class="nav-label">Ambiente local</span>
+    </div>
+  </aside>
+  <div class="workspace">
+    <header>
+      <button
+        #menuButton
+        class="menu-toggle"
+        type="button"
+        [attr.aria-expanded]="expanded()"
+        aria-controls="main-navigation"
+        [attr.aria-label]="expanded() ? 'Recolher navegação' : 'Expandir navegação'"
+        (click)="toggleNavigation()"
+      >
+        <mnr-icon name="menu" />
+      </button>
+      <div class="page-heading">
+        <span class="eyebrow">MNR Perfumes</span>
+        <h1 #heading id="main-content" tabindex="-1">{{ current().title }}</h1>
+      </div>
+      <span class="local-label"><span class="local-dot"></span>Aplicativo local</span>
+    </header>
+    <main #content aria-label="Conteúdo principal"><router-outlet /></main>
+  </div>
+</div>

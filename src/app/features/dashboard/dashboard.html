@@ -1,0 +1,114 @@
+<div class="stack">
+  <section class="welcome" aria-labelledby="welcome-title">
+    <div class="welcome-copy stack">
+      <div class="row">
+        <span class="eyebrow">Seu espaço de trabalho</span
+        ><mnr-badge>Etapa 2 · Estrutura visual</mnr-badge>
+      </div>
+      <h2 id="welcome-title">Tudo começa com uma boa base.</h2>
+      <p>
+        Bem-vindo ao MNR Perfumes. A identidade visual e a navegação estão prontas para receber a
+        gestão do seu negócio.
+      </p>
+      <a routerLink="/configuracoes" class="diagnostic-link"
+        >Ver diagnóstico do aplicativo <mnr-icon name="arrow"
+      /></a>
+    </div>
+    <div class="welcome-symbol" aria-hidden="true"><mnr-icon name="perfumes" /></div>
+  </section>
+  <div class="notice">
+    <mnr-icon name="info" />
+    <p>
+      <strong>Uma estrutura em construção.</strong> Os módulos comerciais ainda não estão
+      implementados. Esta tela apresenta a interface, sem dados de vendas, estoque ou clientes.
+    </p>
+  </div>
+  <section aria-labelledby="modules-title" class="stack">
+    <div>
+      <h2 id="modules-title">Explore os módulos</h2>
+      <p>Conheça os espaços reservados para as próximas etapas.</p>
+    </div>
+    <div class="module-grid">
+      @for (item of modules; track item.path) {
+      <a class="module-link" [routerLink]="'/' + item.path"
+        ><span class="module-icon"><mnr-icon [name]="item.icon" /></span
+        ><strong>{{ item.title }}</strong><span class="module-caption">Próxima etapa</span
+        ><mnr-icon class="module-arrow" name="arrow"
+      /></a>
+      }
+    </div>
+  </section>
+  <section aria-labelledby="components-title" class="stack">
+    <div>
+      <div class="row">
+        <h2 id="components-title">Demonstração dos componentes</h2>
+        <mnr-badge tone="warning">Somente exemplos</mnr-badge>
+      </div>
+      <p>Elementos reutilizáveis e seus estados. As interações abaixo não gravam dados.</p>
+    </div>
+    <div class="demo-grid">
+      <mnr-card
+        ><div class="stack">
+          <h3>Ações e identificadores</h3>
+          <div class="row">
+            <mnr-button (pressed)="demoMessage.set('Exemplo executado. Nenhum dado foi gravado.')"
+              >Testar ação</mnr-button
+            ><mnr-button
+              variant="secondary"
+              (pressed)="demoMessage.set('Demonstração reiniciada.'); example.set('')"
+              >Reiniciar exemplo</mnr-button
+            >
+          </div>
+          <div class="row">
+            <mnr-badge tone="success">Sucesso</mnr-badge><mnr-badge tone="warning">Aviso</mnr-badge
+            ><mnr-badge tone="error">Erro</mnr-badge>
+          </div>
+          <p role="status">{{ demoMessage() }}</p>
+        </div></mnr-card
+      >
+      <mnr-card
+        ><div class="stack">
+          <h3>Campos de formulário</h3>
+          <mnr-field
+            controlId="demo-name"
+            label="Nome de exemplo"
+            placeholder="Digite para experimentar"
+            hint="Campo demonstrativo, sem salvamento."
+            [value]="example()"
+            (valueChanged)="example.set($event)"
+          /><mnr-field
+            controlId="demo-disabled"
+            label="Campo indisponível"
+            value="Disponível em uma próxima etapa"
+            [disabled]="true"
+            hint="Desabilitado nesta demonstração."
+          /></div
+      ></mnr-card>
+    </div>
+    <div class="demo-grid">
+      <mnr-content-state
+        kind="loading"
+        title="Exemplo · Carregamento"
+        description="Aguarde enquanto as informações são carregadas. Estado ilustrativo; não há operação em andamento."
+      />
+      <mnr-content-state
+        kind="empty"
+        title="Exemplo · Conteúdo vazio"
+        description="Nenhum item para exibir. Este é um exemplo visual, sem consulta a cadastros."
+      />
+      <mnr-content-state
+        kind="error"
+        title="Exemplo · Falha de carregamento"
+        description="Não foi possível carregar o conteúdo de exemplo. Não representa uma falha real."
+      />
+      <mnr-card
+        ><div class="stack">
+          <h3>Exemplo · Ação indisponível</h3>
+          <p>O cadastro comercial será implementado em uma próxima etapa.</p>
+          <div><mnr-button [disabled]="true">Cadastrar perfume</mnr-button></div>
+        </div></mnr-card
+      >
+    </div>
+  </section>
+  <p class="stage-note">MNR Software · Interface local, preparada para evoluir.</p>
+</div>

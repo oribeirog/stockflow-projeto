@@ -1,3 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app';
-bootstrapApplication(App).catch(console.error);
+import { provideRouter, withHashLocation } from '@angular/router';
+import { routes } from './app/core/navigation';
+bootstrapApplication(App, { providers: [provideRouter(routes, withHashLocation())] }).catch(
+  console.error,
+);

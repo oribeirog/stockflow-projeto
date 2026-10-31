@@ -17,10 +17,11 @@
             "tsConfig": "tsconfig.app.json",
             "styles": ["src/styles.scss"],
             "outputPath": "dist/renderer",
-            "baseHref": "./"
+            "baseHref": ""
           },
           "configurations": {
             "production": {
+              "optimization": { "styles": { "inlineCritical": false } },
               "outputHashing": "all",
               "budgets": [
                 {

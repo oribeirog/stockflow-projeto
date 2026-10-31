@@ -1,0 +1,11 @@
+<label [for]="controlId()">{{ label() }}</label
+><input
+  [id]="controlId()"
+  [value]="value()"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  [attr.aria-describedby]="hint() ? controlId() + '-hint' : null"
+  (input)="valueChanged.emit($any($event.target).value)"
+/>@if (hint()) {
+<p [id]="controlId() + '-hint'">{{ hint() }}</p>
+}

@@ -162,3 +162,66 @@ tsconfig.app.json
 tsconfig.electron.json
 tsconfig.json
 ```
+
+## Etapa 2 — Design system e estrutura visual
+
+Tema escuro único, sem fontes externas. Nove destinos com hash: Dashboard, Perfumes, Estoque, Vendas, Compras, Clientes, Fornecedores, Relatórios e Configurações. Os sete módulos comerciais apresentam “Disponível em uma próxima etapa”. Não há indicadores fictícios, operações comerciais, persistência nova ou migrações.
+
+O Dashboard contém atalhos e demonstrações identificadas; seus campos e ações existem apenas em memória. Configurações consulta o diagnóstico real via DesktopService, com carregamento, falha, nova tentativa e atualização. Electron, preload, contratos IPC e bancos existentes foram preservados.
+
+### Organização e componentes
+
+- `src/app/core/navigation.ts`: metadados compartilhados, títulos e rotas sob demanda; caminhos vazios ou desconhecidos redirecionam ao Dashboard.
+- `src/app/core/shell`: sidebar de 224px, cabeçalho, rolagem própria do conteúdo, link de salto e foco no título após renderizar a navegação. Abaixo de 900px, sidebar de 72px com nomes acessíveis; a expansão sobrepõe o conteúdo, com fechamento por botão, Escape, clique externo ou saída do foco.
+- `src/app/features`: Dashboard, página compartilhada dos módulos com metadados próprios e Configurações; templates e SCSS separados.
+- `src/app/shared/ui`: componentes standalone sem IPC ou regras comerciais.
+
+| Componente          | Entradas e eventos principais                                                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `mnr-button`        | `variant`: primary/secondary; `type`; `disabled`; evento `pressed`. Botão nativo.                                                         |
+| `mnr-icon`          | `name` tipado; SVG local decorativo. O controle que o contém fornece o nome acessível.                                                    |
+| `mnr-card`          | Projeção de conteúdo; superfície e espaçamento consistentes.                                                                              |
+| `mnr-badge`         | `tone`: neutral/success/warning/error; texto projetado.                                                                                   |
+| `mnr-field`         | `controlId` único, `label`, `value`, `placeholder`, `hint`, `disabled`; evento `valueChanged`. Rótulo e ajuda associados ao input nativo. |
+| `mnr-content-state` | `kind`: loading/empty/error/upcoming; `title`, `description`; ação opcional projetada. Status anunciado; erros usam alert.                |
+
+### Tokens e contraste
+
+`src/styles/_theme.scss` compõe `_tokens.scss`, que publica propriedades CSS semânticas. Segoe UI com fallback de sistema; corpo de 14px, subtítulos de 18px e títulos de 28px. Espaços em múltiplos de 4px, raios de 6/10px e controles de 40px. Hover, pressionado, desabilitado e foco visível compõem os estados; transições de 120ms são removidas com `prefers-reduced-motion`.
+
+| Uso                                    | Tokens/cores                                                      | Contraste calculado                                                                |
+| -------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Fundo e superfícies                    | background `#090B10`, surface `#171D2A`, surface-raised `#20293A` | Bordas decorativas discretas.                                                      |
+| Texto principal sobre superfície       | text `#F7F9FC` / surface                                          | 15,98:1                                                                            |
+| Texto secundário na superfície elevada | text-secondary `#C4CBD7` / surface-raised                         | 8,94:1                                                                             |
+| Destaque institucional                 | accent `#1677FF`                                                  | Marca, seleção e detalhes.                                                         |
+| Ação com texto branco                  | action `#0961DC` / `#FFFFFF`                                      | 5,59:1; o azul institucional daria 4,10:1, por isso o botão usa a variação escura. |
+| Hover e pressionado                    | action-hover `#0754BF`, action-pressed `#06469F`                  | Mais escuros que a ação padrão.                                                    |
+| Foco e links na seleção                | focus `#8FC1FF` / selection `#17365F`                             | 6,50:1                                                                             |
+| Borda de campo sobre superfície        | control-border `#68788F` / surface                                | 3,75:1                                                                             |
+| Erro no fundo                          | error `#FFB4B4` / background                                      | 11,66:1                                                                            |
+| Sucesso na superfície elevada          | success `#8AE0B3` / surface-raised                                | 9,30:1                                                                             |
+| Aviso na superfície elevada            | warning `#F5D28C` / surface-raised                                | 10,06:1                                                                            |
+
+Contrastes calculados pela luminância relativa sRGB/WCAG: texto normal ≥ 4,5:1 e limites de controles/foco ≥ 3:1. Mensagens e seleção também têm texto/ícone, além da cor. Bordas decorativas usam `--border`; campos e botões secundários usam `--control-border`. Controles indisponíveis têm desabilitação nativa e explicação visível.
+
+### Navegação e build
+
+Única dependência acrescentada: `@angular/router` **22.2.4**, oficial e fixada no lockfile, para navegação declarativa, histórico e carregamento sob demanda. A base HTML vazia preserva `mnr://app/index.html` ao mudar o hash e funciona também na raiz do servidor de desenvolvimento. Não trocar por `./`: isso pode remover `index.html` da URL e fazer o IPC rejeitar o remetente.
+
+O build de produção desativa somente `optimization.styles.inlineCritical`: a otimização padrão injeta um script inline para ativar a folha de estilos, bloqueado pela CSP existente. O CSS é carregado diretamente, sem afrouxar a CSP. A moldura nativa e as dimensões originais da janela foram preservadas.
+
+### Verificação da etapa
+
+Validado em **Windows 10 build 19045 x64**, em 31/10/2026. Windows 11 não foi executado nesta etapa.
+
+- `npm.cmd run typecheck`, `npm.cmd run lint`, `npm.cmd run format:check`, `npm.cmd run build` e `npm.cmd test`: verificações de código, build, testes existentes de IPC/SQLite e smoke desktop.
+- `npm.cmd run test:ui`: recompila e abre Electron com a entrada real do aplicativo e o renderer de produção. Verifica nove destinos, título do documento, seleção única, foco, histórico, rota desconhecida, recarga de Configurações e diagnóstico real.
+- Falha e resposta atrasada do diagnóstico são simuladas **somente no processo de teste**, cobrindo erro, carregamento e nova tentativa. O teste exercita ações demonstrativas, rótulos nativos, desabilitação, Tab/Enter/Escape e redução de movimento.
+- Tamanhos externos 1366×768, 1000×700 e 640×480 em zoom real de 100%, 125% e 150%, incluindo sidebar expandida: sem transbordamento horizontal da página ou conteúdo. A área útil é menor que a dimensão externa devido à moldura nativa.
+- Recarga e abertura de módulo sob demanda no protocolo local com rede emulada offline. Isso não substitui o ensaio de instalação offline em máquina limpa.
+- Capturas em `.cache/ui/`: Dashboard por tamanho/zoom, sidebar expandida, diagnóstico e componentes. Capturas inspecionadas visualmente; teste confirma CSS global sob CSP de produção e ausência de Node no renderer.
+
+`test:ui` usa `.local-data/development`, sem apagar/recriar banco ou alterar schema. Feche outras instâncias antes de executá-lo. O smoke original continua usando `.local-data/test`. Capturas e artefatos ficam ignorados pelo Git. Neste ambiente, build/desktop podem exigir execução fora da sandbox por restrições de leitura e abertura de processos.
+
+Pendentes: Windows 11, instalação NSIS e ensaio offline em máquina limpa. Nenhum commit ou push foi feito.
