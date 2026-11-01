@@ -50,7 +50,7 @@ export function aplicarMovimentoNaTransacao(
     .prepare(`SELECT ${saldoFields} FROM saldos_estoque WHERE produto_id = ?`)
     .get(data.produtoId) as SaldoEstoque | undefined;
   if (!before) throw new EstoqueError('NOT_FOUND', 'Produto ou saldo não encontrado.');
-  const incoming = data.natureza === 'AJUSTE_ENTRADA';
+  const incoming = data.natureza === 'AJUSTE_ENTRADA' || data.natureza === 'COMPRA';
   const quantity = BigInt(data.quantidade);
   if (quantity <= 0n || quantity > MAX_STOCK_QUANTITY)
     throw new EstoqueError('VALIDATION', 'Quantidade inválida.');

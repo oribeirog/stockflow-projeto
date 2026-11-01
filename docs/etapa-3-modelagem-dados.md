@@ -3,10 +3,13 @@
 **Estado: aprovado conceitualmente; implementação dividida em 3A–3D.** A entrega original
 era somente documental. Na revisão seguinte, a 3A foi implementada nos serviços do processo
 principal: migrações e cadastros, com DTOs independentes de plataforma. A 3B acrescenta
-estoque e custeio; operações comerciais e financeiro permanecem planejados. Veja a
+estoque e custeio; a 3C implementa compras/vendas, parcelamento e quitação na confirmação,
+sem recebimento inicial a prazo ou serviços financeiros posteriores. Veja a
 [entrega 3A e suas verificações](etapa-3A-migracoes-cadastros.md).
 O [relatório 3B](etapa-3B-estoque-custeio.md) detalha a migração 0002, os serviços,
 a validação de custos sem funções personalizadas e a medição de inicialização.
+O [relatório 3C](etapa-3C-compras-vendas-parcelas.md) documenta a migração 0003,
+rascunhos, confirmação atômica e testes financeiros/de preservação dos dados.
 Não há UI ou novos canais IPC comerciais. O desenho abaixo descreve também partes futuras;
 a seção 10 distingue o estado de cada entrega.
 
@@ -547,7 +550,7 @@ Não inferir validação de Windows 11 ou pacote distribuído a partir de teste 
 | ------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | 3A      | Migrações, identidade/checksums, backup prévio, cadastros, auditoria e histórico de preços | Implementada e testada no processo principal; detalhes no relatório 3A                                                                    |
 | 3B      | Estoque, movimentos, média ponderada inteira e reconciliação                               | Implementada no processo principal; verificações e medições no relatório 3B                                                               |
-| 3C      | Compras/vendas, descontos, rateios, baixa, parcelamento e confirmações atômicas            | Pendente; testes de conservação exata em descontos/rateios/parcelas, rollback e prazo sem recebimento                                     |
+| 3C      | Compras/vendas, descontos, rateios, baixa, parcelamento e confirmações atômicas            | Implementada no processo principal; relatório 3C detalha conservação, migração, rollback e prazo sem recebimento                          |
 | 3D      | Recebimentos, abatimentos, reembolsos, devoluções, cancelamentos e consultas financeiras   | Pendente; reconciliação, dependências, conservação de centavos e contratos distinguindo dinheiro, dívida reduzida e devolução de dinheiro |
 
 Concluir e validar uma entrega antes de iniciar a seguinte. Serviços serão verificados
@@ -586,8 +589,9 @@ ao índice de busca; exceção auditada para estado `ESTORNADO`; inicialização
 da operação idempotente antes das FKs; saldo não negativo com abatimento sobre parte paga;
 reembolso sem reabertura da parcela; sinal da diferença de avaliação; totais zero;
 contagem sem diferença; e conservação conjunta dos componentes em devoluções arredondadas.
-Esses esclarecimentos integram o desenho aprovado conceitualmente. Cadastros e custeio
-estão implementados em 3A/3B; fórmulas financeiras continuam para 3C–3D.
+Esses esclarecimentos integram o desenho aprovado conceitualmente. Cadastros, custeio
+e confirmações comerciais estão implementados em 3A–3C; recebimentos posteriores e
+fórmulas de correção financeira continuam para 3D.
 
 ### Adaptações aprovadas na 3B
 

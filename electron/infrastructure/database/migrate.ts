@@ -4,13 +4,16 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { cadastrosV1 } from './migrations/0001-cadastros';
 import { estoqueV2 } from './migrations/0002-estoque';
+import { comercialV3, commercialTables } from './migrations/0003-comercial';
+import { reconciliarEstoque } from '../../services/estoque-reconciliation';
+import { reconciliarComercial } from '../../services/comercial-reconciliation';
 
 export interface Migration {
   readonly version: number;
   readonly name: string;
   readonly sql: string;
 }
-export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2];
+export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2, comercialV3];
 export const APPLICATION_ID = 0x4d4e5250;
 export class DatabaseCompatibilityError extends Error {}
 interface AppliedMigration {
@@ -63,6 +66,23 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
       'eventos_auditoria',
     ];
     const tableList = db.pragma('table_list') as { name: string; strict: number }[];
+    if (version >= 3 && available[2]?.name === comercialV3.name) {
+      requiredTables.push(...commercialTables);
+      const expectedTriggers = [...comercialV3.sql.matchAll(/CREATE TRIGGER (\w+)/g)].map(
+        (m) => m[1],
+      );
+      const actual = db.prepare("SELECT name FROM sqlite_schema WHERE type='trigger'").all() as {
+        name: string;
+      }[];
+      if (expectedTriggers.some((name) => !actual.some((trigger) => trigger.name === name)))
+        throw new Error('Proteção comercial ausente');
+      const expectedIndexes = [...comercialV3.sql.matchAll(/CREATE INDEX (\w+)/g)].map((m) => m[1]);
+      const indexes = db.prepare("SELECT name FROM sqlite_schema WHERE type='index'").all() as {
+        name: string;
+      }[];
+      if (expectedIndexes.some((name) => !indexes.some((index) => index.name === name)))
+        throw new Error('Índice comercial ausente');
+    }
     if (version >= 2 && available[1]?.name === estoqueV2.name) {
       requiredTables.push('saldos_estoque', 'movimentacoes_estoque');
       const triggers = db.prepare("SELECT name FROM sqlite_schema WHERE type='trigger'").all() as {
@@ -177,5 +197,9 @@ export async function migrateDatabase(
       db.pragma(`user_version = ${migration.version}`);
     }
     checkIntegrity(db);
+    if (available[2]?.name === comercialV3.name && !reconciliarEstoque(db).consistente)
+      throw new DatabaseCompatibilityError('Reconciliação de estoque falhou; banco preservado.');
+    if (available[2]?.name === comercialV3.name && !reconciliarComercial(db))
+      throw new DatabaseCompatibilityError('Reconciliação comercial falhou; banco preservado.');
   }).immediate();
 }

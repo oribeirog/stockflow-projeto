@@ -1,6 +1,6 @@
 # MNR Perfumes
 
-## Etapa 3 — Entregas 3A e 3B
+## Etapa 3 — Entregas 3A, 3B e 3C
 
 O [modelo de dados e regras de negócio](docs/etapa-3-modelagem-dados.md) reúne o
 dicionário de dados, custeio, operações financeiras, correções, migrações futuras e
@@ -8,7 +8,10 @@ critérios de aceitação. O desenho foi aprovado conceitualmente e dividido em 
 A [entrega 3A](docs/etapa-3A-migracoes-cadastros.md) implementa migrações e cadastros
 no processo principal, sem UI ou canais IPC novos. A [entrega 3B](docs/etapa-3B-estoque-custeio.md)
 acrescenta estoque, custo médio inteiro, contagem física e reconciliação com falha segura.
-Compras, vendas, financeiro e devoluções continuam pendentes nas entregas 3C–3D.
+A [entrega 3C](docs/etapa-3C-compras-vendas-parcelas.md) acrescenta rascunhos,
+compras/vendas, pagamentos na confirmação, parcelas e integração atômica ao estoque,
+sem UI ou novos canais IPC. Recebimentos posteriores e entrada parcial a prazo,
+correções, devoluções e reembolsos permanecem para 3D.
 As seções da fundação e da Etapa 2 abaixo registram o estado histórico dessas entregas;
 as afirmações antigas de ausência de tabelas/migrações foram superadas pelas entregas atuais.
 

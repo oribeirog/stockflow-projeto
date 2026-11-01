@@ -1,5 +1,5 @@
 // Internal service DTOs only; no preload or IPC exposure.
-export type NaturezaEstoque = 'AJUSTE_ENTRADA' | 'AJUSTE_SAIDA' | 'PERDA';
+export type NaturezaEstoque = 'AJUSTE_ENTRADA' | 'AJUSTE_SAIDA' | 'PERDA' | 'COMPRA' | 'VENDA';
 export type CodigoErroEstoque =
   | 'VALIDATION'
   | 'NOT_FOUND'

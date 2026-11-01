@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { inspectDatabase, migrateDatabase } from './migrate';
 import { reconciliarEstoque } from '../../services/estoque-reconciliation';
 import { EstoqueError } from '../../services/estoque-validation';
+import { reconciliarComercial } from '../../services/comercial-reconciliation';
 
 export async function openDatabase(
   directory: string,
@@ -31,6 +32,10 @@ export async function openDatabase(
     onTiming?.('reconciliation', performance.now() - started);
     if (!reconciliation.consistente)
       throw new EstoqueError('INTEGRITY', 'Reconciliação de estoque falhou; banco preservado.');
+    started = performance.now();
+    if (!reconciliarComercial(db))
+      throw new EstoqueError('INTEGRITY', 'Reconciliação comercial falhou; banco preservado.');
+    onTiming?.('commercialReconciliation', performance.now() - started);
     return db;
   } catch (error) {
     db.close();

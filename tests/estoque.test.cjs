@@ -327,7 +327,11 @@ test('actual 3A product migration initializes zero without inventing movements o
     'metadados_banco',
   ];
   const snapshot = oldTables.map((table) => old.prepare(`SELECT * FROM ${table}`).all());
-  await migrateDatabase(old, { directory, existed: true, appVersion: '3B' });
+  await migrateDatabase(
+    old,
+    { directory, existed: true, appVersion: '3B' },
+    migrations.slice(0, 2),
+  );
   assert.deepEqual(
     oldTables.map((table) => old.prepare(`SELECT * FROM ${table}`).all()),
     snapshot,
@@ -459,7 +463,11 @@ test('failure during actual stock migration rolls back tables and preserves vers
     );
     assert.equal(old.prepare('SELECT nome FROM marcas WHERE id=55').get().nome, 'Preservar');
     assert.deepEqual(old.prepare('SELECT * FROM metadados_banco').get(), snapshot);
-    await migrateDatabase(old, { directory, existed: true, appVersion: '3B' });
+    await migrateDatabase(
+      old,
+      { directory, existed: true, appVersion: '3B' },
+      migrations.slice(0, 2),
+    );
     assert.equal(old.pragma('user_version', { simple: true }), 2);
   } finally {
     old.close();
