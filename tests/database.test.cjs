@@ -3,25 +3,28 @@ const assert = require('node:assert/strict');
 const { mkdirSync, mkdtempSync } = require('node:fs');
 const { resolve, join } = require('node:path');
 const { openDatabase } = require('../dist/electron/infrastructure/database/index.js');
-test('SQLite creates and reopens a local database with safety pragmas and no business tables', () => {
+test('SQLite creates and reopens the versioned 3A schema with safety pragmas', async () => {
   const root = resolve('.local-data');
   mkdirSync(root, { recursive: true });
   const directory = mkdtempSync(join(root, 'database-test-'));
-  let db = openDatabase(directory);
+  let db = await openDatabase(directory, 'test');
+  let identity;
   try {
     assert.equal(db.pragma('foreign_keys', { simple: true }), 1);
     assert.equal(db.pragma('journal_mode', { simple: true }), 'wal');
     assert.equal(db.pragma('synchronous', { simple: true }), 2);
-    assert.equal(
-      db.prepare("SELECT COUNT(*) AS count FROM sqlite_master WHERE type = 'table'").get().count,
-      0,
-    );
+    assert.equal(db.pragma('user_version', { simple: true }), 1);
+    assert.equal(db.pragma('busy_timeout', { simple: true }), 5000);
+    identity = db.prepare('SELECT * FROM metadados_banco').get();
+    assert.equal(db.prepare('SELECT COUNT(*) n FROM schema_migrations').get().n, 1);
   } finally {
     db.close();
   }
-  db = openDatabase(directory);
+  db = await openDatabase(directory, 'test');
   try {
     assert.equal(db.prepare('SELECT 1 AS ready').get().ready, 1);
+    assert.deepEqual(db.prepare('SELECT * FROM metadados_banco').get(), identity);
+    assert.equal(db.prepare('SELECT COUNT(*) n FROM schema_migrations').get().n, 1);
   } finally {
     db.close();
   }

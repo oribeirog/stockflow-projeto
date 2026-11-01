@@ -1,5 +1,6 @@
 // Runs the real desktop entry point without changing its production behavior.
-// Uses the normal development database; never deletes data or changes its schema.
+// Uses the normal development database without deleting it. Normal startup may apply
+// versioned migrations, with a consistent backup before updating an existing file.
 const { app, ipcMain } = require('electron');
 const { strict: assert } = require('node:assert');
 const { mkdirSync, writeFileSync } = require('node:fs');

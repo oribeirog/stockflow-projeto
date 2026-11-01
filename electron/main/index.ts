@@ -8,14 +8,14 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'mnr', privileges: { standard: true, secure: true, supportFetchAPI: true } },
 ]);
 const paths = preparePaths();
-let db: ReturnType<typeof openDatabase> | undefined;
+let db: Awaited<ReturnType<typeof openDatabase>> | undefined;
 const smoke = process.env['MNR_SMOKE'] === '1';
 if (!app.requestSingleInstanceLock()) app.quit();
 else
   void app
     .whenReady()
     .then(async () => {
-      db = openDatabase(paths.data);
+      db = await openDatabase(paths.data, app.getVersion());
       const dev = !app.isPackaged && process.env['MNR_DEV'] === '1';
       const url = dev ? 'http://127.0.0.1:4200/' : 'mnr://app/index.html';
       const root = resolve(__dirname, '../../renderer/browser');

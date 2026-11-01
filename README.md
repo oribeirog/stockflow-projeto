@@ -1,5 +1,16 @@
 # MNR Perfumes
 
+## Etapa 3 — Modelagem aprovada; entrega 3A
+
+O [modelo de dados e regras de negócio](docs/etapa-3-modelagem-dados.md) reúne o
+dicionário de dados, custeio, operações financeiras, correções, migrações futuras e
+critérios de aceitação. O desenho foi aprovado conceitualmente e dividido em 3A–3D.
+A [entrega 3A](docs/etapa-3A-migracoes-cadastros.md) implementa migrações e cadastros
+no processo principal, sem UI ou canais IPC novos. Estoque, custos, compras, vendas,
+financeiro e devoluções continuam pendentes nas entregas 3B–3D.
+As seções da fundação e da Etapa 2 abaixo registram o estado histórico dessas entregas;
+as afirmações antigas de ausência de tabelas/migrações foram superadas pela 3A.
+
 Funda??o desktop local da MNR Software para Windows 10 (22H2) e Windows 11 x64. Sem m?dulos comerciais, servidor externo ou servi?os de internet em produ??o.
 
 ## Requisitos
