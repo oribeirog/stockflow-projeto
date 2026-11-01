@@ -2,9 +2,11 @@
 
 **Estado: aprovado conceitualmente; implementação dividida em 3A–3D.** A entrega original
 era somente documental. Na revisão seguinte, a 3A foi implementada nos serviços do processo
-principal: migrações e cadastros, com DTOs independentes de plataforma. Estoque, operações
-comerciais e financeiro permanecem planejados. Veja a
+principal: migrações e cadastros, com DTOs independentes de plataforma. A 3B acrescenta
+estoque e custeio; operações comerciais e financeiro permanecem planejados. Veja a
 [entrega 3A e suas verificações](etapa-3A-migracoes-cadastros.md).
+O [relatório 3B](etapa-3B-estoque-custeio.md) detalha a migração 0002, os serviços,
+a validação de custos sem funções personalizadas e a medição de inicialização.
 Não há UI ou novos canais IPC comerciais. O desenho abaixo descreve também partes futuras;
 a seção 10 distingue o estado de cada entrega.
 
@@ -544,7 +546,7 @@ Não inferir validação de Windows 11 ou pacote distribuído a partir de teste 
 | Entrega | Escopo                                                                                     | Estado e critério                                                                                                                         |
 | ------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | 3A      | Migrações, identidade/checksums, backup prévio, cadastros, auditoria e histórico de preços | Implementada e testada no processo principal; detalhes no relatório 3A                                                                    |
-| 3B      | Estoque, movimentos, média ponderada inteira e reconciliação                               | Pendente; provar saldo não negativo, conservação de centavos e reconstrução histórica                                                     |
+| 3B      | Estoque, movimentos, média ponderada inteira e reconciliação                               | Implementada no processo principal; verificações e medições no relatório 3B                                                               |
 | 3C      | Compras/vendas, descontos, rateios, baixa, parcelamento e confirmações atômicas            | Pendente; testes de conservação exata em descontos/rateios/parcelas, rollback e prazo sem recebimento                                     |
 | 3D      | Recebimentos, abatimentos, reembolsos, devoluções, cancelamentos e consultas financeiras   | Pendente; reconciliação, dependências, conservação de centavos e contratos distinguindo dinheiro, dívida reduzida e devolução de dinheiro |
 
@@ -556,7 +558,7 @@ Essa simplicidade não dispensa FKs, histórico, auditoria e testes de falha.
 
 ### Conservação dos centavos e contratos de consulta
 
-Os critérios abaixo são requisitos futuros, não testes já aprovados na 3A:
+Os critérios abaixo não eram testes aprovados na 3A; os de estoque são cobertos pela 3B:
 
 - 3B: custo de saídas parciais mais estoque residual coincide com valor anterior;
   saída total zera quantidade e valor; usar também séries geradas deterministicamente.
@@ -584,5 +586,18 @@ ao índice de busca; exceção auditada para estado `ESTORNADO`; inicialização
 da operação idempotente antes das FKs; saldo não negativo com abatimento sobre parte paga;
 reembolso sem reabertura da parcela; sinal da diferença de avaliação; totais zero;
 contagem sem diferença; e conservação conjunta dos componentes em devoluções arredondadas.
-Esses esclarecimentos integram o desenho aprovado conceitualmente. Apenas os relativos
-à 3A estão implementados; fórmulas financeiras e custeio continuam para 3B–3D.
+Esses esclarecimentos integram o desenho aprovado conceitualmente. Cadastros e custeio
+estão implementados em 3A/3B; fórmulas financeiras continuam para 3C–3D.
+
+### Adaptações aprovadas na 3B
+
+- `movimentacoes_estoque` não possui FK para itens comerciais inexistentes. Na 3C será
+  criada tabela de vínculo com `movimentacao_id` PK/FK e `item_documento_id` FK indexada,
+  inserida na transação comercial. Um item poderá gerar vários movimentos, sem editar
+  movimentos existentes nem associar automaticamente ajustes manuais a documentos.
+- A 3B aceita somente `AJUSTE_ENTRADA`, `AJUSTE_SAIDA` e `PERDA`; os demais tipos e
+  estornos dependem das próximas entregas. Contagem sem diferença audita sem movimento.
+- Cálculo do serviço em BigInt; trigger valida half-up por decomposição inteira sem
+  overflow. Não usa função personalizada, sendo compatível com `trusted_schema=OFF`.
+- Reconciliação completa na abertura, sem reparo automático, timeout de negócio ou
+  corte de histórico. Desempenho progressivo e limitações constam no relatório 3B.

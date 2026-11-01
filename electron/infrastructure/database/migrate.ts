@@ -3,13 +3,14 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { cadastrosV1 } from './migrations/0001-cadastros';
+import { estoqueV2 } from './migrations/0002-estoque';
 
 export interface Migration {
   readonly version: number;
   readonly name: string;
   readonly sql: string;
 }
-export const migrations: readonly Migration[] = [cadastrosV1];
+export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2];
 export const APPLICATION_ID = 0x4d4e5250;
 export class DatabaseCompatibilityError extends Error {}
 interface AppliedMigration {
@@ -62,6 +63,25 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
       'eventos_auditoria',
     ];
     const tableList = db.pragma('table_list') as { name: string; strict: number }[];
+    if (version >= 2 && available[1]?.name === estoqueV2.name) {
+      requiredTables.push('saldos_estoque', 'movimentacoes_estoque');
+      const triggers = db.prepare("SELECT name FROM sqlite_schema WHERE type='trigger'").all() as {
+        name: string;
+      }[];
+      for (const name of [
+        'estoque_saldo_inicial',
+        'estoque_produto_criado',
+        'estoque_saldo_sem_exclusao',
+        'estoque_saldo_protegido',
+        'estoque_movimento_imutavel',
+        'estoque_movimento_sem_exclusao',
+        'estoque_movimento_validar',
+        'estoque_movimento_aplicar',
+      ]) {
+        if (!triggers.some((trigger) => trigger.name === name))
+          throw new Error('Proteção de estoque ausente');
+      }
+    }
     if (
       requiredTables.some(
         (name) => !tableList.some((table) => table.name === name && table.strict === 1),

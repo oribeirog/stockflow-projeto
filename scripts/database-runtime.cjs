@@ -11,6 +11,7 @@ const {
   checkIntegrity,
 } = require('../dist/electron/infrastructure/database/migrate.js');
 const { createCatalogService } = require('../dist/electron/services/catalogos.js');
+const { createStockService } = require('../dist/electron/services/estoque.js');
 
 const root = resolve('.local-data/test');
 mkdirSync(root, { recursive: true });
@@ -24,7 +25,7 @@ app
     const foundation = new Database(join(directory, 'mnr-perfumes.db'));
     foundation.pragma('journal_mode=WAL');
     foundation.close();
-    const db = await openDatabase(directory, app.getVersion());
+    let db = await openDatabase(directory, app.getVersion());
     try {
       assert.ok(process.versions.electron);
       assert.equal(
@@ -32,7 +33,8 @@ app
         1,
       );
       assert.equal(db.pragma('foreign_keys', { simple: true }), 1);
-      assert.equal(db.pragma('user_version', { simple: true }), 1);
+      assert.equal(db.pragma('user_version', { simple: true }), 2);
+      assert.equal(db.pragma('trusted_schema', { simple: true }), 0);
       const service = createCatalogService(db, app.getVersion());
       const cmd = (operacaoId, dados) => ({ operacaoId, motivo: 'Validação Electron', dados });
       const brand = service.saveReference('MARCA', cmd('brand', { nome: 'Marca runtime' }));
@@ -69,16 +71,49 @@ app
       await assert.rejects(
         migrateDatabase(db, { directory, existed: true, appVersion: app.getVersion() }, [
           ...migrations,
-          { version: 2, name: 'runtime-2', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
-          { version: 3, name: 'runtime-3', sql: 'INSERT INTO missing_table VALUES (1)' },
+          { version: 3, name: 'runtime-3', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
+          { version: 4, name: 'runtime-4', sql: 'INSERT INTO missing_table VALUES (1)' },
         ]),
         /missing_table/,
       );
-      assert.equal(db.pragma('user_version', { simple: true }), 1);
+      assert.equal(db.pragma('user_version', { simple: true }), 2);
       assert.equal(
         db.prepare("SELECT count(*) n FROM sqlite_schema WHERE name='rollback_test'").get().n,
         0,
       );
+      const stock = createStockService(db, app.getVersion());
+      const movement = (id, dados) => ({ ...cmd(id, dados), dataEfetiva: '2026-10-31' });
+      const entry = movement('stock-entry', {
+        produtoId: product.id,
+        quantidade: 3,
+        custoTotalCentavos: 100,
+      });
+      stock.registrarEntrada(entry);
+      stock.registrarSaida(movement('stock-out-1', { produtoId: product.id, quantidade: 1 }));
+      stock.registrarPerda(movement('stock-loss', { produtoId: product.id, quantidade: 1 }));
+      stock.registrarSaida(movement('stock-out-2', { produtoId: product.id, quantidade: 1 }));
+      assert.deepEqual(
+        stock.listarMovimentacoes(product.id).map((m) => m.valorDeltaCentavos),
+        [100, -33, -34, -33],
+      );
+      assert.equal(stock.reconciliarEstoque().consistente, true);
+      db.exec(
+        "CREATE TRIGGER stock_failure AFTER INSERT ON eventos_auditoria BEGIN SELECT RAISE(ABORT,'runtime failure'); END",
+      );
+      assert.throws(() =>
+        stock.registrarEntrada(
+          movement('stock-fail', { produtoId: product.id, quantidade: 1, custoTotalCentavos: 1 }),
+        ),
+      );
+      db.exec('DROP TRIGGER stock_failure');
+      assert.equal(stock.consultarSaldo(product.id).quantidade, 0);
+      assert.equal(db.prepare("SELECT COUNT(*) n FROM operacoes WHERE id='stock-fail'").get().n, 0);
+      db.close();
+      db = await openDatabase(directory, app.getVersion());
+      const persisted = createStockService(db, app.getVersion());
+      assert.equal(persisted.consultarSaldo(product.id).versao, 4);
+      assert.equal(persisted.registrarEntrada(entry).saldo.versao, 1);
+      assert.equal(persisted.consultarSaldo(product.id).versao, 4);
       console.log(
         'DATABASE_RUNTIME_OK',
         JSON.stringify({

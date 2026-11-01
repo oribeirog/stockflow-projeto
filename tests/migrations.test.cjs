@@ -27,7 +27,7 @@ const options = (dir) => ({ directory: dir, existed: true, appVersion: 'test' })
 const fixture = (version, sql) => ({ version, name: `fixture-${version}`, sql });
 const backups = (dir) => readdirSync(join(dir, 'backups')).filter((file) => file.endsWith('.db'));
 
-test('3A schema contains only technical/catalog tables and all are STRICT', async () => {
+test('3B schema contains only technical/catalog/stock tables and all are STRICT', async () => {
   const db = await openDatabase(directory(), 'test');
   try {
     const expected = [
@@ -39,8 +39,10 @@ test('3A schema contains only technical/catalog tables and all are STRICT', asyn
       'historico_precos',
       'marcas',
       'metadados_banco',
+      'movimentacoes_estoque',
       'operacoes',
       'produtos',
+      'saldos_estoque',
       'schema_migrations',
     ];
     assert.deepEqual(tables(db), expected);
@@ -70,7 +72,7 @@ test('existing empty foundation database is backed up before first migration', a
     }
     const manifest = JSON.parse(readFileSync(`${path}.json`, 'utf8'));
     assert.equal(manifest.schemaVersion, 0);
-    assert.equal(manifest.targetSchemaVersion, 1);
+    assert.equal(manifest.targetSchemaVersion, 2);
     assert.equal(manifest.databaseId, null);
   } finally {
     db.close();
@@ -119,14 +121,15 @@ test('tampered checksum, incomplete history and invalid identity block opening a
 });
 test('upgrade from version 1 preserves data/IDs and creates consistent WAL backup with manifest', async () => {
   const dir = directory();
-  const db = await openDatabase(dir, 'test');
+  const db = new Database(join(dir, 'mnr-perfumes.db'));
+  db.pragma('foreign_keys=ON');
+  db.pragma('trusted_schema=OFF');
+  db.pragma('journal_mode=WAL');
+  await migrateDatabase(db, { ...options(dir), existed: false }, migrations.slice(0, 1));
   try {
     db.exec("INSERT INTO marcas VALUES (8,'Preservar','PRESERVAR',1,'now','now')");
     const identity = inspectDatabase(db).identity;
-    const future = [
-      ...migrations,
-      fixture(2, 'CREATE TABLE fixture_two(id INTEGER PRIMARY KEY) STRICT;'),
-    ];
+    const future = migrations;
     await migrateDatabase(db, options(dir), future);
     assert.equal(db.pragma('user_version', { simple: true }), 2);
     assert.equal(inspectDatabase(db, future).identity.identificador, identity.identificador);
@@ -159,14 +162,14 @@ test('failure in pending set rolls back all migrations and markers', async () =>
     await assert.rejects(
       migrateDatabase(db, options(dir), [
         ...migrations,
-        fixture(2, 'CREATE TABLE rollback_marker(id INTEGER) STRICT;'),
-        fixture(3, 'INSERT INTO nonexistent VALUES (1);'),
+        fixture(3, 'CREATE TABLE rollback_marker(id INTEGER) STRICT;'),
+        fixture(4, 'INSERT INTO nonexistent VALUES (1);'),
       ]),
       /nonexistent/,
     );
-    assert.equal(db.pragma('user_version', { simple: true }), 1);
+    assert.equal(db.pragma('user_version', { simple: true }), 2);
     assert.equal(tables(db).includes('rollback_marker'), false);
-    assert.equal(db.prepare('SELECT count(*) n FROM schema_migrations').get().n, 1);
+    assert.equal(db.prepare('SELECT count(*) n FROM schema_migrations').get().n, 2);
     assert.deepEqual(inspectDatabase(db).identity, identity);
     assert.equal(backups(dir).length, 1);
   } finally {
@@ -181,7 +184,7 @@ test('failure during initial set restores pristine schema and application/user v
     await assert.rejects(
       migrateDatabase(db, { ...options(dir), existed: false }, [
         ...migrations,
-        fixture(2, 'INSERT INTO nonexistent VALUES (1)'),
+        fixture(3, 'INSERT INTO nonexistent VALUES (1)'),
       ]),
       /nonexistent/,
     );
@@ -212,10 +215,10 @@ test('backup and manifest failures prevent migration', async () => {
       await assert.rejects(
         migrateDatabase(db, options(dir), [
           ...migrations,
-          fixture(2, 'CREATE TABLE must_not_exist(id INTEGER) STRICT;'),
+          fixture(3, 'CREATE TABLE must_not_exist(id INTEGER) STRICT;'),
         ]),
       );
-      assert.equal(db.pragma('user_version', { simple: true }), 1);
+      assert.equal(db.pragma('user_version', { simple: true }), 2);
       assert.equal(tables(db).includes('must_not_exist'), false);
       checkIntegrity(db);
     } finally {
