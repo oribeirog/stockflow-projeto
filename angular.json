@@ -20,6 +20,12 @@
             "baseHref": ""
           },
           "configurations": {
+            "integration": {
+              "browser": "tests/angular/main.ts",
+              "tsConfig": "tsconfig.integration.json",
+              "outputPath": ".cache/cadastros-renderer",
+              "optimization": { "styles": { "inlineCritical": false } }
+            },
             "production": {
               "optimization": { "styles": { "inlineCritical": false } },
               "outputHashing": "all",

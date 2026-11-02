@@ -69,6 +69,7 @@ else
       const result = await window.mnrApi.system.getStatus();
       if (!result.ok || result.data.database !== 'ready') throw new Error('IPC/SQLite failed');
       if (typeof window.require !== 'undefined' || typeof window.process !== 'undefined') throw new Error('Node exposed');
+      if (!isSecureContext || typeof crypto.randomUUID !== 'function' || !/^[0-9a-f-]{36}$/.test(crypto.randomUUID())) throw new Error('Secure UUID unavailable');
       if (!document.querySelector('app-root h1')) throw new Error('Angular failed');
       return result;
     })()`);

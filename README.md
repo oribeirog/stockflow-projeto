@@ -1,5 +1,37 @@
 # MNR Perfumes
 
+## Etapa 4A — Integração segura dos cadastros
+
+Implementada a comunicação Angular → preload → IPC → serviços cadastrais existentes
+para produtos, marcas, categorias, clientes e fornecedores. A API
+`window.mnrApi.cadastros` oferece `listar`, `obter` e `salvar` para cada cadastro,
+com 15 canais fixos, validação de remetente/frame/URL/argumentos e erros públicos
+sanitizados. Não há IPC genérico, SQL, fotos, novos canais financeiros/de estoque
+ou telas completas de cadastro. Migrações 0001–0004, serviços comerciais e Design
+System foram preservados.
+
+Os cinco serviços Angular ficam em `src/app/core/cadastros`. Cada intenção criada
+por `novaGravacao(dados, motivo)` conserva uma cópia do comando e sua chave UUID;
+`executar()` repetido reutiliza ambos. `novaConsulta()` mantém estados independentes,
+ignora respostas antigas e usa paginação/busca/filtro de ativo sem carregar o catálogo
+inteiro. As páginas atuais continuam reservadas, sem consultas cadastrais automáticas.
+
+Validação em Windows 10 build 19045 em 02/11/2026: typecheck, lint, format:check,
+build, **84 testes aprovados**, integração Angular real em HTTP local e `mnr://app`,
+teste de interface existente e smoke do executável empacotado. UUID verificado
+também no desenvolvimento real e no pacote. Inspeção do ASAR confirmou a exclusão
+dos recursos exclusivos de teste. Nenhuma dependência nova, commit ou push.
+
+`npm.cmd test` inclui a nova integração; `npm.cmd run test:cadastros` a executa
+separadamente, após build do Electron. O renderer exclusivo de teste é compilado
+em `.cache/cadastros-renderer` e usa bancos novos sob `.local-data/test`.
+Após `npm.cmd run pack`, `node scripts/verify-package.mjs` inspeciona o isolamento
+do pacote. Detalhes, contratos, arquivos e limitações no
+[relatório da Etapa 4A](docs/etapa-4A-integracao-cadastros.md).
+
+As seções anteriores abaixo registram o histórico das entregas; a API desktop já
+não se limita ao diagnóstico descrito na fundação.
+
 ## Etapa 3 — Entregas 3A, 3B, 3C e 3D
 
 O [modelo de dados e regras de negócio](docs/etapa-3-modelagem-dados.md) reúne o
