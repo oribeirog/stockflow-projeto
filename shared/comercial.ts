@@ -1,6 +1,6 @@
 // Internal service contracts only. No preload/IPC exposure.
-export type TipoDocumento = 'COMPRA' | 'VENDA';
-export type EstadoDocumento = 'RASCUNHO' | 'CONFIRMADO' | 'DESCARTADO';
+export type TipoDocumento = 'COMPRA' | 'VENDA' | 'DEV_COMPRA' | 'DEV_VENDA' | 'ESTORNO';
+export type EstadoDocumento = 'RASCUNHO' | 'CONFIRMADO' | 'DESCARTADO' | 'ESTORNADO';
 export type ModalidadeVenda = 'A_VISTA' | 'A_PRAZO';
 export type Desconto = { tipo: 'CENTAVOS' | 'PONTOS_BASE'; valor: number };
 export interface ItemRascunho {
@@ -13,7 +13,7 @@ export interface ItemRascunho {
 export interface DadosRascunho {
   id?: number;
   versaoEsperada?: number;
-  tipo: TipoDocumento;
+  tipo: 'COMPRA' | 'VENDA';
   clienteId?: number | null;
   fornecedorId?: number | null;
   modalidadeVenda?: ModalidadeVenda | null;

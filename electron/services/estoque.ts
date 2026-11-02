@@ -50,15 +50,18 @@ export function aplicarMovimentoNaTransacao(
     .prepare(`SELECT ${saldoFields} FROM saldos_estoque WHERE produto_id = ?`)
     .get(data.produtoId) as SaldoEstoque | undefined;
   if (!before) throw new EstoqueError('NOT_FOUND', 'Produto ou saldo não encontrado.');
-  const incoming = data.natureza === 'AJUSTE_ENTRADA' || data.natureza === 'COMPRA';
+  const incoming = ['AJUSTE_ENTRADA', 'COMPRA', 'DEV_VENDA', 'REVERSAO_ENTRADA'].includes(
+    data.natureza,
+  );
   const quantity = BigInt(data.quantidade);
   if (quantity <= 0n || quantity > MAX_STOCK_QUANTITY)
     throw new EstoqueError('VALIDATION', 'Quantidade inválida.');
   if (!incoming && quantity > BigInt(before.quantidade))
     throw new EstoqueError('INSUFFICIENT_STOCK', 'Estoque insuficiente.');
-  const cost = incoming
-    ? BigInt(data.custoTotalCentavos ?? -1)
-    : custoSaida(BigInt(before.valorTotalCentavos), BigInt(before.quantidade), quantity);
+  const cost =
+    incoming || ['REVERSAO_SAIDA', 'PERDA_DEVOLUCAO'].includes(data.natureza)
+      ? BigInt(data.custoTotalCentavos ?? -1)
+      : custoSaida(BigInt(before.valorTotalCentavos), BigInt(before.quantidade), quantity);
   if (cost < 0n || cost > MAX_STOCK_MONEY) throw new EstoqueError('VALIDATION', 'Custo inválido.');
   const deltaQ = incoming ? quantity : -quantity;
   const deltaV = incoming ? cost : -cost;

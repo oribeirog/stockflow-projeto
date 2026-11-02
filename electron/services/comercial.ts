@@ -25,6 +25,8 @@ import {
 import { effectiveDate, EstoqueError } from './estoque-validation';
 import { createCatalogService } from './catalogos';
 import { aplicarMovimentoNaTransacao } from './estoque';
+import { resumoFinanceiro } from './financeiro';
+import { reconciliarFinanceiro } from './financeiro-reconciliation';
 
 export class ComercialError extends Error {
   constructor(
@@ -187,9 +189,13 @@ export function createCommercialService(
       parcelas,
       recebimentosEfetivosCentavos,
       saldoReceberCentavos:
-        row.tipo === 'VENDA' && row.estado === 'CONFIRMADO'
-          ? dinheiro(BigInt(row.totalCentavos) - BigInt(recebimentosEfetivosCentavos))
-          : 0,
+        (db.pragma('user_version', { simple: true }) as number) >= 4 &&
+        row.tipo === 'VENDA' &&
+        row.estado === 'CONFIRMADO'
+          ? resumoFinanceiro(db, id).saldoReceberCentavos
+          : row.tipo === 'VENDA' && row.estado === 'CONFIRMADO'
+            ? dinheiro(BigInt(row.totalCentavos) - BigInt(recebimentosEfetivosCentavos))
+            : 0,
     };
   }
   function handle<T>(action: () => T): T {
@@ -273,6 +279,14 @@ export function createCommercialService(
             JSON.stringify(result),
             op,
           );
+          if (
+            (db.pragma('user_version', { simple: true }) as number) >= 4 &&
+            !reconciliarFinanceiro(db)
+          )
+            throw new ComercialError(
+              'INTEGRITY',
+              'Reconciliação financeira falhou; operação desfeita.',
+            );
           return result;
         })
         .immediate();
@@ -368,7 +382,13 @@ export function createCommercialService(
     );
     return read(id);
   }
-  function confirm(data: DadosConfirmacao, op: string, reason: string, now: string) {
+  function confirm(
+    data: DadosConfirmacao,
+    op: string,
+    reason: string,
+    now: string,
+    entrada = false,
+  ) {
     const d = draft(data.id, data.versaoEsperada);
     effectiveDate(d.dataComercial, clock());
     if (!d.itens.length) fail('Confirmação exige itens.');
@@ -390,7 +410,10 @@ export function createCommercialService(
     const payments = data.pagamentos ?? [],
       planned = data.parcelas ?? [];
     const paidNow = d.tipo === 'COMPRA' || d.modalidadeVenda === 'A_VISTA';
-    if (somar(payments.map((p) => p.valorCentavos)) !== (paidNow ? d.totalCentavos : 0))
+    const initial = somar(payments.map((p) => p.valorCentavos));
+    if (entrada && (paidNow || initial <= 0 || initial >= d.totalCentavos))
+      fail('Entrada exige venda a prazo e saldo futuro positivo.');
+    if (!entrada && initial !== (paidNow ? d.totalCentavos : 0))
       fail('Pagamentos não correspondem ao total.');
     const forms = payments.map((p) => {
       const f = catalog.getReference('FORMA_PAGAMENTO', p.formaPagamentoId);
@@ -400,11 +423,14 @@ export function createCommercialService(
     let parcels: ParcelaPlanejada[] = [];
     if (d.tipo === 'VENDA' && d.modalidadeVenda === 'A_PRAZO') {
       if (
-        somar(planned.map((p) => p.valorCentavos)) !== d.totalCentavos ||
+        somar(planned.map((p) => p.valorCentavos)) !== d.totalCentavos - (entrada ? initial : 0) ||
         planned.some((p) => p.vencimento < d.dataComercial)
       )
         fail('Parcelamento inválido.');
-      parcels = planned;
+      parcels = entrada
+        ? [{ valorCentavos: initial, vencimento: d.dataComercial }, ...planned]
+        : planned;
+      if (parcels.length > 1000) fail('Limite de parcelas excedido.');
     } else if (planned.length) fail('Parcelamento informado em operação incompatível.');
     if (d.tipo === 'VENDA' && d.modalidadeVenda === 'A_VISTA' && d.totalCentavos > 0)
       parcels = [{ valorCentavos: d.totalCentavos, vencimento: d.dataComercial }];
@@ -446,7 +472,7 @@ export function createCommercialService(
     for (const item of d.itens) {
       const m = aplicarMovimentoNaTransacao(db, {
         produtoId: item.produtoId,
-        natureza: d.tipo,
+        natureza: d.tipo === 'COMPRA' ? 'COMPRA' : 'VENDA',
         quantidade: item.quantidade,
         custoTotalCentavos: d.tipo === 'COMPRA' ? item.valorCustoEstoqueCentavos : undefined,
         movimentacaoOrigemId: null,
@@ -464,7 +490,7 @@ export function createCommercialService(
       Number(
         db
           .prepare(
-            'INSERT INTO parcelas_receber (venda_id,numero,valor_original_centavos,vencimento,criado_em) VALUES (?,?,?,?,?)',
+            `INSERT INTO parcelas_receber (venda_id,numero,valor_original_centavos,vencimento,criado_em${entrada ? ',tipo' : ''}) VALUES (?,?,?,?,?${entrada ? ",'" + (i === 0 ? 'ENTRADA' : 'REGULAR') + "'" : ''})`,
           )
           .run(d.id, i + 1, p.valorCentavos, p.vencimento, now).lastInsertRowid,
       ),
@@ -508,6 +534,13 @@ export function createCommercialService(
     salvarRascunho: (command: unknown) => write('COMERCIAL_SALVAR', command, normalizeDraft, save),
     confirmar: (command: unknown) =>
       write('COMERCIAL_CONFIRMAR', command, normalizeConfirmation, confirm),
+    confirmarComEntrada: (command: unknown) =>
+      write(
+        'COMERCIAL_CONFIRMAR_ENTRADA',
+        command,
+        normalizeConfirmation,
+        (data, op, reason, now) => confirm(data, op, reason, now, true),
+      ),
     descartarRascunho: (command: unknown) =>
       write(
         'COMERCIAL_DESCARTAR',

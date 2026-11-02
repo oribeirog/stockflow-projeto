@@ -14,6 +14,7 @@ const { createCatalogService } = require('../dist/electron/services/catalogos.js
 const { createStockService } = require('../dist/electron/services/estoque.js');
 const { createCommercialService } = require('../dist/electron/services/comercial.js');
 const { reconciliarComercial } = require('../dist/electron/services/comercial-reconciliation.js');
+const { verifyFinanceiroRuntime } = require('../tests/helpers/financeiro-runtime.cjs');
 const {
   verifyMigration,
   verifyMigrationRollback,
@@ -39,7 +40,7 @@ app
         1,
       );
       assert.equal(db.pragma('foreign_keys', { simple: true }), 1);
-      assert.equal(db.pragma('user_version', { simple: true }), 3);
+      assert.equal(db.pragma('user_version', { simple: true }), 4);
       assert.equal(db.pragma('trusted_schema', { simple: true }), 0);
       const service = createCatalogService(db, app.getVersion());
       const cmd = (operacaoId, dados) => ({ operacaoId, motivo: 'Validação Electron', dados });
@@ -77,12 +78,12 @@ app
       await assert.rejects(
         migrateDatabase(db, { directory, existed: true, appVersion: app.getVersion() }, [
           ...migrations,
-          { version: 4, name: 'runtime-4', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
-          { version: 5, name: 'runtime-5', sql: 'INSERT INTO missing_table VALUES (1)' },
+          { version: 5, name: 'runtime-5', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
+          { version: 6, name: 'runtime-6', sql: 'INSERT INTO missing_table VALUES (1)' },
         ]),
         /missing_table/,
       );
-      assert.equal(db.pragma('user_version', { simple: true }), 3);
+      assert.equal(db.pragma('user_version', { simple: true }), 4);
       assert.equal(
         db.prepare("SELECT count(*) n FROM sqlite_schema WHERE name='rollback_test'").get().n,
         0,
@@ -206,6 +207,7 @@ app
       );
       await verifyMigration(mkdtempSync(join(root, 'electron-commercial-upgrade-')));
       await verifyMigrationRollback(directory);
+      await verifyFinanceiroRuntime(join(directory, 'financeiro-3d'));
       console.log(
         'DATABASE_RUNTIME_OK',
         JSON.stringify({

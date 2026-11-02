@@ -96,7 +96,11 @@ async function verifyMigration(directory) {
       sequence = rows(db, 'sqlite_sequence'),
       foreignKeys = db.pragma('foreign_key_list(movimentacoes_estoque)');
     const identity = inspectDatabase(db).identity;
-    await migrateDatabase(db, { directory, existed: true, appVersion: '3C' });
+    await migrateDatabase(
+      db,
+      { directory, existed: true, appVersion: '3C' },
+      migrations.slice(0, 3),
+    );
     for (const table of oldTables) {
       let actual = rows(db, table);
       if (table === 'eventos_auditoria')

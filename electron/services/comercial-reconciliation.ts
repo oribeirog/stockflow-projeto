@@ -1,7 +1,10 @@
 import type Database from 'better-sqlite3';
+import { reconciliarFinanceiro } from './financeiro-reconciliation';
 
 // Checks persisted components and links, never recomputes historical costs/rateios.
 export function reconciliarComercial(db: Database.Database): boolean {
+  if ((db.pragma('user_version', { simple: true }) as number) >= 4)
+    return reconciliarFinanceiro(db);
   return db.transaction(() => {
     const invalid = [
       "SELECT 1 FROM operacoes WHERE tipo LIKE 'COMERCIAL_%' AND resultado_json='null' LIMIT 1",

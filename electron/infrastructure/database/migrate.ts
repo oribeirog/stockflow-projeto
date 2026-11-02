@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { cadastrosV1 } from './migrations/0001-cadastros';
 import { estoqueV2 } from './migrations/0002-estoque';
 import { comercialV3, commercialTables } from './migrations/0003-comercial';
+import { financeiroV4, financeiroTables } from './migrations/0004-financeiro';
 import { reconciliarEstoque } from '../../services/estoque-reconciliation';
 import { reconciliarComercial } from '../../services/comercial-reconciliation';
 
@@ -13,7 +14,7 @@ export interface Migration {
   readonly name: string;
   readonly sql: string;
 }
-export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2, comercialV3];
+export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2, comercialV3, financeiroV4];
 export const APPLICATION_ID = 0x4d4e5250;
 export class DatabaseCompatibilityError extends Error {}
 interface AppliedMigration {
@@ -66,6 +67,21 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
       'eventos_auditoria',
     ];
     const tableList = db.pragma('table_list') as { name: string; strict: number }[];
+    if (version >= 4) {
+      requiredTables.push(...financeiroTables);
+      for (const [kind, pattern] of [
+        ['trigger', /CREATE TRIGGER (\w+)/g],
+        ['index', /CREATE (?:UNIQUE )?INDEX (\w+)/g],
+      ] as const) {
+        const actual = db.prepare('SELECT name FROM sqlite_schema WHERE type=?').all(kind) as {
+          name: string;
+        }[];
+        if (
+          [...financeiroV4.sql.matchAll(pattern)].some((m) => !actual.some((o) => o.name === m[1]))
+        )
+          throw new Error('Proteção financeira ausente');
+      }
+    }
     if (version >= 3 && available[2]?.name === comercialV3.name) {
       requiredTables.push(...commercialTables);
       const expectedTriggers = [...comercialV3.sql.matchAll(/CREATE TRIGGER (\w+)/g)].map(
@@ -149,6 +165,14 @@ export async function migrateDatabase(
 ): Promise<void> {
   const initial = inspectDatabase(db, available);
   if (initial.version === available.length) return;
+  if (initial.version >= 2 && !reconciliarEstoque(db).consistente)
+    throw new DatabaseCompatibilityError(
+      'Reconciliação anterior de estoque falhou; banco preservado.',
+    );
+  if (initial.version >= 3 && !reconciliarComercial(db))
+    throw new DatabaseCompatibilityError(
+      'Reconciliação comercial anterior falhou; banco preservado.',
+    );
   // The application has not registered IPC or exposed any service at this point.
   if (options.existed) {
     const directory = join(options.directory, 'backups');

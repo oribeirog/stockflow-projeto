@@ -10,6 +10,8 @@ O [relatório 3B](etapa-3B-estoque-custeio.md) detalha a migração 0002, os ser
 a validação de custos sem funções personalizadas e a medição de inicialização.
 O [relatório 3C](etapa-3C-compras-vendas-parcelas.md) documenta a migração 0003,
 rascunhos, confirmação atômica e testes financeiros/de preservação dos dados.
+O [relatório 3D](etapa-3D-financeiro-correcoes.md) documenta a migração 0004,
+recebimentos, entrada a prazo, devoluções, cancelamentos, reembolsos e estornos.
 Não há UI ou novos canais IPC comerciais. O desenho abaixo descreve também partes futuras;
 a seção 10 distingue o estado de cada entrega.
 
@@ -546,12 +548,12 @@ Não inferir validação de Windows 11 ou pacote distribuído a partir de teste 
 
 ## 10. Entregas 3A–3D
 
-| Entrega | Escopo                                                                                     | Estado e critério                                                                                                                         |
-| ------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 3A      | Migrações, identidade/checksums, backup prévio, cadastros, auditoria e histórico de preços | Implementada e testada no processo principal; detalhes no relatório 3A                                                                    |
-| 3B      | Estoque, movimentos, média ponderada inteira e reconciliação                               | Implementada no processo principal; verificações e medições no relatório 3B                                                               |
-| 3C      | Compras/vendas, descontos, rateios, baixa, parcelamento e confirmações atômicas            | Implementada no processo principal; relatório 3C detalha conservação, migração, rollback e prazo sem recebimento                          |
-| 3D      | Recebimentos, abatimentos, reembolsos, devoluções, cancelamentos e consultas financeiras   | Pendente; reconciliação, dependências, conservação de centavos e contratos distinguindo dinheiro, dívida reduzida e devolução de dinheiro |
+| Entrega | Escopo                                                                                     | Estado e critério                                                                                                                      |
+| ------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 3A      | Migrações, identidade/checksums, backup prévio, cadastros, auditoria e histórico de preços | Implementada e testada no processo principal; detalhes no relatório 3A                                                                 |
+| 3B      | Estoque, movimentos, média ponderada inteira e reconciliação                               | Implementada no processo principal; verificações e medições no relatório 3B                                                            |
+| 3C      | Compras/vendas, descontos, rateios, baixa, parcelamento e confirmações atômicas            | Implementada no processo principal; relatório 3C detalha conservação, migração, rollback e prazo sem recebimento                       |
+| 3D      | Recebimentos, abatimentos, reembolsos, devoluções, cancelamentos e consultas financeiras   | Implementada no processo principal; relatório 3D documenta migração populada, reconciliação, dependências e testes financeiros/desktop |
 
 Concluir e validar uma entrega antes de iniciar a seguinte. Serviços serão verificados
 diretamente antes de expor contratos IPC, sempre mantendo a segurança atual. UI depende

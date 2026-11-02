@@ -1,6 +1,6 @@
 # MNR Perfumes
 
-## Etapa 3 — Entregas 3A, 3B e 3C
+## Etapa 3 — Entregas 3A, 3B, 3C e 3D
 
 O [modelo de dados e regras de negócio](docs/etapa-3-modelagem-dados.md) reúne o
 dicionário de dados, custeio, operações financeiras, correções, migrações futuras e
@@ -10,8 +10,22 @@ no processo principal, sem UI ou canais IPC novos. A [entrega 3B](docs/etapa-3B-
 acrescenta estoque, custo médio inteiro, contagem física e reconciliação com falha segura.
 A [entrega 3C](docs/etapa-3C-compras-vendas-parcelas.md) acrescenta rascunhos,
 compras/vendas, pagamentos na confirmação, parcelas e integração atômica ao estoque,
-sem UI ou novos canais IPC. Recebimentos posteriores e entrada parcial a prazo,
-correções, devoluções e reembolsos permanecem para 3D.
+sem UI ou novos canais IPC. A [entrega 3D](docs/etapa-3D-financeiro-correcoes.md)
+acrescenta recebimentos posteriores/parciais, entrada a prazo, abatimentos, devoluções,
+cancelamentos, obrigações e pagamentos de reembolso, além de estornos vinculados.
+Schema versão 4, sem alterar migrações anteriores, dependências ou segurança Electron.
+Movimentos registram dinheiro uma única vez; alocações apenas o distribuem entre parcelas.
+Produtos impróprios retornam pelo custo histórico e geram perda vinculada de igual valor,
+preservando o estoque anterior mesmo quando a média atual for diferente.
+
+A 0004 foi exercitada com bancos populados v1/v2/v3 e falhas de reconstrução em WAL.
+A implementação precisou reconstruir também tabelas dependentes (auditoria, parcelas e
+vínculos) para evitar pendências de FK no commit, mantendo `foreign_keys=ON`.
+Detalhes de serviços, verificações, resultados e limitações estão no relatório 3D.
+Validação 3D em Windows 10 build 19045: typecheck, lint, formatação, build e **76 testes
+aprovados**, incluindo novos fluxos no Electron real; teste visual existente aprovado.
+Pacote Windows gerado e executado com `SMOKE_OK`; desenvolvimento reiniciado em modo
+smoke sobre a base de teste. Windows 11 e instalação NSIS permanecem pendentes externos.
 As seções da fundação e da Etapa 2 abaixo registram o estado histórico dessas entregas;
 as afirmações antigas de ausência de tabelas/migrações foram superadas pelas entregas atuais.
 
