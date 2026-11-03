@@ -9,6 +9,7 @@ export class MnrRouteReuseStrategy extends BaseRouteReuseStrategy {
   ): boolean {
     // Recreate editors when the ID/query changes so deactivation guards protect the old intention.
     if (future.data['perfumeEditor'] || current.data['perfumeEditor']) return false;
+    if (future.data['pessoaEditor'] || current.data['pessoaEditor']) return false;
     return super.shouldReuseRoute(future, current);
   }
 }

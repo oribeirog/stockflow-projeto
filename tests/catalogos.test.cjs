@@ -110,6 +110,53 @@ test('people accept optional data, duplicate names, CPF, numeric CNPJ and offici
     assert.equal(service.listPeople(kind, { busca: 'oleos' })[0].id, alpha.id);
   }
 });
+test('people full updates preserve every field and clear only explicitly emptied optional fields', async (t) => {
+  const { service } = await fixture(t);
+  for (const kind of ['CLIENTE', 'FORNECEDOR']) {
+    const original = {
+      nome: 'Pessoa completa',
+      tipoPessoa: 'PF',
+      documento: '52998224725',
+      telefone: '+55 11 99999-0000',
+      email: 'pessoa@example.com',
+      endereco: 'Rua Um\nNúmero 10',
+      observacoes: 'Observação original',
+      ativo: true,
+    };
+    const saved = service.savePerson(kind, command(original));
+    const replacements = {
+      nome: 'Nome corrigido',
+      documento: '11144477735',
+      telefone: '+55 21 2222-0000',
+      email: 'novo@example.com',
+      endereco: 'Outro endereço\nComplemento',
+      observacoes: 'Outra observação',
+    };
+    for (const [field, value] of Object.entries(replacements)) {
+      const changed = service.savePerson(
+        kind,
+        command({ ...original, id: saved.id, [field]: value }),
+      );
+      for (const [key, expected] of Object.entries(original))
+        assert.equal(changed[key], key === field ? value : expected, `${kind}: ${field}/${key}`);
+      if (field !== 'nome') {
+        const cleared = service.savePerson(
+          kind,
+          command({ ...original, id: saved.id, [field]: '' }),
+        );
+        for (const [key, expected] of Object.entries(original))
+          assert.equal(cleared[key], key === field ? null : expected, `clear ${field}/${key}`);
+      } else {
+        assert.throws(
+          () => service.savePerson(kind, command({ ...original, id: saved.id, nome: '' })),
+          code('VALIDATION'),
+        );
+        assert.equal(service.getPerson(kind, saved.id).nome, value);
+      }
+    }
+  }
+});
+
 test('invalid documents, unknown fields, enums, decimals, overflow and unsafe IDs cause no writes', async (t) => {
   const { service, db, product } = await fixture(t);
   const count = () => db.prepare('SELECT count(*) n FROM operacoes').get().n;

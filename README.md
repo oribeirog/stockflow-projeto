@@ -1,5 +1,25 @@
 # MNR Perfumes
 
+## Etapa 4C — Gestão visual de clientes e fornecedores
+
+Clientes e Fornecedores possuem listagens reais paginadas, pesquisa por nome,
+filtro de situação, cadastro, edição completa e inativação/reativação com
+justificativa. CPF/CNPJ são opcionais, incluindo o CNPJ alfanumérico já aceito
+pelo backend. As telas compartilham componentes e estilos do Design System MNR.
+
+Atualizações enviam todos os campos opcionais explicitamente. Intenções
+idempotentes protegem duplo envio e respostas perdidas, sem repetição automática.
+Compras, vendas, parcelas, recebimentos e históricos vinculados são preservados.
+Não foram criadas migrações, dependências ou canais IPC.
+
+O smoke agora usa diretório exclusivo por execução e verifica os fluxos reais
+também no pacote Windows, com documentos comerciais confirmados. Para reiniciar
+a entrada de desenvolvimento com fixtures e dados isolados:
+`node scripts/smoke.mjs --development`.
+
+Detalhes, arquivos, testes e limitações no
+[relatório da Etapa 4C](docs/etapa-4C-clientes-fornecedores.md).
+
 ## Etapa 4B — Cadastro e gestão de perfumes
 
 Perfumes agora oferece catálogo real paginado, busca por nome/SKU, filtro de

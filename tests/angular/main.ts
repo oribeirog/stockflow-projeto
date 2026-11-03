@@ -11,6 +11,11 @@ import { FornecedoresService } from '../../src/app/core/cadastros/fornecedores.s
 import { DesktopService } from '../../src/app/core/desktop.service';
 import { ConsultaEstado, GravacaoEstado } from '../../src/app/core/cadastros/estado';
 import type { ResultadoCadastro } from '../../shared/cadastros-ipc';
+import {
+  formularioPessoa,
+  entradaPessoa,
+  validarPessoa,
+} from '../../src/app/features/pessoas/formulario';
 function check(value: unknown, message: string): asserts value {
   if (!value) throw new Error(message);
 }
@@ -37,6 +42,82 @@ class Integration {
       });
   }
   private async verify() {
+    const pessoaCompleta = {
+      id: 42,
+      nome: 'Pessoa',
+      ativo: true,
+      tipoPessoa: 'PJ' as const,
+      documento: '12ABC34501DE35',
+      telefone: '11 99999-0000',
+      email: 'pessoa@example.com',
+      endereco: 'Rua\nNúmero',
+      observacoes: 'Observação',
+      criadoEm: 'data',
+      atualizadoEm: 'data',
+    };
+    const form = { ...formularioPessoa(pessoaCompleta), motivo: 'Correção' };
+    const roundTrip = validarPessoa(form, pessoaCompleta);
+    check(!Object.keys(roundTrip.errors).length, 'Full person form is valid');
+    check(
+      JSON.stringify(roundTrip.dados) ===
+        JSON.stringify({
+          id: 42,
+          nome: pessoaCompleta.nome,
+          tipoPessoa: 'PJ',
+          documento: pessoaCompleta.documento,
+          telefone: pessoaCompleta.telefone,
+          email: pessoaCompleta.email,
+          endereco: pessoaCompleta.endereco,
+          observacoes: pessoaCompleta.observacoes,
+          ativo: true,
+        }),
+      'Full replacement includes every optional',
+    );
+    check(!('criadoEm' in entradaPessoa(pessoaCompleta)), 'Only input fields forwarded');
+    for (const [key, max] of [
+      ['nome', 200],
+      ['documento', 40],
+      ['telefone', 40],
+      ['email', 254],
+      ['endereco', 4000],
+      ['observacoes', 4000],
+      ['motivo', 4000],
+    ] as const) {
+      check(
+        !!validarPessoa({ ...form, [key]: 'x'.repeat(max + 1) }, pessoaCompleta).errors[key],
+        `Person max ${key}`,
+      );
+    }
+    check(
+      !!validarPessoa({ ...form, tipoPessoa: '' }, pessoaCompleta).errors['tipoPessoa'],
+      'Document needs type',
+    );
+    check(
+      !!validarPessoa({ ...form, email: 'invalido' }, pessoaCompleta).errors['email'],
+      'Invalid email',
+    );
+    check(
+      !!validarPessoa({ ...form, nome: '\u0301' }, pessoaCompleta).errors['nome'],
+      'Name key is required',
+    );
+    for (const [key, value] of [
+      ['nome', 'x'.repeat(200)],
+      ['telefone', 'x'.repeat(40)],
+      ['email', 'x'.repeat(242) + '@example.com'],
+      ['documento', '.'.repeat(26) + '12ABC34501DE35'],
+      ['endereco', 'x'.repeat(4000)],
+      ['observacoes', 'x'.repeat(4000)],
+      ['motivo', 'x'.repeat(4000)],
+    ] as const) {
+      check(
+        !validarPessoa({ ...form, [key]: value }, pessoaCompleta).errors[key],
+        `Exact person max ${key}`,
+      );
+      check(
+        !!validarPessoa({ ...form, [key]: 'x\u0001' }, pessoaCompleta).errors[key],
+        `Control chars ${key}`,
+      );
+    }
     check(isSecureContext && crypto.randomUUID().length === 36, 'UUID secure context');
     check(typeof window.mnrApi === 'object' && !('invoke' in window.mnrApi), 'Limited API');
     const marca = data(

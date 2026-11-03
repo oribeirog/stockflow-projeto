@@ -1,0 +1,115 @@
+<section class="catalog stack" [attr.aria-label]="contexto.titulo">
+  <div class="catalog-heading">
+    <div>
+      <h2>{{contexto.titulo}}</h2>
+      <p>Cadastre e organize seus {{contexto.plural}}.</p>
+    </div>
+    <a class="action-link" [routerLink]="[contexto.path, 'novo']"
+      >Cadastrar {{contexto.singular}}</a
+    >
+  </div>
+  <form class="filters" (submit)="$event.preventDefault(); filter()">
+    <div>
+      <label for="pessoa-search">Nome</label
+      ><input
+        id="pessoa-search"
+        type="search"
+        maxlength="200"
+        [value]="search()"
+        (input)="searching($any($event.target).value)"
+        [placeholder]="'Pesquisar ' + contexto.plural + ' por nome'"
+      />
+    </div>
+    <div>
+      <label for="pessoa-active">Situação</label
+      ><select
+        id="pessoa-active"
+        [value]="active()"
+        (change)="active.set($any($event.target).value); filter()"
+      >
+        <option value="true">Ativos</option>
+        <option value="false">Inativos</option>
+        <option value="all">Todos</option>
+      </select>
+    </div>
+    <mnr-button type="submit" variant="secondary">Pesquisar</mnr-button>
+  </form>
+  @if (consulta.estado().fase === 'carregando') {
+  <mnr-content-state
+    kind="loading"
+    [title]="'Carregando ' + contexto.plural"
+    description="Consultando os cadastros locais."
+  />
+  } @else if (consulta.estado(); as state) { @if (state.fase === 'erro') {
+  <mnr-content-state
+    kind="error"
+    title="Não foi possível carregar"
+    [description]="state.erro.message"
+    ><mnr-button (pressed)="load()">Tentar novamente</mnr-button></mnr-content-state
+  >
+  } @else if (!rows().length) {
+  <mnr-content-state
+    kind="empty"
+    [title]="'Nenhum ' + contexto.singular + ' encontrado'"
+    description="Cadastre ou ajuste a pesquisa e a situação."
+  />
+  } @else {
+  <table>
+    <caption class="sr-only">
+      {{contexto.titulo}} cadastrados
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Contato</th>
+        <th scope="col">Situação</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of rows(); track p.id) {
+      <tr>
+        <td data-label="Nome"><strong>{{p.nome}}</strong><small>ID {{p.id}}</small></td>
+        <td data-label="Documento">
+          {{p.documento || 'Não informado'}}<small
+            >{{p.tipoPessoa === 'PF' ? 'Pessoa física' : p.tipoPessoa === 'PJ' ? 'Pessoa jurídica' :
+            'Tipo não informado'}}</small
+          >
+        </td>
+        <td data-label="Contato">
+          {{p.telefone || 'Telefone não informado'}}<small
+            >{{p.email || 'E-mail não informado'}}</small
+          >
+        </td>
+        <td data-label="Situação">
+          <mnr-badge [tone]="p.ativo ? 'success' : 'neutral'"
+            >{{p.ativo ? 'Ativo' : 'Inativo'}}</mnr-badge
+          >
+        </td>
+        <td data-label="Ações">
+          <div class="row">
+            <a [routerLink]="[contexto.path, p.id, 'editar']" [attr.aria-label]="'Editar ' + p.nome"
+              >Editar</a
+            ><a
+              [routerLink]="[contexto.path, p.id, 'editar']"
+              [queryParams]="{acao:'situacao'}"
+              [attr.aria-label]="(p.ativo ? 'Inativar ' : 'Reativar ') + p.nome"
+              >{{p.ativo ? 'Inativar' : 'Reativar'}}</a
+            >
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  <nav class="pagination" [attr.aria-label]="'Páginas de ' + contexto.plural">
+    <mnr-button variant="secondary" [disabled]="page() === 0" (pressed)="load(page()-1)"
+      >Anterior</mnr-button
+    ><span role="status">Página {{page()+1}}</span
+    ><mnr-button variant="secondary" [disabled]="!next()" (pressed)="load(page()+1)"
+      >Próxima</mnr-button
+    >
+  </nav>
+  } }
+</section>

@@ -27,6 +27,7 @@ import { Field } from './field';
           [required]="true"
           [multiline]="true"
           [value]="reason()"
+          [error]="reasonError()"
           (valueChanged)="reason.set($event)"
         />
       }
@@ -62,6 +63,7 @@ export class Confirm {
   readonly title = input.required<string>();
   readonly description = input('');
   readonly reasonRequired = input(false);
+  readonly reasonError = input('');
   readonly confirmed = output<string>();
   readonly cancelled = output<void>();
   readonly reason = signal('');

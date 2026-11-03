@@ -1,4 +1,5 @@
 import type { CodigoErroCadastro } from '../../shared/catalogos';
+import { documentoCanonico } from '../../shared/pessoa-values';
 
 export const MAX_MONEY = 9_000_000_000_000;
 export const MAX_QUANTITY = 1_000_000_000;
@@ -58,34 +59,13 @@ export function nameKey(value: string): string {
   return value.normalize('NFD').replace(/\p{M}/gu, '').toUpperCase().replace(/\s+/g, ' ').trim();
 }
 
-function digit(base: string, weights: number[]): string {
-  const sum = [...base].reduce(
-    (acc, char, index) => acc + (char.charCodeAt(0) - 48) * weights[index],
-    0,
-  );
-  const remainder = sum % 11;
-  return String(remainder < 2 ? 0 : 11 - remainder);
-}
 export function documentNumber(value: unknown, type: 'PF' | 'PJ' | null): string | null {
   const raw = optionalText(value, 'documento', 40);
-  if (raw === null) return null;
-  if (!type) invalid('tipoPessoa');
-  const normalized = raw.toUpperCase().replace(/[.\/\-\s]/g, '');
-  if (/^(.)\1+$/.test(normalized)) invalid('documento');
-  if (type === 'PF') {
-    if (!/^\d{11}$/.test(normalized)) invalid('CPF');
-    const base = normalized.slice(0, 9);
-    const first = digit(base, [10, 9, 8, 7, 6, 5, 4, 3, 2]);
-    if (normalized !== base + first + digit(base + first, [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]))
-      invalid('CPF');
-  } else {
-    if (!/^[A-Z0-9]{12}\d{2}$/.test(normalized)) invalid('CNPJ');
-    const base = normalized.slice(0, 12);
-    const first = digit(base, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
-    if (normalized !== base + first + digit(base + first, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]))
-      invalid('CNPJ');
+  try {
+    return documentoCanonico(raw, type);
+  } catch (error) {
+    invalid(error instanceof Error ? error.message : 'documento');
   }
-  return normalized;
 }
 
 // Canonical serialization for normalized commands: object key order is irrelevant.

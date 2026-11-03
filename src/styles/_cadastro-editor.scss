@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+legend {
+  padding: 0 8px;
+  font-weight: 600;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.wide {
+  grid-column: 1/-1;
+}
+.feedback {
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 16px;
+  border-radius: var(--radius-control);
+}
+.feedback.success {
+  border-color: var(--success);
+  color: var(--success);
+}
+@media (max-width: 760px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

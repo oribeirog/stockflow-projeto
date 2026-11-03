@@ -41,13 +41,13 @@ export const navigation: readonly {
     path: 'clientes',
     title: 'Clientes',
     icon: 'clients',
-    description: 'Espaço reservado para o cadastro de clientes.',
+    description: 'Cadastro e gestão de clientes.',
   },
   {
     path: 'fornecedores',
     title: 'Fornecedores',
     icon: 'suppliers',
-    description: 'Espaço reservado para o cadastro de fornecedores.',
+    description: 'Cadastro e gestão de fornecedores.',
   },
   {
     path: 'relatorios',
@@ -63,6 +63,17 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...(['clientes', 'fornecedores'] as const).flatMap((path) =>
+    ['novo', ':id/editar'].map((suffix) => ({
+      path: `${path}/${suffix}`,
+      title: `${path === 'clientes' ? 'Clientes' : 'Fornecedores'} • MNR Perfumes`,
+      data: { pessoaEditor: true, pessoa: path === 'clientes' ? 'cliente' : 'fornecedor' },
+      loadComponent: () => import('../features/pessoas/editor').then((m) => m.PessoaEditor),
+      canDeactivate: [
+        (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
+      ],
+    })),
+  ),
   ...['perfumes/novo', 'perfumes/:id/editar'].map((path) => ({
     path,
     title: 'Perfumes • MNR Perfumes',
@@ -75,7 +86,7 @@ export const routes: Routes = [
   ...navigation.map((item) => ({
     path: item.path,
     title: `${item.title} • MNR Perfumes`,
-    data: item,
+    data: { ...item, pessoa: item.path === 'fornecedores' ? 'fornecedor' : 'cliente' },
     loadComponent:
       item.path === 'dashboard'
         ? () => import('../features/dashboard/dashboard').then((m) => m.Dashboard)
@@ -83,7 +94,9 @@ export const routes: Routes = [
           ? () => import('../features/perfumes/perfumes').then((m) => m.Perfumes)
           : item.path === 'configuracoes'
             ? () => import('../features/settings/settings').then((m) => m.Settings)
-            : () => import('../features/module/module').then((m) => m.ModulePage),
+            : ['clientes', 'fornecedores'].includes(item.path)
+              ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
+              : () => import('../features/module/module').then((m) => m.ModulePage),
   })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },

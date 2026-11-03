@@ -1,0 +1,128 @@
+<section class="stack" [attr.aria-label]="'Editor de ' + contexto.singular">
+  <div class="row">
+    <a [routerLink]="contexto.path">← Voltar à listagem</a>
+    <h2>{{pessoa() ? 'Editar ' : 'Cadastrar '}}{{contexto.singular}}</h2>
+    @if (pessoa(); as p) {<mnr-badge [tone]="p.ativo ? 'success' : 'neutral'"
+      >{{p.ativo ? 'Ativo' : 'Inativo'}}</mnr-badge
+    >}
+  </div>
+  @if (loading()) {
+  <mnr-content-state
+    kind="loading"
+    title="Carregando cadastro"
+    description="Consultando os dados locais."
+  />
+  } @else if (id !== undefined && !pessoa()) {
+  <mnr-content-state kind="error" title="Cadastro indisponível" [description]="message()"
+    ><mnr-button (pressed)="load()">Tentar novamente</mnr-button></mnr-content-state
+  >
+  } @else { @if (message()) {
+  <div
+    class="feedback"
+    tabindex="-1"
+    [class.success]="success()"
+    [attr.role]="success() ? 'status' : 'alert'"
+  >
+    {{message()}}
+  </div>
+  } @if (busy()) {
+  <p role="status">Salvando. Aguarde a confirmação…</p>
+  } @if (uncertain()) {
+  <p role="status">
+    A intenção original foi preservada. Repita a confirmação sem alterar os dados.
+  </p>
+  } @if (blocked()) {
+  <p role="alert">
+    A chave da operação apresentou conflito. Não é seguro criar outra intenção automaticamente.
+    Preserve esta tela e investigue a inconsistência.
+  </p>
+  } @if (refreshFailed()) {<mnr-button
+    variant="secondary"
+    [disabled]="locked || dirty()"
+    (pressed)="refresh()"
+    >Consultar cadastro novamente</mnr-button
+  >}
+  <form novalidate (submit)="$event.preventDefault(); save()" class="stack">
+    <p>Campos com * são obrigatórios. CPF e CNPJ são opcionais.</p>
+    @for (group of groups; track group.title) {
+    <fieldset [disabled]="locked">
+      <legend>{{group.title}}</legend>
+      <div class="form-grid">
+        @if (group.title === 'Identificação') {
+        <div class="wide">
+          <label for="pessoa-tipoPessoa">Tipo de pessoa</label
+          ><select
+            id="pessoa-tipoPessoa"
+            [value]="form().tipoPessoa"
+            [attr.aria-invalid]="errors()['tipoPessoa'] ? 'true' : null"
+            aria-describedby="pessoa-tipoPessoa-hint pessoa-tipoPessoa-error"
+            (change)="update('tipoPessoa', $any($event.target).value)"
+          >
+            <option value="">Não informado</option>
+            <option value="PF">Pessoa física (PF)</option>
+            <option value="PJ">Pessoa jurídica (PJ)</option>
+          </select>
+          <p id="pessoa-tipoPessoa-hint">
+            Selecione PF ou PJ somente se desejar informar um documento.
+          </p>
+          <p id="pessoa-tipoPessoa-error" class="field-error">{{errors()['tipoPessoa'] || ''}}</p>
+        </div>
+        } @for (field of group.fields; track field.key) {
+        <mnr-field
+          [class.wide]="field.key === 'nome' || field.key === 'endereco' || field.key === 'observacoes'"
+          [controlId]="'pessoa-'+field.key"
+          [label]="field.key === 'documento' ? (form().tipoPessoa === 'PF' ? 'CPF' : form().tipoPessoa === 'PJ' ? 'CNPJ' : 'CPF ou CNPJ') : field.label"
+          [value]="form()[field.key]"
+          [required]="field.key === 'nome'"
+          [maxLength]="field.max"
+          [multiline]="field.key === 'endereco' || field.key === 'observacoes'"
+          [hint]="field.key === 'documento' ? 'Opcional. CNPJ também aceita letras; pontuação é permitida.' : ''"
+          [error]="errors()[field.key] || ''"
+          (valueChanged)="update(field.key, $event)"
+        />
+        }
+      </div>
+    </fieldset>
+    } @if (pessoa()) {
+    <fieldset [disabled]="locked">
+      <legend>Justificativa</legend>
+      <mnr-field
+        controlId="pessoa-motivo"
+        label="Justificativa da alteração"
+        [required]="true"
+        [multiline]="true"
+        [maxLength]="4000"
+        [value]="form().motivo"
+        [error]="errors()['motivo'] || ''"
+        (valueChanged)="update('motivo', $event)"
+      />
+    </fieldset>
+    }
+    <div class="row">
+      <mnr-button
+        type="submit"
+        [disabled]="busy() || blocked() || (!!pessoa() && !dirty() && !uncertain())"
+        >{{uncertain() ? 'Tentar confirmar novamente' : 'Salvar ' + contexto.singular}}</mnr-button
+      ><a [routerLink]="contexto.path">Voltar à listagem</a> @if (pessoa(); as p) {<mnr-button
+        data-status
+        variant="secondary"
+        [disabled]="locked || dirty()"
+        (pressed)="openStatus()"
+        >{{p.ativo ? 'Inativar ' : 'Reativar '}}{{contexto.singular}}</mnr-button
+      >}
+    </div>
+  </form>
+  } @if (confirmation() === 'discard') {<mnr-confirm
+    title="Descartar alterações?"
+    description="As alterações não salvas serão descartadas."
+    (confirmed)="confirmDiscard()"
+    (cancelled)="cancelConfirm()"
+  />} @if (confirmation() === 'status') {<mnr-confirm
+    [title]="(pessoa()!.ativo ? 'Inativar ' : 'Reativar ') + contexto.singular + '?'"
+    [description]="pessoa()!.nome + ' — ID ' + pessoa()!.id + '. Histórico e vínculos comerciais serão preservados.'"
+    [reasonRequired]="true"
+    [reasonError]="statusError()"
+    (confirmed)="confirmStatus($event)"
+    (cancelled)="cancelConfirm()"
+  />}
+</section>
