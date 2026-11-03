@@ -7,5 +7,11 @@ export class Field {
   readonly placeholder = input('');
   readonly hint = input('');
   readonly disabled = input(false);
+  readonly readonly = input(false);
+  readonly required = input(false);
+  readonly error = input('');
+  readonly maxLength = input(4000);
+  readonly inputMode = input<'text' | 'decimal' | 'numeric'>('text');
+  readonly multiline = input(false);
   readonly valueChanged = output<string>();
 }

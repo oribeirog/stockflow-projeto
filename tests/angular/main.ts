@@ -1,5 +1,7 @@
 // Separate Angular build; never imported by src/main.ts or included in the package.
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injector } from '@angular/core';
+import { FotosService } from '../../src/app/core/cadastros/fotos.service';
+import type { FotosApi, ImagemFoto } from '../../shared/fotos';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { ProdutosService } from '../../src/app/core/cadastros/produtos.service';
 import { MarcasService } from '../../src/app/core/cadastros/marcas.service';
@@ -174,6 +176,52 @@ class Integration {
     await erro;
     check(state.estado().fase === 'erro', 'Query failure');
     check((requests[2] as { deslocamento: number }).deslocamento === 10, 'Page offset preserved');
+    const photoReplies: ((value: ResultadoCadastro<ImagemFoto | null>) => void)[] = [];
+    const photoApi: FotosApi = {
+      selecionar: async () => ({ ok: true, data: null }),
+      descartar: async () => ({ ok: true, data: null }),
+      obter: () => new Promise((resolve) => photoReplies.push(resolve)),
+      salvar: async (command) => ({
+        ok: true,
+        data: { produtoId: command.dados.produtoId, fotoId: 'new-photo' },
+      }),
+      remover: async (command) => ({
+        ok: true,
+        data: { produtoId: command.dados.produtoId, fotoId: null },
+      }),
+    };
+    const photoInjector = Injector.create({
+      providers: [
+        FotosService,
+        {
+          provide: DesktopService,
+          useValue: {
+            foto: <T>(operation: (api: FotosApi) => Promise<ResultadoCadastro<T>>) =>
+              operation(photoApi),
+          },
+        },
+      ],
+    });
+    try {
+      const photos = photoInjector.get(FotosService),
+        oldPhoto = photos.obter(7, 'miniatura');
+      check(photos.obter(7, 'miniatura') === oldPhoto, 'Deduplicate concurrent photo reads');
+      data(
+        await photos.novaGravacao({ produtoId: 7, token: 'prepared' }, 'Replacement').executar(),
+      );
+      const newPhoto = photos.obter(7, 'miniatura');
+      check(newPhoto !== oldPhoto, 'Replacement invalidates old in-flight photo reads');
+      photoReplies[0]({ ok: true, data: null });
+      await oldPhoto;
+      check(
+        photos.obter(7, 'miniatura') === newPhoto,
+        'Late old read cannot evict the current photo request',
+      );
+      photoReplies[1]({ ok: true, data: null });
+      await newPhoto;
+    } finally {
+      photoInjector.destroy();
+    }
   }
 }
 void bootstrapApplication(Integration).catch((error: unknown) => {

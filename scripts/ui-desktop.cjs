@@ -1,7 +1,6 @@
 // Runs the real desktop entry point without changing its production behavior.
-// Uses the normal development database without deleting it. Normal startup may apply
-// versioned migrations, with a consistent backup before updating an existing file.
-const { app, ipcMain } = require('electron');
+// Each run uses its own database, images and Chromium directory.
+const { app, ipcMain, dialog, nativeImage } = require('electron');
 const { strict: assert } = require('node:assert');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const { resolve } = require('node:path');
@@ -24,8 +23,19 @@ app.on('browser-window-created', (_event, window) => {
 require('../dist/electron/main/index.js');
 
 async function verify(window) {
+  assert.match(app.getPath('userData'), /[\\/]test[\\/]ui-[a-zA-Z0-9_-]+$/);
+  assert.equal(app.getPath('sessionData'), resolve(app.getPath('userData'), 'chromium'));
   const web = window.webContents;
-  const evaluate = (expression) => web.executeJavaScript(expression);
+  const evaluate = async (expression) => {
+    try {
+      return await web.executeJavaScript(expression);
+    } catch (error) {
+      throw new Error('Renderer expression failed: ' + expression + '\n' + error);
+    }
+  };
+  web.on('console-message', (event) => {
+    if (event.level === 'error') console.error('Renderer:', event.message);
+  });
   async function until(expression) {
     for (let attempt = 0; attempt < 100; attempt++) {
       if (await evaluate(expression)) return;
@@ -104,12 +114,17 @@ async function verify(window) {
   ];
   for (const [path, title] of destinations) {
     await route(path, title);
-    if (!['dashboard', 'configuracoes'].includes(path)) {
+    if (!['dashboard', 'configuracoes', 'perfumes'].includes(path)) {
       await until(
         `document.querySelector('main').textContent.includes('Disponível em uma próxima etapa')`,
       );
     }
   }
+  await route('perfumes', 'Perfumes');
+  await until(
+    `document.querySelector('mnr-perfumes')?.textContent.includes('Nenhum perfume encontrado')`,
+  );
+  await route('configuracoes', 'Configurações');
   console.log('Diagnostic URL:', await evaluate('location.href'));
   await until(
     `document.querySelector('main').textContent.includes('Electron e SQLite conectados.')`,
@@ -145,6 +160,251 @@ async function verify(window) {
     `document.querySelector('main').textContent.includes('Electron e SQLite conectados.')`,
   );
   await route('dashboard', 'Dashboard');
+  await evaluate(
+    `(() => { window.__liveBlobs = new Set(); const create = URL.createObjectURL.bind(URL), revoke = URL.revokeObjectURL.bind(URL); URL.createObjectURL = blob => { const url=create(blob); window.__liveBlobs.add(url); return url; }; URL.revokeObjectURL = url => { window.__liveBlobs.delete(url); revoke(url); }; })()`,
+  );
+  // Real UI writes, exclusively inside this run's isolated database.
+  await route('perfumes', 'Perfumes');
+  await click('a[href="#/perfumes/novo"]');
+  await until(`document.querySelector('mnr-perfume-editor') !== null`);
+  async function fill(selector, value) {
+    await evaluate(
+      `(() => { const input = document.querySelector(${JSON.stringify(selector)}); input.value = ${JSON.stringify(value)}; input.dispatchEvent(new Event('input', { bubbles: true })); })()`,
+    );
+  }
+  async function buttonText(text) {
+    await evaluate(
+      `Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === ${JSON.stringify(text)}).click()`,
+    );
+    await pause(80);
+  }
+  await buttonText('Salvar perfume');
+  await until(`document.activeElement.id === 'perfume-nome'`);
+  assert.equal(
+    await evaluate(`document.querySelector('#perfume-nome').getAttribute('aria-invalid')`),
+    'true',
+  );
+  await screenshot('perfume-validation');
+  await fill('#perfume-nome', 'Perfume interface');
+  await fill('#perfume-sku', 'UI-001');
+  await fill('#perfume-volume', '100,125');
+  await fill('#perfume-preco', '129,90');
+  for (const [kind, name] of [
+    ['marca', 'Marca UI'],
+    ['categoria', 'Categoria UI'],
+  ]) {
+    await click(`mnr-reference-picker[kind="${kind}"] summary`);
+    await fill(`#${kind}-new`, name);
+    await click(`mnr-reference-picker[kind="${kind}"] mnr-button button`);
+    await until(`document.querySelector('#${kind}-select').value !== ''`);
+  }
+  const photoPath = resolve(app.getPath('userData'), 'selected-photo.png');
+  writeFileSync(
+    photoPath,
+    nativeImage.createFromBitmap(Buffer.alloc(4 * 4 * 4, 255), { width: 4, height: 4 }).toPNG(),
+  );
+  dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [photoPath] });
+  await buttonText('Selecionar fotografia');
+  await until(`document.querySelector('img[alt="Prévia da fotografia selecionada"]') !== null`);
+  const productHandler = ipcMain._invokeHandlers.get('cadastros:produtos:salvar');
+  const productCommands = [];
+  let loseProductReply = true;
+  ipcMain.removeHandler('cadastros:produtos:salvar');
+  ipcMain.handle('cadastros:produtos:salvar', async (...args) => {
+    productCommands.push(JSON.stringify(args[1]));
+    const result = await productHandler(...args);
+    if (loseProductReply && result.ok) {
+      loseProductReply = false;
+      throw new Error('Test-only lost product reply after commit');
+    }
+    return result;
+  });
+  await evaluate(
+    `(() => { const button=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Salvar perfume'); button.click(); button.click(); })()`,
+  );
+  await until(
+    `Array.from(document.querySelectorAll('button')).some(b=>b.textContent.trim()==='Tentar confirmar novamente')`,
+  );
+  assert.equal(await evaluate(`document.querySelector('fieldset').disabled`), true);
+  await buttonText('Tentar confirmar novamente');
+  assert.equal(productCommands.length, 2);
+  assert.equal(productCommands[0], productCommands[1]);
+  await until(
+    `document.querySelector('.feedback.success')?.textContent.includes('Perfume e fotografia salvos')`,
+  );
+  await until(`document.querySelector('mnr-photo-editor mnr-photo img') !== null`);
+  assert.equal(await evaluate(`document.querySelector('#perfume-sku').readOnly`), true);
+  assert.equal(await evaluate(`document.querySelector('#perfume-volume').value`), '100,125');
+  await screenshot('perfume-created');
+  dialog.showOpenDialog = async () => ({ canceled: true, filePaths: [] });
+  await buttonText('Selecionar fotografia');
+  assert.equal(
+    await evaluate(
+      `document.querySelector('img[alt="Prévia da fotografia selecionada"]') !== null`,
+    ),
+    false,
+  );
+  dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [photoPath] });
+  await buttonText('Selecionar fotografia');
+  await until(`document.querySelector('img[alt="Prévia da fotografia selecionada"]') !== null`);
+  await fill('#perfume-motivo', 'Inclusão da fotografia');
+  const originalPhotoHandler = ipcMain._invokeHandlers.get('fotos:salvar');
+  let losePhotoReply = true;
+  ipcMain.removeHandler('fotos:salvar');
+  ipcMain.handle('fotos:salvar', async (...args) => {
+    const reply = await originalPhotoHandler(...args);
+    if (losePhotoReply && reply.ok) {
+      losePhotoReply = false;
+      throw new Error('Test-only lost photo reply after commit');
+    }
+    return reply;
+  });
+  await buttonText('Salvar perfume');
+  await until(
+    `document.querySelector('mnr-photo-editor')?.textContent.includes('Tentar confirmar fotografia novamente')`,
+  );
+  await screenshot('perfume-photo-partial');
+  await buttonText('Tentar confirmar fotografia novamente');
+  await until(
+    `document.querySelector('mnr-photo-editor')?.textContent.includes('Fotografia atualizada com sucesso')`,
+  );
+  await until(`document.querySelector('mnr-photo-editor mnr-photo img') !== null`);
+  await click('mnr-photo-editor .thumbnail');
+  await until(`document.querySelector('dialog[open] img.large') !== null`);
+  await key('Escape');
+  await until(`document.querySelector('dialog[open]') === null`);
+  for (const [width, height] of [
+    [1366, 768],
+    [1000, 700],
+    [640, 480],
+  ]) {
+    window.setSize(width, height);
+    for (const zoom of [1, 1.25, 1.5]) {
+      web.setZoomFactor(zoom);
+      await pause(100);
+      await noOverflow();
+      await screenshot(`perfume-editor-${width}-${height}-${zoom}`);
+      await evaluate(`document.querySelector('mnr-photo-editor').scrollIntoView({block:'start'})`);
+      await screenshot(`perfume-editor-photo-${width}-${height}-${zoom}`);
+      await evaluate(`document.querySelector('main').scrollTop=0; window.scrollTo(0,0)`);
+    }
+  }
+  window.setSize(1000, 700);
+  web.setZoomFactor(1);
+  await fill('#perfume-nome', 'Perfume editado');
+  await click('a[href="#/perfumes"]');
+  await until(
+    `document.querySelector('dialog[open] #confirm-title')?.textContent === 'Descartar alterações?'`,
+  );
+  await key('Escape');
+  await until(`document.querySelector('dialog[open]') === null`);
+  assert.equal(await evaluate(`document.querySelector('#perfume-nome').value`), 'Perfume editado');
+  await fill('#perfume-motivo', 'Correção do nome');
+  await buttonText('Salvar perfume');
+  await until(`document.querySelector('.feedback.success') !== null`);
+  await buttonText('Inativar perfume');
+  await until(`document.querySelector('dialog[open]') !== null`);
+  await fill('#confirm-reason', 'Saiu de linha');
+  await buttonText('Confirmar');
+  await until(
+    `Array.from(document.querySelectorAll('button')).some(b => b.textContent.includes('Reativar perfume'))`,
+  );
+  await buttonText('Reativar perfume');
+  await until(`document.querySelector('dialog[open]') !== null`);
+  await fill('#confirm-reason', 'Retorno ao catálogo');
+  await buttonText('Confirmar');
+  await until(
+    `Array.from(document.querySelectorAll('button')).some(b => b.textContent.includes('Inativar perfume'))`,
+  );
+  const Database = require('better-sqlite3');
+  const inspection = new Database(resolve(app.getPath('userData'), 'data/mnr-perfumes.db'));
+  const saved = inspection.prepare("SELECT * FROM produtos WHERE sku='UI-001'").get();
+  assert.equal(saved.volume_microlitros, 100125);
+  assert.equal(saved.preco_venda_centavos, 12990);
+  assert.equal(saved.ativo, 1);
+  assert.equal(inspection.prepare('SELECT count(*) n FROM produtos').get().n, 1);
+  assert.equal(inspection.prepare('SELECT count(*) n FROM historico_precos').get().n, 1);
+  assert.equal(inspection.prepare('SELECT count(*) n FROM movimentacoes_estoque').get().n, 0);
+  const { createCatalogService } = require('../dist/electron/services/catalogos.js');
+  const { randomUUID } = require('node:crypto');
+  const catalogs = createCatalogService(inspection, 'ui');
+  for (let index = 0; index < 26; index++)
+    catalogs.saveProduct({
+      operacaoId: randomUUID(),
+      motivo: 'Paginação UI',
+      dados: {
+        nome: `Teste ${String(index).padStart(2, '0')}`,
+        sku: `PAGE-${index}`,
+        marcaId: saved.marca_id,
+        categoriaId: saved.categoria_id,
+        volumeMicrolitros: 1000,
+        precoVendaCentavos: 0,
+        estoqueMinimo: 0,
+      },
+    });
+  const otherId = inspection.prepare("SELECT id FROM produtos WHERE sku='PAGE-0'").get().id;
+  inspection.close();
+  const photoHandler = ipcMain._invokeHandlers.get('fotos:obter'),
+    photoReads = [];
+  ipcMain.removeHandler('fotos:obter');
+  ipcMain.handle('fotos:obter', (...args) => {
+    photoReads.push(args[1]);
+    return photoHandler(...args);
+  });
+  await click('a[href="#/perfumes"]');
+  await until(`document.querySelectorAll('tbody tr').length === 25`);
+  await until(`document.querySelectorAll('mnr-photo').length === 25`);
+  assert.equal(photoReads.length, 25);
+  assert.ok(photoReads.every((r) => r.variante === 'miniatura'));
+  await buttonText('Próxima');
+  await until(`document.querySelectorAll('tbody tr').length === 2`);
+  await fill('#perfume-search', 'UI-001');
+  await until(`document.querySelectorAll('tbody tr').length === 1`);
+  assert.equal(
+    await evaluate(`document.querySelector('.pagination [role=status]').textContent`),
+    'Página 1',
+  );
+  await screenshot('perfume-search');
+  for (const [width, height] of [
+    [1366, 768],
+    [1000, 700],
+    [640, 480],
+  ]) {
+    window.setSize(width, height);
+    for (const zoom of [1, 1.25, 1.5]) {
+      web.setZoomFactor(zoom);
+      await pause(100);
+      await noOverflow();
+      await screenshot(`perfume-list-${width}-${height}-${zoom}`);
+      await evaluate(`document.querySelector('tbody tr').scrollIntoView({block:'start'})`);
+      await screenshot(`perfume-list-row-${width}-${height}-${zoom}`);
+      await evaluate(`document.querySelector('main').scrollTop=0; window.scrollTo(0,0)`);
+    }
+  }
+  window.setSize(1000, 700);
+  web.setZoomFactor(1);
+  await click('tbody a[aria-label="Editar Perfume editado"]');
+  await until(`document.querySelector('#perfume-sku')?.value === 'UI-001'`);
+  await evaluate(`location.hash='/perfumes/${otherId}/editar'`);
+  await until(`document.querySelector('#perfume-sku')?.value === 'PAGE-0'`);
+  await fill('#perfume-nome', 'Rascunho não salvo');
+  await evaluate(`location.hash='/perfumes/${saved.id}/editar'`);
+  await until(
+    `document.querySelector('dialog[open] #confirm-title')?.textContent === 'Descartar alterações?'`,
+  );
+  await key('Escape');
+  await until(`location.hash === '#/perfumes/${otherId}/editar'`);
+  assert.equal(await evaluate(`document.querySelector('#perfume-sku').value`), 'PAGE-0');
+  await click('a[href="#/perfumes"]');
+  await until(`document.querySelector('dialog[open]') !== null`);
+  await buttonText('Confirmar');
+  await until(`document.querySelector('mnr-perfumes') !== null`);
+  await route('dashboard', 'Dashboard');
+  assert.equal(
+    await evaluate('window.__liveBlobs.size'),
+    0,
+    'All photo object URLs must be released after leaving the feature',
+  );
   await route('perfumes', 'Perfumes');
   await evaluate('history.back()');
   await until(`document.querySelector('h1').textContent === 'Dashboard'`);
@@ -262,6 +522,15 @@ async function verify(window) {
   web.reload();
   await until(`document.querySelector('mnr-dashboard') !== null`);
   await route('estoque', 'Estoque');
+  await route('perfumes', 'Perfumes');
+  await fill('#perfume-search', 'UI-001');
+  await until(
+    `document.querySelectorAll('tbody tr').length === 1 && document.querySelector('mnr-photo .thumbnail') !== null`,
+  );
+  await click('mnr-photo .thumbnail');
+  await until(`document.querySelector('dialog[open] img.large') !== null`);
+  await screenshot('perfume-offline-photo');
+  await key('Escape');
   await noOverflow();
   web.debugger.detach();
   console.log(

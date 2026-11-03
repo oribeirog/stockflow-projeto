@@ -7,10 +7,11 @@ import {
 } from '../../shared/cadastros-ipc';
 import { createCatalogService } from '../services/catalogos';
 import { CadastroError, identifier } from '../services/catalog-validation';
+import { FotoError } from '../services/foto-validation';
 
 export function erroCadastro(error: unknown): ResultadoCadastro<never> {
   let code: CodigoErroDesktopCadastro = 'INTERNAL_ERROR';
-  if (error instanceof CadastroError) code = error.code;
+  if (error instanceof CadastroError || error instanceof FotoError) code = error.code;
   else if (error instanceof Error && 'code' in error && typeof error.code === 'string') {
     if (/^SQLITE_(BUSY|LOCKED)(_|$)/.test(error.code)) code = 'DATABASE_BUSY';
     else if (/^SQLITE_(CORRUPT|NOTADB)(_|$)/.test(error.code)) code = 'INTEGRITY';

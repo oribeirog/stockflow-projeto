@@ -10,6 +10,7 @@ export async function openDatabase(
   directory: string,
   appVersion: string,
   onTiming?: (phase: string, durationMs: number) => void,
+  imagesDirectory?: string,
 ) {
   const file = join(directory, 'mnr-perfumes.db');
   const existed = existsSync(file);
@@ -25,7 +26,7 @@ export async function openDatabase(
     db.pragma('synchronous = FULL');
     onTiming?.('pragmas', performance.now() - started);
     started = performance.now();
-    await migrateDatabase(db, { directory, existed, appVersion });
+    await migrateDatabase(db, { directory, existed, appVersion, imagesDirectory });
     onTiming?.('migrationIncludingReinspection', performance.now() - started);
     started = performance.now();
     const reconciliation = reconciliarEstoque(db);

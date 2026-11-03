@@ -1,0 +1,120 @@
+<section class="stack" aria-label="Editor de perfume">
+  <div class="row">
+    <a routerLink="/perfumes">← Voltar ao catálogo</a>
+    <h2>{{product() ? 'Editar perfume' : 'Cadastrar perfume'}}</h2>
+  </div>
+  @if (loading()) {
+  <mnr-content-state
+    kind="loading"
+    title="Carregando cadastro"
+    description="Consultando perfume e classificações."
+  />
+  } @else if (id !== undefined && !product()) {
+  <mnr-content-state kind="error" title="Cadastro indisponível" [description]="message()"
+    ><mnr-button (pressed)="load()">Tentar novamente</mnr-button></mnr-content-state
+  >
+  } @else { @if (message()) {
+  <div class="feedback" [class.success]="success()" [attr.role]="success() ? 'status' : 'alert'">
+    {{message()}}
+  </div>
+  } @if (busy()) {
+  <p role="status">Salvando. Aguarde a confirmação…</p>
+  } @if (uncertain()) {
+  <p role="status">
+    A intenção original foi preservada. Repita a confirmação sem alterar os dados.
+  </p>
+  }
+  <form novalidate (submit)="$event.preventDefault(); save()" class="stack">
+    <p>Campos com * são obrigatórios.</p>
+    @for (group of groups; track group.title) {
+    <fieldset [disabled]="locked">
+      <legend>{{group.title}}</legend>
+      <div class="form-grid">
+        @for (field of group.fields; track field.key) {
+        <mnr-field
+          [class.wide]="field.multiline || field.key === 'nome' || field.key === 'concentracao'"
+          [controlId]="'perfume-'+field.key"
+          [label]="field.label"
+          [value]="form()[field.key]"
+          [required]="!!field.required"
+          [readonly]="field.key === 'sku' && !!product()"
+          [maxLength]="field.max"
+          [hint]="field.hint || ''"
+          [inputMode]="field.mode || 'text'"
+          [multiline]="!!field.multiline"
+          [error]="errors()[field.key] || ''"
+          (valueChanged)="update(field.key,$event)"
+        />
+        } @if (group.title === 'Classificação') {
+        <mnr-reference-picker
+          kind="marca"
+          label="Marca"
+          [disabled]="locked"
+          [selected]="brand()"
+          [error]="errors()['marca'] || ''"
+          (changed)="select('brand',$event)"
+          (pending)="referenceState('marca',$event)"
+        />
+        <mnr-reference-picker
+          kind="categoria"
+          label="Categoria"
+          [disabled]="locked"
+          [selected]="category()"
+          [error]="errors()['categoria'] || ''"
+          (changed)="select('category',$event)"
+          (pending)="referenceState('categoria',$event)"
+        />
+        }
+      </div>
+    </fieldset>
+    } @if (product()) {
+    <fieldset [disabled]="locked">
+      <legend>Justificativa</legend>
+      <mnr-field
+        class="wide"
+        controlId="perfume-motivo"
+        label="Justificativa da alteração"
+        [required]="true"
+        [multiline]="true"
+        [value]="form().motivo"
+        [error]="errors()['motivo'] || ''"
+        (valueChanged)="update('motivo',$event)"
+      />
+    </fieldset>
+    }
+    <mnr-photo-editor
+      [produtoId]="product()?.id"
+      [disabled]="locked"
+      (changed)="photoDirty.set($event)"
+      (pending)="photoPending.set($event)"
+      (saved)="photoSaved($event)"
+    />
+    <div class="row">
+      <mnr-button type="submit" [disabled]="busy() || referencePending() || photoPending()"
+        >{{uncertain() ? 'Tentar confirmar novamente' : 'Salvar perfume'}}</mnr-button
+      ><mnr-button
+        variant="secondary"
+        [disabled]="locked || referencePending() || photoPending()"
+        (pressed)="back()"
+        >Voltar</mnr-button
+      >
+      @if (product()) {
+      <mnr-button
+        variant="secondary"
+        [disabled]="locked || referencePending() || dirty() || photoDirty() || photoPending()"
+        (pressed)="confirmation.set('status')"
+        >{{product()!.ativo ? 'Inativar perfume' : 'Reativar perfume'}}</mnr-button
+      >
+      }
+    </div>
+  </form>
+  } @if (confirmation()) {
+  <mnr-confirm
+    [title]="confirmation() === 'discard' ? 'Descartar alterações?' : product()?.ativo ? 'Inativar perfume?' : 'Reativar perfume?'"
+    [description]="confirmation() === 'discard' ? 'As alterações não salvas serão descartadas.' : product()!.nome + ' — SKU ' + product()!.sku + '. O histórico será preservado.'"
+    [reasonRequired]="confirmation() === 'status'"
+    (confirmed)="confirm($event)"
+    (cancelled)="cancelConfirm()"
+  />
+  }
+</section>

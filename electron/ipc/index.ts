@@ -3,7 +3,15 @@ import { criarHandlersCadastros } from './cadastros';
 import { app, ipcMain, type BrowserWindow } from 'electron';
 import type Database from 'better-sqlite3';
 import { STATUS_CHANNEL, type Result, type SystemStatus } from '../../shared/contracts';
-export function registerIpc(window: BrowserWindow, db: Database.Database, allowedUrl: string) {
+import { registerFotos } from './fotos';
+import type { FotoService } from '../services/fotos';
+export function registerIpc(
+  window: BrowserWindow,
+  db: Database.Database,
+  allowedUrl: string,
+  photos?: FotoService,
+) {
+  if (photos) registerFotos(window, allowedUrl, photos);
   for (const [channel, handler] of criarHandlersCadastros(db, app.getVersion())) {
     ipcMain.handle(channel, (event, ...args: unknown[]) => {
       if (!isTrustedSender(event, window, allowedUrl)) {

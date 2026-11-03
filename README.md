@@ -1,5 +1,24 @@
 # MNR Perfumes
 
+## Etapa 4B — Cadastro e gestão de perfumes
+
+Perfumes agora oferece catálogo real paginado, busca por nome/SKU, filtro de
+situação, cadastro, edição, referências rápidas, inativação/reativação e uma
+fotografia local opcional. Preços são editados em reais e volumes em mL, com
+conversões inteiras para os contratos existentes. Intenções idempotentes e
+mensagens de sucesso parcial protegem as gravações de cadastro e fotografia.
+
+Schema v5 acrescenta somente a infraestrutura aprovada de fotografias. Imagens
+normalizadas e miniaturas ficam fora da instalação; o renderer recebe bytes por
+API limitada, sem paths ou acesso genérico ao filesystem. Backup completo com
+manifesto e restauração isolada foram preparados; sua interface fica para etapa
+posterior. `test:ui` agora utiliza banco, imagens e Chromium exclusivos por execução.
+
+Fluxos, segurança, arquivos, testes e limitações no
+[relatório da Etapa 4B](docs/etapa-4B-cadastro-perfumes.md). As seções anteriores
+abaixo são históricas; suas referências a schema v4 e Perfumes reservado foram
+superadas por esta entrega.
+
 ## Etapa 4A — Integração segura dos cadastros
 
 Implementada a comunicação Angular → preload → IPC → serviços cadastrais existentes

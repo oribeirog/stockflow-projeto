@@ -51,7 +51,11 @@ export class Shell {
     router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.current.set(
-          navigation.find((item) => '/' + item.path === event.urlAfterRedirects) ?? navigation[0],
+          navigation.find(
+            (item) =>
+              '/' + item.path ===
+              event.urlAfterRedirects.split('?')[0].split('/').slice(0, 2).join('/'),
+          ) ?? navigation[0],
         );
         this.expanded.set(false);
         afterNextRender(

@@ -1,11 +1,32 @@
-<label [for]="controlId()">{{ label() }}</label
-><input
+<label [for]="controlId()">{{ label() }}{{required() ? ' *' : ''}}</label>
+@if (multiline()) {
+<textarea
+  [id]="controlId()"
+  [value]="value()"
+  [disabled]="disabled()"
+  [required]="required()"
+  [readOnly]="readonly()"
+  [maxLength]="maxLength()"
+  [attr.aria-invalid]="error() ? 'true' : null"
+  [attr.aria-describedby]="(hint() ? controlId() + '-hint ' : '') + (error() ? controlId() + '-error' : '')"
+  (input)="valueChanged.emit($any($event.target).value)"
+></textarea>
+} @else {
+<input
   [id]="controlId()"
   [value]="value()"
   [placeholder]="placeholder()"
   [disabled]="disabled()"
-  [attr.aria-describedby]="hint() ? controlId() + '-hint' : null"
+  [required]="required()"
+  [readOnly]="readonly()"
+  [maxLength]="maxLength()"
+  [attr.inputmode]="inputMode()"
+  [attr.aria-invalid]="error() ? 'true' : null"
+  [attr.aria-describedby]="(hint() ? controlId() + '-hint ' : '') + (error() ? controlId() + '-error' : '')"
   (input)="valueChanged.emit($any($event.target).value)"
-/>@if (hint()) {
+/>
+} @if (hint()) {
 <p [id]="controlId() + '-hint'">{{ hint() }}</p>
+} @if (error()) {
+<p class="field-error" [id]="controlId() + '-error'">{{error()}}</p>
 }

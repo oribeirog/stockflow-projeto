@@ -6,15 +6,24 @@ import { cadastrosV1 } from './migrations/0001-cadastros';
 import { estoqueV2 } from './migrations/0002-estoque';
 import { comercialV3, commercialTables } from './migrations/0003-comercial';
 import { financeiroV4, financeiroTables } from './migrations/0004-financeiro';
+import { fotografiasV5 } from './migrations/0005-fotografias';
 import { reconciliarEstoque } from '../../services/estoque-reconciliation';
 import { reconciliarComercial } from '../../services/comercial-reconciliation';
+import { createFotoService } from '../../services/fotos';
+import { createMediaSnapshot } from '../../services/media-snapshot';
 
 export interface Migration {
   readonly version: number;
   readonly name: string;
   readonly sql: string;
 }
-export const migrations: readonly Migration[] = [cadastrosV1, estoqueV2, comercialV3, financeiroV4];
+export const migrations: readonly Migration[] = [
+  cadastrosV1,
+  estoqueV2,
+  comercialV3,
+  financeiroV4,
+  fotografiasV5,
+];
 export const APPLICATION_ID = 0x4d4e5250;
 export class DatabaseCompatibilityError extends Error {}
 interface AppliedMigration {
@@ -67,6 +76,18 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
       'eventos_auditoria',
     ];
     const tableList = db.pragma('table_list') as { name: string; strict: number }[];
+    if (version >= 5) {
+      requiredTables.push('foto_arquivos', 'produto_fotos');
+      const triggers = db.prepare("SELECT name FROM sqlite_schema WHERE type='trigger'").all() as {
+        name: string;
+      }[];
+      if (
+        [...fotografiasV5.sql.matchAll(/CREATE TRIGGER (\w+)/g)].some(
+          (m) => !triggers.some((t) => t.name === m[1]),
+        )
+      )
+        throw new Error('Proteção de fotografias ausente');
+    }
     if (version >= 4) {
       requiredTables.push(...financeiroTables);
       for (const [kind, pattern] of [
@@ -160,7 +181,7 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
 
 export async function migrateDatabase(
   db: Database.Database,
-  options: { directory: string; existed: boolean; appVersion: string },
+  options: { directory: string; existed: boolean; appVersion: string; imagesDirectory?: string },
   available: readonly Migration[] = migrations,
 ): Promise<void> {
   const initial = inspectDatabase(db, available);
@@ -178,6 +199,18 @@ export async function migrateDatabase(
     const directory = join(options.directory, 'backups');
     mkdirSync(directory, { recursive: true });
     const path = join(directory, `pre-migration-${initial.version}-${randomUUID()}.db`);
+    if (initial.version >= 5) {
+      // No IPC exists during migration; normal runtime snapshots share the live service lock.
+      const photos = createFotoService(
+        db,
+        options.imagesDirectory ?? join(options.directory, 'images'),
+        options.appVersion,
+        () => {
+          throw new Error('Codec indisponível durante backup');
+        },
+      );
+      await createMediaSnapshot(db, photos, path + '.assets', options.appVersion);
+    }
     await db.backup(path);
     writeFileSync(
       `${path}.json`,

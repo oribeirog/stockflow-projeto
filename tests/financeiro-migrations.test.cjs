@@ -132,7 +132,7 @@ for (const version of [1, 2, 3])
             protection.name,
           );
       }
-      assert.equal(inspectDatabase(db).version, 4);
+      assert.equal(inspectDatabase(db).version, 5);
       assert.deepEqual(db.pragma('foreign_key_check'), []);
       assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
     } finally {

@@ -73,7 +73,7 @@ test('15 explicit handlers preserve full saves, idempotency, audit, history and 
   assert.equal(db.prepare('SELECT count(*) n FROM eventos_auditoria').get().n, 15);
   assert.equal(db.prepare('SELECT count(*) n FROM historico_precos').get().n, 1);
   assert.equal(db.prepare('SELECT count(*) n FROM movimentacoes_estoque').get().n, 0);
-  assert.equal(db.pragma('user_version', { simple: true }), 4);
+  assert.equal(db.pragma('user_version', { simple: true }), 5);
   assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
 });
 
@@ -253,7 +253,7 @@ test('bundled preload exposes exactly system plus five fixed cadastral APIs', as
       };
     },
   });
-  assert.deepEqual(Object.keys(exposed).sort(), ['cadastros', 'system']);
+  assert.deepEqual(Object.keys(exposed).sort(), ['cadastros', 'fotos', 'system']);
   assert.deepEqual(Object.keys(exposed.cadastros).sort(), Object.keys(CANAIS_CADASTROS).sort());
   for (const [name, channels] of Object.entries(CANAIS_CADASTROS)) {
     assert.deepEqual(Object.keys(exposed.cadastros[name]).sort(), ['listar', 'obter', 'salvar']);

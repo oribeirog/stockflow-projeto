@@ -40,7 +40,7 @@ app
         1,
       );
       assert.equal(db.pragma('foreign_keys', { simple: true }), 1);
-      assert.equal(db.pragma('user_version', { simple: true }), 4);
+      assert.equal(db.pragma('user_version', { simple: true }), 5);
       assert.equal(db.pragma('trusted_schema', { simple: true }), 0);
       const service = createCatalogService(db, app.getVersion());
       const cmd = (operacaoId, dados) => ({ operacaoId, motivo: 'Validação Electron', dados });
@@ -78,12 +78,12 @@ app
       await assert.rejects(
         migrateDatabase(db, { directory, existed: true, appVersion: app.getVersion() }, [
           ...migrations,
-          { version: 5, name: 'runtime-5', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
-          { version: 6, name: 'runtime-6', sql: 'INSERT INTO missing_table VALUES (1)' },
+          { version: 6, name: 'runtime-6', sql: 'CREATE TABLE rollback_test(id INTEGER) STRICT;' },
+          { version: 7, name: 'runtime-7', sql: 'INSERT INTO missing_table VALUES (1)' },
         ]),
         /missing_table/,
       );
-      assert.equal(db.pragma('user_version', { simple: true }), 4);
+      assert.equal(db.pragma('user_version', { simple: true }), 5);
       assert.equal(
         db.prepare("SELECT count(*) n FROM sqlite_schema WHERE name='rollback_test'").get().n,
         0,

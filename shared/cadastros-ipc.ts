@@ -16,7 +16,10 @@ export type CodigoErroDesktopCadastro =
   | 'INTEGRITY'
   | 'INTERNAL_ERROR'
   | 'DESKTOP_UNAVAILABLE'
-  | 'IPC_UNAVAILABLE';
+  | 'IPC_UNAVAILABLE'
+  | 'PHOTO_INVALID'
+  | 'PHOTO_EXPIRED'
+  | 'PHOTO_UNAVAILABLE';
 export type ResultadoCadastro<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: CodigoErroDesktopCadastro; message: string } };
@@ -60,6 +63,10 @@ export const CANAIS_CADASTROS = {
   },
 } as const;
 export const MENSAGENS_CADASTRO: Record<CodigoErroDesktopCadastro, string> = {
+  PHOTO_INVALID:
+    'Fotografia inválida. Use JPEG ou PNG estático de até 10 MiB e 24 milhões de pixels.',
+  PHOTO_EXPIRED: 'A seleção da fotografia expirou. Selecione o arquivo novamente.',
+  PHOTO_UNAVAILABLE: 'Não foi possível acessar a fotografia. O cadastro foi preservado.',
   VALIDATION: 'Confira os campos e os limites informados.',
   NOT_FOUND: 'Cadastro ou referência não encontrado.',
   CONFLICT: 'Já existe um cadastro com esses identificadores ou há uma restrição de integridade.',

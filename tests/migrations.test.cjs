@@ -40,6 +40,7 @@ test('3D schema contains only approved tables and all are STRICT', async () => {
       'eventos_auditoria',
       'formas_pagamento',
       'fornecedores',
+      'foto_arquivos',
       'historico_precos',
       'itens_documento',
       'marcas',
@@ -49,6 +50,7 @@ test('3D schema contains only approved tables and all are STRICT', async () => {
       'operacoes',
       'origens_reembolso',
       'parcelas_receber',
+      'produto_fotos',
       'produtos',
       'reembolsos_cliente',
       'saldos_estoque',
@@ -82,7 +84,7 @@ test('existing empty foundation database is backed up before first migration', a
     }
     const manifest = JSON.parse(readFileSync(`${path}.json`, 'utf8'));
     assert.equal(manifest.schemaVersion, 0);
-    assert.equal(manifest.targetSchemaVersion, 4);
+    assert.equal(manifest.targetSchemaVersion, 5);
     assert.equal(manifest.databaseId, null);
   } finally {
     db.close();
@@ -141,7 +143,7 @@ test('upgrade from version 1 preserves data/IDs and creates consistent WAL backu
     const identity = inspectDatabase(db).identity;
     const future = migrations;
     await migrateDatabase(db, options(dir), future);
-    assert.equal(db.pragma('user_version', { simple: true }), 4);
+    assert.equal(db.pragma('user_version', { simple: true }), 5);
     assert.equal(inspectDatabase(db, future).identity.identificador, identity.identificador);
     assert.equal(db.prepare('SELECT nome FROM marcas WHERE id=8').get().nome, 'Preservar');
     const path = join(dir, 'backups', backups(dir)[0]);
@@ -172,14 +174,14 @@ test('failure in pending set rolls back all migrations and markers', async () =>
     await assert.rejects(
       migrateDatabase(db, options(dir), [
         ...migrations,
-        fixture(5, 'CREATE TABLE rollback_marker(id INTEGER) STRICT;'),
-        fixture(6, 'INSERT INTO nonexistent VALUES (1);'),
+        fixture(6, 'CREATE TABLE rollback_marker(id INTEGER) STRICT;'),
+        fixture(7, 'INSERT INTO nonexistent VALUES (1);'),
       ]),
       /nonexistent/,
     );
-    assert.equal(db.pragma('user_version', { simple: true }), 4);
+    assert.equal(db.pragma('user_version', { simple: true }), 5);
     assert.equal(tables(db).includes('rollback_marker'), false);
-    assert.equal(db.prepare('SELECT count(*) n FROM schema_migrations').get().n, 4);
+    assert.equal(db.prepare('SELECT count(*) n FROM schema_migrations').get().n, 5);
     assert.deepEqual(inspectDatabase(db).identity, identity);
     assert.equal(backups(dir).length, 1);
   } finally {
@@ -194,7 +196,7 @@ test('failure during initial set restores pristine schema and application/user v
     await assert.rejects(
       migrateDatabase(db, { ...options(dir), existed: false }, [
         ...migrations,
-        fixture(5, 'INSERT INTO nonexistent VALUES (1)'),
+        fixture(6, 'INSERT INTO nonexistent VALUES (1)'),
       ]),
       /nonexistent/,
     );
@@ -225,10 +227,10 @@ test('backup and manifest failures prevent migration', async () => {
       await assert.rejects(
         migrateDatabase(db, options(dir), [
           ...migrations,
-          fixture(5, 'CREATE TABLE must_not_exist(id INTEGER) STRICT;'),
+          fixture(6, 'CREATE TABLE must_not_exist(id INTEGER) STRICT;'),
         ]),
       );
-      assert.equal(db.pragma('user_version', { simple: true }), 4);
+      assert.equal(db.pragma('user_version', { simple: true }), 5);
       assert.equal(tables(db).includes('must_not_exist'), false);
       checkIntegrity(db);
     } finally {

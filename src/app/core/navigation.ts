@@ -17,7 +17,7 @@ export const navigation: readonly {
     path: 'perfumes',
     title: 'Perfumes',
     icon: 'perfumes',
-    description: 'Espaço reservado para o catálogo de perfumes.',
+    description: 'Cadastro e gestão do catálogo de perfumes.',
   },
   {
     path: 'estoque',
@@ -63,6 +63,15 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...['perfumes/novo', 'perfumes/:id/editar'].map((path) => ({
+    path,
+    title: 'Perfumes • MNR Perfumes',
+    data: { perfumeEditor: true },
+    loadComponent: () => import('../features/perfumes/editor').then((m) => m.PerfumeEditor),
+    canDeactivate: [
+      (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
+    ],
+  })),
   ...navigation.map((item) => ({
     path: item.path,
     title: `${item.title} • MNR Perfumes`,
@@ -70,9 +79,11 @@ export const routes: Routes = [
     loadComponent:
       item.path === 'dashboard'
         ? () => import('../features/dashboard/dashboard').then((m) => m.Dashboard)
-        : item.path === 'configuracoes'
-          ? () => import('../features/settings/settings').then((m) => m.Settings)
-          : () => import('../features/module/module').then((m) => m.ModulePage),
+        : item.path === 'perfumes'
+          ? () => import('../features/perfumes/perfumes').then((m) => m.Perfumes)
+          : item.path === 'configuracoes'
+            ? () => import('../features/settings/settings').then((m) => m.Settings)
+            : () => import('../features/module/module').then((m) => m.ModulePage),
   })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },

@@ -1,7 +1,18 @@
 import { spawn } from 'node:child_process';
 import electron from 'electron';
 import { environment } from './env.mjs';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+
+mkdirSync('.local-data/test', { recursive: true });
+const testRoot = mkdtempSync(resolve('.local-data/test/ui-'));
+const development = resolve('.local-data/development/data/mnr-perfumes.db');
+const fingerprint = () =>
+  existsSync(development)
+    ? createHash('sha256').update(readFileSync(development)).digest('hex')
+    : null;
+const before = fingerprint();
 
 // A package entry keeps app.getVersion() consistent with the normal application.
 const packageInfo = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
@@ -18,7 +29,7 @@ writeFileSync(
 let passed = false;
 const child = spawn(electron, ['.cache/ui-app'], {
   stdio: ['ignore', 'pipe', 'inherit'],
-  env: environment({ MNR_SMOKE: '0', MNR_DEV: '0' }),
+  env: environment({ MNR_SMOKE: '0', MNR_DEV: '0', MNR_UI_TEST_RUN: basename(testRoot) }),
 });
 child.stdout.on('data', (chunk) => {
   process.stdout.write(chunk);
@@ -28,7 +39,7 @@ const timer = setTimeout(() => {
   child.kill();
   process.exitCode = 1;
   console.error('Desktop UI timeout');
-}, 90000);
+}, 180000);
 child.on('error', (error) => {
   clearTimeout(timer);
   console.error(error);
@@ -36,5 +47,7 @@ child.on('error', (error) => {
 });
 child.on('exit', (code) => {
   clearTimeout(timer);
-  process.exitCode = code === 0 && passed ? 0 : 1;
+  const unchanged = before === fingerprint();
+  if (!unchanged) console.error('Development database changed during UI test');
+  process.exitCode = code === 0 && passed && unchanged ? 0 : 1;
 });

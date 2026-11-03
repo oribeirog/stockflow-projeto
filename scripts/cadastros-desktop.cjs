@@ -132,7 +132,7 @@ app
         { quantidade: 0, valor_total_centavos: 0, versao: 0 },
       );
       assert.equal(db.prepare('SELECT count(*) n FROM movimentacoes_estoque').get().n, 0);
-      assert.equal(db.pragma('user_version', { simple: true }), 4);
+      assert.equal(db.pragma('user_version', { simple: true }), 5);
       assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
       assert.equal(db.pragma('foreign_key_check').length, 0);
       console.log(
