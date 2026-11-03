@@ -1,3 +1,4 @@
+import { criarHandlersVendas } from './vendas';
 import { isTrustedRequest, isTrustedSender } from './trust';
 import { criarHandlersCadastros } from './cadastros';
 import { criarHandlersEstoque } from './estoque';
@@ -18,6 +19,7 @@ export function registerIpc(
     ...criarHandlersCadastros(db, app.getVersion()),
     ...criarHandlersEstoque(db, app.getVersion()),
     ...criarHandlersCompras(db, app.getVersion()),
+    ...criarHandlersVendas(db, app.getVersion()),
   ]) {
     ipcMain.handle(channel, (event, ...args: unknown[]) => {
       if (!isTrustedSender(event, window, allowedUrl)) {

@@ -1,3 +1,4 @@
+import { CANAIS_VENDAS } from '../../shared/vendas-ipc';
 import { contextBridge, ipcRenderer } from 'electron';
 import { STATUS_CHANNEL, type DesktopApi } from '../../shared/contracts';
 import { CANAIS_CADASTROS, type ApiCadastro } from '../../shared/cadastros-ipc';
@@ -16,6 +17,15 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  vendas: {
+    listar: (input) => ipcRenderer.invoke(CANAIS_VENDAS.listar, input),
+    obter: (input) => ipcRenderer.invoke(CANAIS_VENDAS.obter, input),
+    revisarPlano: (input) => ipcRenderer.invoke(CANAIS_VENDAS.revisarPlano, input),
+    salvarRascunho: (input) => ipcRenderer.invoke(CANAIS_VENDAS.salvarRascunho, input),
+    confirmar: (input) => ipcRenderer.invoke(CANAIS_VENDAS.confirmar, input),
+    confirmarComEntrada: (input) => ipcRenderer.invoke(CANAIS_VENDAS.confirmarComEntrada, input),
+    descartarRascunho: (input) => ipcRenderer.invoke(CANAIS_VENDAS.descartarRascunho, input),
+  },
   compras: {
     listar: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.listar, input),
     obter: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.obter, input),

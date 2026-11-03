@@ -134,11 +134,24 @@ try {
   await until(
     `document.querySelector('mnr-compra-editor').innerText.includes('Total oficial: R$ 6,00')`,
   );
+  const draft = (await api('window.mnrApi.compras.listar({})')).itens[0];
+  const draftVersion = (await api(`window.mnrApi.compras.obter(${draft.id})`)).versao;
+  await button('Voltar às compras');
+  await evaluate(`location.hash='#/compras/${draft.id}'`);
+  await until(`!!document.querySelector('#compra-motivo')`);
+  if (
+    await evaluate(
+      `document.querySelector('#compra-motivo').value !== '' || document.querySelector('#compra-motivo').required`,
+    )
+  )
+    throw Error('Rascunho reaberto exige justificativa comercial.');
   await button('Adicionar pagamento');
   await fill('#pagamento-forma-0', String(forms[0].id));
   await fill('#pagamento-valor-0', '6,00');
   await button('Salvar e revisar compra');
   await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
+  if ((await api(`window.mnrApi.compras.obter(${draft.id})`)).versao !== draftVersion)
+    throw Error('Pagamento alterou a versão comercial.');
   await call('Network.enable');
   await call('Network.emulateNetworkConditions', {
     offline: true,

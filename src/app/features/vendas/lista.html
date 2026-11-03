@@ -1,0 +1,87 @@
+<section class="stack" aria-label="Vendas de clientes">
+  <div class="row">
+    <a routerLink="/vendas/nova">Nova venda</a
+    ><a routerLink="/configuracoes/formas-pagamento">Gerenciar formas de pagamento</a>
+  </div>
+  <div class="row">
+    <label
+      >Estado<select
+        id="vendas-estado"
+        [value]="state()"
+        (change)="state.set($any($event.target).value); load()"
+      >
+        <option value="">Todos</option>
+        <option>RASCUNHO</option>
+        <option>CONFIRMADO</option>
+        <option>DESCARTADO</option>
+        <option>ESTORNADO</option>
+      </select></label
+    >
+    <mnr-field
+      controlId="vendas-cliente-busca"
+      label="Pesquisar cliente"
+      [value]="search()"
+      (valueChanged)="search.set($event); findClients()"
+    />
+    <label
+      >Cliente<select
+        id="vendas-cliente"
+        [value]="client()"
+        (change)="client.set($any($event.target).value); load()"
+      >
+        <option value="">Todos</option>
+        @for (p of options(); track p.id) {
+        <option [value]="p.id">{{p.nome}}{{p.ativo ? '' : ' (inativo)'}}</option>
+        }
+      </select></label
+    >
+    @if (clientMore()) {
+    <mnr-button variant="secondary" (pressed)="findClients(true)">Mais clientes</mnr-button> }
+    <mnr-button [disabled]="loading()" (pressed)="load()">Atualizar vendas</mnr-button>
+  </div>
+  @if (message()) {
+  <p role="alert">{{message()}}</p>
+  } @if (loading()) {
+  <p role="status">Carregando vendas…</p>
+  } @else if (result(); as r) { @if (!r.itens.length) {
+  <p>Nenhuma venda encontrada.</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Venda</th>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Estado</th>
+          <th>Modalidade</th>
+          <th>Total oficial</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of r.itens; track c.id) {
+        <tr>
+          <td><a [routerLink]="['/vendas',c.id]">{{c.numero}}</a></td>
+          <td>{{c.dataComercial}}</td>
+          <td>{{c.contraparteNome || 'Não informado'}}</td>
+          <td>{{c.estado}}</td>
+          <td>
+            {{c.modalidadeVenda === 'A_PRAZO' ? 'A prazo' : c.modalidadeVenda === 'A_VISTA' ? 'À
+            vista' : 'Não definida'}}
+          </td>
+          <td>{{reais(c.totalCentavos)}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <mnr-button variant="secondary" [disabled]="page === 0" (pressed)="load(page-1)"
+      >Anterior</mnr-button
+    ><span>Página {{page+1}}</span
+    ><mnr-button variant="secondary" [disabled]="!r.temMais" (pressed)="load(page+1)"
+      >Próxima</mnr-button
+    >
+  </div>
+  }
+</section>

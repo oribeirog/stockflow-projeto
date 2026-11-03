@@ -1,5 +1,27 @@
 # MNR Perfumes
 
+## Etapa 4E.1 — Vendas
+
+Vendas oferece rascunhos, descontos, revisão oficial no backend e confirmação
+atômica à vista, a prazo ou com entrada e múltiplas formas. O detalhe preserva
+históricos e separa total vendido, recebido na confirmação e saldo exigível atual.
+A parcela técnica de entrada não soma dinheiro novamente.
+
+Sete canais tipados delegam aos serviços existentes. Revisar não grava operações;
+confirmar revalida versão, referências, estoque e custo. Migrações 0001–0005,
+serviços de negócio existentes e segurança Electron foram preservados.
+
+Testes locais, HTTP e executável empacotado usam bancos isolados, incluindo offline,
+rollback e repetição idempotente. Detalhes, evidências, limitações e arquivos no
+[relatório técnico da 4E.1](docs/etapa-4E1-vendas.md).
+
+Correções do fluxo a prazo, transições de modalidade e reabertura de rascunhos
+sem repetir justificativas comerciais estão no
+[relatório da correção](docs/correcao-4E1-fluxos-rascunhos.md).
+
+A 4E.2 permanece planejada e aguarda aprovação separada. Interfaces de devolução e
+cancelamento de compras e estorno de ajustes manuais também ficam para escopo futuro.
+
 ## Etapa 4D.2 — Compras de fornecedores
 
 Compras e formas de pagamento estão disponíveis. Um teste isolado do Electron

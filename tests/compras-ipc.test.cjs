@@ -312,5 +312,5 @@ test('preload exposes exactly five fixed purchase operations with no generic inv
   }
   assert.equal(api.invoke, undefined);
   assert.equal(api.financeiro, undefined);
-  assert.equal(api.vendas, undefined);
+  assert.ok(api.vendas);
 });

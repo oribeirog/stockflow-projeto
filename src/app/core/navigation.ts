@@ -29,7 +29,7 @@ export const navigation: readonly {
     path: 'vendas',
     title: 'Vendas',
     icon: 'sales',
-    description: 'Espaço reservado para o registro e acompanhamento de vendas.',
+    description: 'Registro, confirmação e histórico de vendas.',
   },
   {
     path: 'compras',
@@ -63,6 +63,15 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...['vendas/nova', 'vendas/:id'].map((path) => ({
+    path,
+    title: 'Vendas ? MNR Perfumes',
+    data: { vendaEditor: true },
+    loadComponent: () => import('../features/vendas/editor').then((m) => m.VendaEditor),
+    canDeactivate: [
+      (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
+    ],
+  })),
   {
     path: 'configuracoes/formas-pagamento',
     title: 'Configurações • MNR Perfumes',
@@ -121,11 +130,13 @@ export const routes: Routes = [
             ? () => import('../features/estoque/estoque').then((m) => m.Estoque)
             : item.path === 'configuracoes'
               ? () => import('../features/settings/settings').then((m) => m.Settings)
-              : item.path === 'compras'
-                ? () => import('../features/compras/lista').then((m) => m.Compras)
-                : ['clientes', 'fornecedores'].includes(item.path)
-                  ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
-                  : () => import('../features/module/module').then((m) => m.ModulePage),
+              : item.path === 'vendas'
+                ? () => import('../features/vendas/lista').then((m) => m.Vendas)
+                : item.path === 'compras'
+                  ? () => import('../features/compras/lista').then((m) => m.Compras)
+                  : ['clientes', 'fornecedores'].includes(item.path)
+                    ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
+                    : () => import('../features/module/module').then((m) => m.ModulePage),
   })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },

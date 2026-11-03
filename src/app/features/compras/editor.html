@@ -39,13 +39,13 @@
           [value]="fornecedor"
           (change)="fornecedor=$any($event.target).value; touch()"
         >
-          <option value="">Não informado</option>
+          <option value="" [selected]="!fornecedor">Não informado</option>
           @if (fornecedor) {
-          <option [value]="fornecedor">
+          <option [value]="fornecedor" [selected]="true">
             Vínculo atual: {{doc()?.contraparteNome || fornecedor}}
           </option>
           }@for (p of supplierOptions(); track p.id) {
-          <option [value]="p.id">{{p.nome}}</option>
+          <option [value]="p.id" [selected]="fornecedor === p.id.toString()">{{p.nome}}</option>
           }
         </select></label
       >
@@ -161,13 +161,18 @@
     />
     <mnr-field
       controlId="compra-motivo"
-      label="Justificativa da operação"
-      [required]="true"
+      label="Justificativa comercial (para salvar alterações ou descartar)"
+      [required]="dirty() || !doc()"
       [maxLength]="4000"
       [value]="motivo"
-      (valueChanged)="motivo=$event; touch()"
+      (valueChanged)="motivo=$event; invalidate()"
     />
     <mnr-button [disabled]="stale()" (pressed)="save()">Salvar rascunho</mnr-button>
+    @if (doc() && !dirty()) {
+    <p>
+      Dados comerciais salvos. Configure o pagamento e revise sem repetir a justificativa comercial.
+    </p>
+    }
   </fieldset>
   <fieldset [disabled]="locked || !!readError()" class="stack">
     <legend>Pagamento integral na confirmação</legend>
@@ -197,11 +202,13 @@
           [value]="p.id"
           (change)="paymentChange(n,'id',$any($event.target).value)"
         >
-          <option value="0">Selecione uma forma ativa</option>
+          <option value="0" [selected]="!p.id">Selecione uma forma ativa</option>
           @if (p.id) {
-          <option [value]="p.id">Selecionada: {{p.id}} — revalidada na revisão</option>
+          <option [value]="p.id" [selected]="true">
+            Selecionada: {{p.id}} — revalidada na revisão
+          </option>
           }@for (f of formOptions(); track f.id) {
-          <option [value]="f.id">{{f.nome}}</option>
+          <option [value]="f.id" [selected]="p.id === f.id">{{f.nome}}</option>
           }
         </select></label
       ><mnr-field

@@ -8,7 +8,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router, } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ComprasService, IntencaoCompra } from '../../core/compras.service';
 import { FornecedoresService } from '../../core/cadastros/fornecedores.service';
 import { ProdutosService } from '../../core/cadastros/produtos.service';
@@ -97,6 +97,7 @@ export class CompraEditor implements OnInit, OnDestroy {
     | IntencaoCompra<DadosDescarteCompra>;
   private action: 'save' | 'confirm' | 'discard' = 'save';
   private reviewFingerprint = '';
+  private savedCommercial = '';
   private destroyed = false;
   private sequence = 0;
   private optionSequences = { supplier: 0, product: 0, form: 0 };
@@ -130,8 +131,24 @@ export class CompraEditor implements OnInit, OnDestroy {
   }
   touch() {
     if (this.locked) return;
-    this.dirty.set(true);
+    try {
+      this.dirty.set(this.commercialFingerprint() !== this.savedCommercial);
+    } catch {
+      this.dirty.set(true);
+    }
     this.invalidate();
+  }
+  private commercialFingerprint() {
+    const data = this.draft();
+    delete data.id;
+    delete data.versaoEsperada;
+    return JSON.stringify(data);
+  }
+  get confirmationReason() {
+    return (
+      this.motivo.trim() ||
+      `Confirmação da compra ${this.doc()?.numero}, versão ${this.doc()?.versao}, após revisão explícita dos pagamentos.`
+    );
   }
   invalidate() {
     this.reviewed.set(null);
@@ -197,7 +214,19 @@ export class CompraEditor implements OnInit, OnDestroy {
       this.formMore.set(r.data.length > 25);
     }
   }
-  private adopt(d: Compra) {
+  private adopt(d: Compra, preserve = false) {
+    const pending = preserve
+      ? {
+          fornecedor: this.fornecedor,
+          data: this.data,
+          frete: this.frete,
+          despesas: this.despesas,
+          desconto: this.desconto,
+          descontoTipo: this.descontoTipo,
+          observacoes: this.observacoes,
+        }
+      : undefined;
+    const pendingItems = this.items();
     this.doc.set(d);
     this.fornecedor = String(d.fornecedorId ?? '');
     this.data = d.dataComercial;
@@ -217,6 +246,13 @@ export class CompraEditor implements OnInit, OnDestroy {
         motivo: i.motivo ?? '',
       })),
     );
+    this.savedCommercial = this.commercialFingerprint();
+    this.dirty.set(false);
+    if (pending) {
+      Object.assign(this, pending);
+      this.items.set(pendingItems);
+      this.touch();
+    }
   }
   async load(id = this.doc()?.id ?? Number(this.route.snapshot.paramMap.get('id'))) {
     if (this.locked) return;
@@ -241,9 +277,11 @@ export class CompraEditor implements OnInit, OnDestroy {
         this.dirty.set(false);
         this.payments.set([]);
       } else {
-        this.doc.set(r.data);
+        this.adopt(r.data, true);
         this.message.set(
-          'Versão atual consultada. Seu preenchimento foi preservado; confira e salve para revisar novamente.',
+          this.dirty()
+            ? 'Versão atual consultada. Seu preenchimento foi preservado; confira e salve para revisar novamente.'
+            : 'Versão atual consultada. Dados comerciais já salvos; revise novamente.',
         );
       }
     } else this.adopt(r.data);
@@ -288,7 +326,7 @@ export class CompraEditor implements OnInit, OnDestroy {
   addPayment() {
     if (!this.locked) {
       this.payments.update((p) => [...p, { id: 0, valor: '' }]);
-      this.touch();
+      this.invalidate();
     }
   }
   paymentChange(index: number, key: 'id' | 'valor', value: string) {
@@ -296,12 +334,12 @@ export class CompraEditor implements OnInit, OnDestroy {
     this.payments.update((p) =>
       p.map((v, n) => (n === index ? { ...v, [key]: key === 'id' ? Number(value) : value } : v)),
     );
-    this.touch();
+    this.invalidate();
   }
   removePayment(index: number) {
     if (!this.locked) {
       this.payments.update((p) => p.filter((_, n) => n !== index));
-      this.touch();
+      this.invalidate();
     }
   }
   private money(raw: string) {
@@ -348,6 +386,12 @@ export class CompraEditor implements OnInit, OnDestroy {
   async save() {
     if (this.locked || !this.editable || this.stale() || this.readError()) return false;
     this.invalidate();
+    if (this.doc() && !this.dirty()) {
+      this.message.set(
+        'Rascunho já salvo, sem alterações comerciais. Configure o pagamento e revise.',
+      );
+      return true;
+    }
     try {
       this.validReason();
       this.intention = this.service.intencao('salvarRascunho', this.draft(), this.motivo);
@@ -383,14 +427,15 @@ export class CompraEditor implements OnInit, OnDestroy {
     return sum !== null && d ? (BigInt(d.totalCentavos) - BigInt(sum)).toString() : null;
   }
   async review() {
-    if (this.locked || !this.editable || this.stale() || this.readError()) return;
-    this.invalidate();
-    try {
-      this.validReason();
-    } catch (e) {
-      this.message.set((e as Error).message);
+    if (this.locked || !this.editable || this.stale() || this.readError()) {
+      this.message.set(
+        this.uncertain()
+          ? 'Repita o mesmo comando para esclarecer o resultado antes de revisar.'
+          : 'Aguarde a operação pendente ou consulte a versão atual antes de revisar.',
+      );
       return;
     }
+    this.invalidate();
     if (this.dirty() || !this.doc()) {
       if (!(await this.save())) return;
     }
@@ -427,6 +472,9 @@ export class CompraEditor implements OnInit, OnDestroy {
   prepareConfirm() {
     if (this.locked || !this.reviewed() || this.fingerprint() !== this.reviewFingerprint) {
       this.invalidate();
+      this.message.set(
+        'Os pagamentos mudaram ou não foram revisados. Revise novamente antes de confirmar.',
+      );
       return;
     }
     this.description.set(
@@ -437,7 +485,7 @@ export class CompraEditor implements OnInit, OnDestroy {
         )
         .join(
           '\n',
-        )}\nJustificativa: ${this.motivo}\nA confirmação registra o pagamento integral e a entrada no estoque.`,
+        )}\nMotivo da confirmação: ${this.confirmationReason}\nA confirmação registra o pagamento integral e a entrada no estoque.`,
     );
     this.confirmation.set('confirm');
   }
@@ -472,6 +520,9 @@ export class CompraEditor implements OnInit, OnDestroy {
         this.doc()!.versao !== this.reviewed()!.versao
       ) {
         this.invalidate();
+        this.message.set(
+          'O documento ou os pagamentos mudaram. Revise novamente antes de confirmar.',
+        );
         return;
       }
       this.intention = this.service.intencao(
@@ -481,7 +532,7 @@ export class CompraEditor implements OnInit, OnDestroy {
           versaoEsperada: this.reviewed()!.versao,
           pagamentos: this.normalizedPayments(),
         },
-        this.motivo,
+        this.confirmationReason,
       );
       this.action = 'confirm';
     } else if (mode === 'discard') {
@@ -569,17 +620,19 @@ export class CompraEditor implements OnInit, OnDestroy {
       this.message.set('Conclua a operação pendente antes de sair.');
       return false;
     }
-    if (!this.dirty()) return true;
+    if (!this.dirty() && !this.payments().length) return true;
     if (this.leaveResolver) return false;
-    this.description.set('Sair sem salvar as alterações do formulário e dos pagamentos?');
+    this.description.set(
+      'Sair da edição? O rascunho salvo permanece. Os pagamentos desta sessão precisarão ser preenchidos novamente.',
+    );
     this.confirmation.set('leave');
     return new Promise((resolve) => (this.leaveResolver = resolve));
   }
   async back() {
-    if (await this.canLeave()) await this.router.navigate(['/compras']);
+    await this.router.navigate(['/compras']);
   }
   @HostListener('window:beforeunload', ['$event']) beforeUnload(event: BeforeUnloadEvent) {
-    if (this.dirty() || this.locked || this.managing()) {
+    if (this.dirty() || this.payments().length || this.locked || this.managing()) {
       event.preventDefault();
       event.returnValue = '';
     }

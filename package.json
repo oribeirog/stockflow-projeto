@@ -22,7 +22,8 @@
     "dist": "npm run build && node scripts/package.mjs",
     "test": "npm run build && node --test tests/*.test.cjs && npm run test:cadastros && node scripts/smoke.mjs",
     "test:cadastros": "ng build --configuration integration && node scripts/cadastros-smoke.mjs",
-    "test:ui": "npm run build && node scripts/ui-smoke.mjs && node scripts/compras-ui-smoke.mjs"
+    "test:ui": "npm run build && node scripts/ui-smoke.mjs && node scripts/compras-ui-smoke.mjs && node scripts/vendas-ui-smoke.mjs",
+    "test:vendas": "npm run build && node --test tests/vendas-ipc.test.cjs && node scripts/vendas-ui-smoke.mjs"
   },
   "dependencies": {
     "@angular/common": "22.2.4",

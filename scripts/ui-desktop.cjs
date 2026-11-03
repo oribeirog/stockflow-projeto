@@ -123,6 +123,7 @@ async function verify(window) {
         'fornecedores',
         'estoque',
         'compras',
+        'vendas',
       ].includes(path)
     ) {
       await until(

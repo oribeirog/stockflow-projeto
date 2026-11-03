@@ -1,3 +1,4 @@
+import type { VendasApi } from './vendas-ipc';
 import type { CadastrosApi } from './cadastros-ipc';
 import type { FotosApi } from './fotos';
 import type { EstoqueApi } from './estoque-ipc';
@@ -12,6 +13,7 @@ export type Result<T> =
   | { ok: false; error: { code: string; message: string } };
 export interface DesktopApi {
   compras: ComprasApi;
+  vendas: VendasApi;
   estoque: EstoqueApi;
   fotos: FotosApi;
   cadastros: CadastrosApi;

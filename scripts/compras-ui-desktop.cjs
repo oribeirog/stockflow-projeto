@@ -208,6 +208,17 @@ async function verify(win) {
   await until(
     `document.querySelector('mnr-compra-editor').innerText.includes('Total oficial: R$ 4,81')`,
   );
+  const saved = (await api('window.mnrApi.compras.listar({})')).itens[0];
+  const savedVersion = (await api(`window.mnrApi.compras.obter(${saved.id})`)).versao;
+  await button('Voltar às compras');
+  await evaluate(`location.hash='#/compras/${saved.id}'`);
+  await until(`!!document.querySelector('#compra-motivo')`);
+  assert.equal(
+    await evaluate(`document.querySelector('#compra-fornecedor').value`),
+    String(supplier.id),
+  );
+  assert.equal(await evaluate(`document.querySelector('#compra-motivo').value`), '');
+  assert.equal(await evaluate(`document.querySelector('#compra-motivo').required`), false);
   await button('Adicionar pagamento');
   await fill('#pagamento-forma-0', String(pix.id));
   await fill('#pagamento-valor-0', '2,00');
@@ -216,6 +227,19 @@ async function verify(win) {
   await fill('#pagamento-valor-1', '2,81');
   await button('Salvar e revisar compra');
   await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
+  assert.equal((await api(`window.mnrApi.compras.obter(${saved.id})`)).versao, savedVersion);
+  await fill('#pagamento-valor-0', '2,00');
+  assert.equal(await evaluate(`!!document.querySelector('[aria-label="Revisão pronta"]')`), false);
+  await button('Salvar e revisar compra');
+  await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
+  assert.equal((await api(`window.mnrApi.compras.obter(${saved.id})`)).versao, savedVersion);
+  await fill('#item-q-0', '4');
+  await button('Salvar e revisar compra');
+  await until(`document.querySelector('.feedback')?.textContent.includes('justificativa')`);
+  await fill('#item-q-0', '3');
+  await button('Salvar e revisar compra');
+  await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
+  assert.equal((await api(`window.mnrApi.compras.obter(${saved.id})`)).versao, savedVersion);
   const pageBefore = await api('window.mnrApi.compras.listar({})');
   const draft = await api(`window.mnrApi.compras.obter(${pageBefore.itens[0].id})`);
   const changed = {
@@ -245,13 +269,34 @@ async function verify(win) {
   await until(
     `!document.querySelector('mnr-compra-editor').innerText.includes('Consultar versão atual preservando preenchimento')`,
   );
+  await api(
+    `window.mnrApi.compras.salvarRascunho(${cmd({ ...changed, versaoEsperada: draft.versao + 1, observacoes: 'Observação externa' })})`,
+  );
+  await fill('#compra-observacoes', 'Edição local');
+  await fill('#compra-motivo', 'Edição com conflito');
+  await button('Salvar e revisar compra');
+  await button('Consultar versão atual preservando preenchimento');
+  assert.equal(
+    await evaluate(`document.querySelector('#compra-observacoes').value`),
+    'Edição local',
+  );
+  await fill('#compra-motivo', '');
+  await fill('#compra-observacoes', '');
+  await button('Salvar e revisar compra');
+  await until(`document.querySelector('.feedback')?.textContent.includes('justificativa')`);
+  await fill('#compra-observacoes', 'Observação externa');
   await button('Salvar e revisar compra');
   await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
+  assert.equal((await api(`window.mnrApi.compras.obter(${saved.id})`)).versao, draft.versao + 2);
   await fill('#compra-observacoes', 'alterado');
+  await fill('#compra-motivo', 'Atualização comercial justificada');
   assert.equal(await evaluate(`!!document.querySelector('[aria-label="Revisão pronta"]')`), false);
   await button('Salvar e revisar compra');
   await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
   await capture('compras');
+  await fill('#compra-motivo', '');
+  await button('Salvar e revisar compra');
+  await until(`!!document.querySelector('[aria-label="Revisão pronta"]')`);
   const original = ipcMain._invokeHandlers.get('compras:confirmar'),
     commands = [];
   let lost = true;
@@ -284,6 +329,7 @@ async function verify(win) {
   );
   assert.equal(commands.length, 2);
   assert.equal(commands[0], commands[1]);
+  assert.match(JSON.parse(commands[0]).motivo, /^Confirmação da compra /);
   const page = await api('window.mnrApi.compras.listar({})');
   assert.equal(page.itens.length, 1);
   const result = await api(`window.mnrApi.compras.obter(${page.itens[0].id})`);

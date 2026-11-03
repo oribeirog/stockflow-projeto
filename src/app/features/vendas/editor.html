@@ -1,0 +1,422 @@
+<section class="stack" aria-label="Venda de cliente">
+  <div class="row">
+    <mnr-button variant="secondary" (pressed)="back()">Voltar às vendas</mnr-button>@if (doc(); as
+    d) {
+    <h2>{{d.numero}} · {{d.estado}} · versão {{d.versao}}</h2>
+    } @else {
+    <h2>Nova venda</h2>
+    }
+  </div>
+  @if (loading()) {
+  <p role="status">Carregando venda…</p>
+  } @if (message()) {
+  <p role="status" tabindex="-1" class="feedback">{{message()}}</p>
+  } @if (readError()) {
+  <p role="alert">{{readError()}}</p>
+  <mnr-button [disabled]="locked" (pressed)="load()">Consultar novamente</mnr-button> } @if
+  (operationId()) {
+  <p>Operação: {{operationId()}}</p>
+  } @if (uncertain()) {
+  <mnr-button [disabled]="busy()" (pressed)="retry()">Repetir o mesmo comando</mnr-button> } @if
+  (stale()) {
+  <mnr-button [disabled]="locked" (pressed)="load()"
+    >Consultar versão atual preservando preenchimento</mnr-button
+  >
+  } @if (editable && !loading() && (!readError() || doc())) {
+  <p>Valores de preenchimento. Os totais oficiais serão apresentados após salvar e revisar.</p>
+  <fieldset [disabled]="locked || !!readError()" class="stack">
+    <legend>Rascunho de venda</legend>
+    <div class="row">
+      <mnr-field
+        controlId="venda-cliente-busca"
+        label="Pesquisar cliente ativo"
+        [value]="clientSearch()"
+        (valueChanged)="clientSearch.set($event); options('client')"
+      />
+      <label
+        >Cliente<select
+          id="venda-cliente"
+          [value]="cliente"
+          [attr.aria-invalid]="financialErrors()['venda-cliente'] ? 'true' : null"
+          [attr.aria-describedby]="financialErrors()['venda-cliente'] ? 'venda-cliente-error' : null"
+          (change)="cliente=$any($event.target).value; touch()"
+        >
+          <option value="" [selected]="!cliente">Não informado</option>
+          @if (cliente) {
+          <option [value]="cliente" [selected]="true">
+            Vínculo atual: {{doc()?.contraparteNome || cliente}}
+          </option>
+          }@for (p of clientOptions(); track p.id) {
+          <option [value]="p.id" [selected]="cliente === p.id.toString()">{{p.nome}}</option>
+          }
+        </select></label
+      >
+      @if (financialErrors()['venda-cliente']; as error) {
+      <p id="venda-cliente-error" role="alert">{{error}}</p>
+      } @if (clientMore()) {
+      <mnr-button variant="secondary" (pressed)="options('client',true)">Mais clientes</mnr-button>
+      }
+      <mnr-field
+        controlId="venda-data"
+        label="Data comercial (AAAA-MM-DD)"
+        [value]="data"
+        (valueChanged)="data=$event; touch()"
+      />
+    </div>
+    <div class="row">
+      <mnr-field
+        controlId="venda-produto-busca"
+        label="Pesquisar perfume ativo por nome/SKU"
+        [value]="productSearch()"
+        (valueChanged)="productSearch.set($event); options('product')"
+      /><label
+        >Adicionar perfume<select
+          id="venda-produto"
+          (change)="addProduct($any($event.target).value); $any($event.target).value='' "
+        >
+          <option value="">Selecione</option>
+          @for (p of productOptions(); track p.id) {
+          <option [value]="p.id">{{p.nome}} · {{p.sku}}</option>
+          }
+        </select></label
+      >@if (productMore()) {
+      <mnr-button variant="secondary" (pressed)="options('product',true)">Mais perfumes</mnr-button>
+      }
+    </div>
+    @for (i of items(); track i.produtoId; let n=$index) {
+    <fieldset class="stack">
+      <legend>{{i.nome}}</legend>
+      @if (saldos()[i.produtoId] !== undefined) {
+      <p>
+        Disponível na última consulta: {{saldos()[i.produtoId]}}. A revisão e a confirmação
+        revalidam o estoque.
+      </p>
+      }
+      <div class="row">
+        <mnr-field
+          [controlId]="'item-q-'+n"
+          label="Quantidade"
+          [value]="i.quantidade"
+          (valueChanged)="itemChange(n,'quantidade',$event)"
+        />
+        <mnr-field
+          [controlId]="'item-v-'+n"
+          label="Preço unitário (R$)"
+          [value]="i.unitario"
+          (valueChanged)="itemChange(n,'unitario',$event)"
+        />
+        <label
+          >Tipo de desconto<select
+            [id]="'item-t-'+n"
+            [value]="i.descontoTipo"
+            (change)="itemChange(n,'descontoTipo',$any($event.target).value)"
+          >
+            <option value="CENTAVOS">Reais</option>
+            <option value="PONTOS_BASE">Percentual</option>
+          </select></label
+        >
+        <mnr-field
+          [controlId]="'item-d-'+n"
+          [label]="i.descontoTipo === 'CENTAVOS' ? 'Desconto (R$)' : 'Desconto (%)'"
+          [value]="i.desconto"
+          (valueChanged)="itemChange(n,'desconto',$event)"
+        />
+        <mnr-field
+          [controlId]="'item-m-'+n"
+          label="Motivo do item / venda abaixo do custo"
+          [maxLength]="4000"
+          [value]="i.motivo"
+          (valueChanged)="itemChange(n,'motivo',$event)"
+        />
+        <mnr-button variant="secondary" (pressed)="remove(n)">Remover perfume {{n+1}}</mnr-button>
+      </div>
+    </fieldset>
+    }
+    <div class="row">
+      <label
+        >Desconto global<select
+          id="venda-desconto-tipo"
+          [value]="descontoTipo"
+          (change)="descontoTipo=$any($event.target).value; touch()"
+        >
+          <option value="CENTAVOS">Reais</option>
+          <option value="PONTOS_BASE">Percentual</option>
+        </select></label
+      ><mnr-field
+        controlId="venda-desconto"
+        [label]="descontoTipo === 'CENTAVOS' ? 'Desconto global (R$)' : 'Desconto global (%)'"
+        [value]="desconto"
+        (valueChanged)="desconto=$event; touch()"
+      />
+    </div>
+    <mnr-field
+      controlId="venda-observacoes"
+      label="Observações"
+      [multiline]="true"
+      [maxLength]="4000"
+      [value]="observacoes"
+      (valueChanged)="observacoes=$event; touch()"
+    />
+    <mnr-field
+      controlId="venda-motivo"
+      label="Justificativa comercial (para salvar alterações ou descartar)"
+      [required]="dirty() || !doc()"
+      [maxLength]="4000"
+      [value]="motivo"
+      (valueChanged)="motivo=$event; invalidate()"
+    />
+    <mnr-button [disabled]="stale()" (pressed)="save()">Salvar rascunho</mnr-button>
+    @if (doc() && !dirty()) {
+    <p>
+      Dados comerciais salvos. Configure o pagamento e revise sem repetir a justificativa comercial.
+    </p>
+    }
+  </fieldset>
+  <fieldset [disabled]="locked || !!readError()" class="stack">
+    <legend>Pagamentos na confirmação e parcelas</legend>
+    <p>Os pagamentos são preparados nesta sessão e só são gravados ao confirmar a venda.</p>
+    <div class="row">
+      <mnr-field
+        controlId="venda-forma-busca"
+        label="Pesquisar forma ativa"
+        [value]="formSearch()"
+        (valueChanged)="formSearch.set($event); options('form')"
+      />@if (formMore()) {
+      <mnr-button variant="secondary" (pressed)="options('form',true)">Mais formas</mnr-button>
+      }<mnr-button id="gerenciar-formas" variant="secondary" (pressed)="openForms()"
+        >Gerenciar formas de pagamento</mnr-button
+      >
+    </div>
+    @if (!formOptions().length) {
+    <p>
+      Nenhuma forma ativa encontrada. Cadastre sua primeira forma em “Gerenciar formas de
+      pagamento”. Recebimentos na confirmação exigem uma forma ativa; a prazo sem entrada não exige
+      pagamento inicial.
+    </p>
+    } @for (p of payments(); track $index; let n=$index) {
+    <div class="row">
+      <label
+        >Forma {{n+1}}<select
+          [id]="'pagamento-forma-'+n"
+          [value]="p.id"
+          [attr.aria-invalid]="financialErrors()['pagamento-forma-'+n] ? 'true' : null"
+          [attr.aria-describedby]="financialErrors()['pagamento-forma-'+n] ? 'pagamento-forma-error-'+n : null"
+          (change)="paymentChange(n,'id',$any($event.target).value)"
+        >
+          <option value="0" [selected]="!p.id">Selecione uma forma ativa</option>
+          @if (p.id) {
+          <option [value]="p.id" [selected]="true">
+            Selecionada: {{p.id}} — revalidada na revisão
+          </option>
+          }@for (f of formOptions(); track f.id) {
+          <option [value]="f.id" [selected]="p.id === f.id">{{f.nome}}</option>
+          }
+        </select></label
+      ><mnr-field
+        [controlId]="'pagamento-valor-'+n"
+        label="Valor pago (R$)"
+        [value]="p.valor"
+        [error]="financialErrors()['pagamento-valor-'+n] || ''"
+        (valueChanged)="paymentChange(n,'valor',$event)"
+      /><mnr-button variant="secondary" (pressed)="removePayment(n)"
+        >Remover pagamento {{n+1}}</mnr-button
+      >
+    </div>
+    @if (financialErrors()['pagamento-forma-'+n]; as error) {
+    <p [id]="'pagamento-forma-error-'+n" role="alert">{{error}}</p>
+    } }
+    <mnr-button variant="secondary" (pressed)="addPayment()">Adicionar pagamento</mnr-button>
+    <p>
+      Pagamentos e vencimentos só serão persistidos na confirmação. Ao sair, precisarão ser
+      preenchidos novamente.
+    </p>
+    <label
+      >Modalidade<select
+        id="venda-modalidade"
+        [value]="modalidade"
+        [attr.aria-invalid]="financialErrors()['venda-modalidade'] ? 'true' : null"
+        [attr.aria-describedby]="financialErrors()['venda-modalidade'] ? 'venda-modalidade-error' : null"
+        (change)="changeMode($any($event.target).value)"
+      >
+        <option value="A_VISTA" [selected]="modalidade === 'A_VISTA'">À vista</option>
+        <option value="A_PRAZO" [selected]="modalidade === 'A_PRAZO'">A prazo</option>
+      </select></label
+    >
+    @if (financialErrors()['venda-modalidade']; as error) {
+    <p id="venda-modalidade-error" role="alert">{{error}}</p>
+    } @if (modalidade === 'A_PRAZO') {
+    <label
+      ><input
+        id="venda-entrada"
+        type="checkbox"
+        [checked]="entrada"
+        (change)="changeEntry($any($event.target).checked)"
+      />Com entrada inicial</label
+    >
+    @for (p of parcelas(); track $index; let n=$index) {
+    <div class="row">
+      <mnr-field
+        [controlId]="'parcela-valor-'+n"
+        label="Valor da parcela (R$)"
+        [value]="p.valor"
+        [error]="financialErrors()['parcela-valor-'+n] || ''"
+        (valueChanged)="parcelaChange(n,'valor',$event)"
+      />
+      <mnr-field
+        [controlId]="'parcela-data-'+n"
+        label="Vencimento (AAAA-MM-DD)"
+        [value]="p.vencimento"
+        [error]="financialErrors()['parcela-data-'+n] || ''"
+        (valueChanged)="parcelaChange(n,'vencimento',$event)"
+      />
+      <mnr-button variant="secondary" (pressed)="removeParcela(n)"
+        >Remover parcela {{n+1}}</mnr-button
+      >
+    </div>
+    }
+    <mnr-button variant="secondary" (pressed)="addParcela()">Adicionar parcela</mnr-button>
+    <mnr-button variant="secondary" (pressed)="review(true)"
+      >Dividir saldo pelos vencimentos e revisar</mnr-button
+    >
+    }
+  </fieldset>
+  <div class="row">
+    <mnr-button [disabled]="locked || stale() || !!readError()" (pressed)="review()"
+      >Salvar e revisar venda</mnr-button
+    >@if (doc()) {
+    <mnr-button
+      variant="secondary"
+      [disabled]="locked || stale() || !!readError()"
+      (pressed)="prepareDiscard()"
+      >Descartar rascunho</mnr-button
+    >
+    }
+  </div>
+  } @if (doc(); as d) {
+  <section class="stack official" aria-labelledby="oficial-title">
+    <h3 id="oficial-title">
+      {{editable ? 'Valores oficiais do último rascunho salvo' : 'Histórico da venda'}}
+    </h3>
+    <p>
+      Cliente: {{d.contraparteNome || 'Não informado'}} · {{d.contraparteDocumento || 'Sem
+      documento'}} · Data: {{d.dataComercial}}
+    </p>
+    <p>
+      Subtotal: {{reais(d.subtotalCentavos)}} · Descontos dos itens:
+      {{reais(d.descontoItensCentavos)}} · Desconto global: {{reais(d.descontoGlobalCentavos)}}
+    </p>
+    <strong>Total oficial: {{reais(d.totalCentavos)}}</strong>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto / SKU</th>
+            <th>Quantidade</th>
+            <th>Unitário</th>
+            <th>Bruto</th>
+            <th>Desconto item</th>
+            <th>Global rateado</th>
+            <th>Líquido</th>
+            <th>Custo histórico do estoque</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of d.itens; track i.id) {
+          <tr>
+            <td>
+              {{i.descricaoHistorica || i.produtoId}} / {{i.skuHistorico}} @if(i.motivo) {
+              <p>{{i.motivo}}</p>
+              }
+            </td>
+            <td>{{i.quantidade}}</td>
+            <td>{{reais(i.valorUnitarioCentavos)}}</td>
+            <td>{{reais(i.valorBrutoCentavos)}}</td>
+            <td>{{reais(i.descontoItemCentavos)}}</td>
+            <td>{{reais(i.descontoGlobalRateadoCentavos)}}</td>
+            <td>{{reais(i.valorLiquidoCentavos)}}</td>
+            <td>
+              {{d.estado === 'RASCUNHO' ? 'Definido na confirmação' :
+              reais(i.valorCustoEstoqueCentavos)}}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (d.observacoes) {
+    <p>Observações: {{d.observacoes}}</p>
+    } @if (!editable) {
+    <h3>Recebimentos históricos da confirmação</h3>
+    <p>
+      Total vendido: {{reais(d.totalCentavos)}} · Dinheiro recebido na confirmação:
+      {{reais(d.recebidoConfirmacaoCentavos)}}
+    </p>
+    @if (d.financeiro; as f) {
+    <p>
+      Valor comercial líquido: {{reais(f.valorComercialLiquidoCentavos)}} · Recebimentos efetivos:
+      {{reais(f.recebimentosEfetivosCentavos)}} · Estornos de recebimento:
+      {{reais(f.estornosRecebimentoCentavos)}} · Abatimentos: {{reais(f.abatimentosDividaCentavos)}}
+      · Saldo exigível atual: {{reais(f.saldoReceberCentavos)}} · Reembolsos pagos:
+      {{reais(f.reembolsosPagosCentavos)}} · Estornos de reembolso:
+      {{reais(f.estornosReembolsoCentavos)}} · Reembolsos pendentes:
+      {{reais(f.reembolsosPendentesCentavos)}}
+    </p>
+    }
+    <h3>Parcelas históricas</h3>
+    @for (p of d.parcelasFinanceiras; track p.id) {
+    <p>
+      Parcela {{p.numero}} · {{p.tipo === 'ENTRADA' ? 'Entrada quitada na confirmação (já incluída
+      no recebido)' : 'Regular'}} · {{p.vencimento}} · Original: {{reais(p.valorOriginalCentavos)}}
+      · Saldo: {{reais(p.saldoCentavos)}} · {{p.status}}
+    </p>
+    } @for (p of historicPayments; track p.id) {
+    <p>
+      {{p.nomeHistorico}} · {{reais(p.valorCentavos)}} · {{p.dataEfetiva}} · registro
+      {{p.registradoEm}}
+    </p>
+    }@if (!historicPayments.length) {
+    <p>Sem recebimentos na confirmação.</p>
+    } }
+  </section>
+  } @if (reviewed(); as r) {
+  <section class="official stack" aria-label="Revisão pronta">
+    <h3>Revisão oficial · versão {{r.plano.versaoEsperada}}</h3>
+    @for (aviso of r.avisos; track $index) {
+    <p role="status">{{aviso}}</p>
+    }
+    <p>
+      Total vendido: {{reais(r.totalCentavos)}} · Recebido na confirmação:
+      {{reais(r.recebidoConfirmacaoCentavos)}} · Saldo a receber: {{reais(r.saldoFuturoCentavos)}}.
+      Confira os rateios acima e os pagamentos preenchidos. Qualquer alteração invalida esta
+      revisão.
+    </p>
+    <mnr-button id="confirmar-venda" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar venda revisada</mnr-button
+    >
+  </section>
+  }
+</section>
+@if (confirmation()) {
+<mnr-confirm
+  [title]="confirmation() === 'leave' ? 'Sair da venda' : confirmation() === 'discard' ? 'Descartar rascunho' : 'Confirmar venda'"
+  [description]="description()"
+  [focusReview]="true"
+  (confirmed)="confirm()"
+  (cancelled)="cancelConfirmation()"
+/>
+} @if (managing()) {
+<dialog
+  #manageDialog
+  aria-label="Gerenciar formas de pagamento"
+  (cancel)="$event.preventDefault(); closeForms()"
+>
+  <div class="stack">
+    <mnr-formas-pagamento (pending)="formPending.set($event)" (changed)="invalidate()" /><mnr-button
+      variant="secondary"
+      [disabled]="formPending()"
+      (pressed)="closeForms()"
+      >Voltar à venda</mnr-button
+    >
+  </div>
+</dialog>
+}
