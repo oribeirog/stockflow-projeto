@@ -1,0 +1,82 @@
+<section class="stack" aria-label="Compras de fornecedores">
+  <div class="row">
+    <a routerLink="/compras/nova">Nova compra</a
+    ><a routerLink="/configuracoes/formas-pagamento">Gerenciar formas de pagamento</a>
+  </div>
+  <div class="row">
+    <label
+      >Estado<select
+        id="compras-estado"
+        [value]="state()"
+        (change)="state.set($any($event.target).value); load()"
+      >
+        <option value="">Todos</option>
+        <option>RASCUNHO</option>
+        <option>CONFIRMADO</option>
+        <option>DESCARTADO</option>
+        <option>ESTORNADO</option>
+      </select></label
+    >
+    <mnr-field
+      controlId="compras-fornecedor-busca"
+      label="Pesquisar fornecedor"
+      [value]="search()"
+      (valueChanged)="search.set($event); findSuppliers()"
+    />
+    <label
+      >Fornecedor<select
+        id="compras-fornecedor"
+        [value]="supplier()"
+        (change)="supplier.set($any($event.target).value); load()"
+      >
+        <option value="">Todos</option>
+        @for (p of options(); track p.id) {
+        <option [value]="p.id">{{p.nome}}{{p.ativo ? '' : ' (inativo)'}}</option>
+        }
+      </select></label
+    >
+    @if (supplierMore()) {
+    <mnr-button variant="secondary" (pressed)="findSuppliers(true)">Mais fornecedores</mnr-button> }
+    <mnr-button [disabled]="loading()" (pressed)="load()">Atualizar compras</mnr-button>
+  </div>
+  @if (message()) {
+  <p role="alert">{{message()}}</p>
+  } @if (loading()) {
+  <p role="status">Carregando compras…</p>
+  } @else if (result(); as r) { @if (!r.itens.length) {
+  <p>Nenhuma compra encontrada.</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Compra</th>
+          <th>Data</th>
+          <th>Fornecedor</th>
+          <th>Estado</th>
+          <th>Total oficial</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of r.itens; track c.id) {
+        <tr>
+          <td><a [routerLink]="['/compras',c.id]">{{c.numero}}</a></td>
+          <td>{{c.dataComercial}}</td>
+          <td>{{c.contraparteNome || 'Não informado'}}</td>
+          <td>{{c.estado}}</td>
+          <td>{{reais(c.totalCentavos)}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <mnr-button variant="secondary" [disabled]="page === 0" (pressed)="load(page-1)"
+      >Anterior</mnr-button
+    ><span>Página {{page+1}}</span
+    ><mnr-button variant="secondary" [disabled]="!r.temMais" (pressed)="load(page+1)"
+      >Próxima</mnr-button
+    >
+  </div>
+  }
+</section>

@@ -7,6 +7,8 @@ export class MnrRouteReuseStrategy extends BaseRouteReuseStrategy {
     future: ActivatedRouteSnapshot,
     current: ActivatedRouteSnapshot,
   ): boolean {
+    if (future.data['compraEditor'] || current.data['compraEditor']) return false;
+    if (future.data['formasEditor'] || current.data['formasEditor']) return false;
     // Recreate editors when the ID/query changes so deactivation guards protect the old intention.
     if (future.data['perfumeEditor'] || current.data['perfumeEditor']) return false;
     if (future.data['pessoaEditor'] || current.data['pessoaEditor']) return false;

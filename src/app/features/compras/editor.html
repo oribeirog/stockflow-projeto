@@ -1,0 +1,342 @@
+<section class="stack" aria-label="Compra de fornecedor">
+  <div class="row">
+    <mnr-button variant="secondary" (pressed)="back()">Voltar às compras</mnr-button>@if (doc(); as
+    d) {
+    <h2>{{d.numero}} · {{d.estado}} · versão {{d.versao}}</h2>
+    } @else {
+    <h2>Nova compra</h2>
+    }
+  </div>
+  @if (loading()) {
+  <p role="status">Carregando compra…</p>
+  } @if (message()) {
+  <p role="status" tabindex="-1" class="feedback">{{message()}}</p>
+  } @if (readError()) {
+  <p role="alert">{{readError()}}</p>
+  <mnr-button [disabled]="locked" (pressed)="load()">Consultar novamente</mnr-button> } @if
+  (operationId()) {
+  <p>Operação: {{operationId()}}</p>
+  } @if (uncertain()) {
+  <mnr-button [disabled]="busy()" (pressed)="retry()">Repetir o mesmo comando</mnr-button> } @if
+  (stale()) {
+  <mnr-button [disabled]="locked" (pressed)="load()"
+    >Consultar versão atual preservando preenchimento</mnr-button
+  >
+  } @if (editable && !loading() && (!readError() || doc())) {
+  <p>Valores de preenchimento. Os totais oficiais serão apresentados após salvar e revisar.</p>
+  <fieldset [disabled]="locked || !!readError()" class="stack">
+    <legend>Rascunho de compra</legend>
+    <div class="row">
+      <mnr-field
+        controlId="compra-fornecedor-busca"
+        label="Pesquisar fornecedor ativo"
+        [value]="supplierSearch()"
+        (valueChanged)="supplierSearch.set($event); options('supplier')"
+      />
+      <label
+        >Fornecedor<select
+          id="compra-fornecedor"
+          [value]="fornecedor"
+          (change)="fornecedor=$any($event.target).value; touch()"
+        >
+          <option value="">Não informado</option>
+          @if (fornecedor) {
+          <option [value]="fornecedor">
+            Vínculo atual: {{doc()?.contraparteNome || fornecedor}}
+          </option>
+          }@for (p of supplierOptions(); track p.id) {
+          <option [value]="p.id">{{p.nome}}</option>
+          }
+        </select></label
+      >
+      @if (supplierMore()) {
+      <mnr-button variant="secondary" (pressed)="options('supplier',true)"
+        >Mais fornecedores</mnr-button
+      >
+      }
+      <mnr-field
+        controlId="compra-data"
+        label="Data comercial (AAAA-MM-DD)"
+        [value]="data"
+        (valueChanged)="data=$event; touch()"
+      />
+    </div>
+    <div class="row">
+      <mnr-field
+        controlId="compra-produto-busca"
+        label="Pesquisar perfume ativo por nome/SKU"
+        [value]="productSearch()"
+        (valueChanged)="productSearch.set($event); options('product')"
+      /><label
+        >Adicionar perfume<select
+          id="compra-produto"
+          (change)="addProduct($any($event.target).value); $any($event.target).value='' "
+        >
+          <option value="">Selecione</option>
+          @for (p of productOptions(); track p.id) {
+          <option [value]="p.id">{{p.nome}} · {{p.sku}}</option>
+          }
+        </select></label
+      >@if (productMore()) {
+      <mnr-button variant="secondary" (pressed)="options('product',true)">Mais perfumes</mnr-button>
+      }
+    </div>
+    @for (i of items(); track i.produtoId; let n=$index) {
+    <fieldset class="stack">
+      <legend>{{i.nome}}</legend>
+      <div class="row">
+        <mnr-field
+          [controlId]="'item-q-'+n"
+          label="Quantidade"
+          [value]="i.quantidade"
+          (valueChanged)="itemChange(n,'quantidade',$event)"
+        />
+        <mnr-field
+          [controlId]="'item-v-'+n"
+          label="Custo unitário (R$)"
+          [value]="i.unitario"
+          (valueChanged)="itemChange(n,'unitario',$event)"
+        />
+        <label
+          >Tipo de desconto<select
+            [id]="'item-t-'+n"
+            [value]="i.descontoTipo"
+            (change)="itemChange(n,'descontoTipo',$any($event.target).value)"
+          >
+            <option value="CENTAVOS">Reais</option>
+            <option value="PONTOS_BASE">Percentual</option>
+          </select></label
+        >
+        <mnr-field
+          [controlId]="'item-d-'+n"
+          [label]="i.descontoTipo === 'CENTAVOS' ? 'Desconto (R$)' : 'Desconto (%)'"
+          [value]="i.desconto"
+          (valueChanged)="itemChange(n,'desconto',$event)"
+        />
+        <mnr-field
+          [controlId]="'item-m-'+n"
+          label="Motivo do item / bonificação"
+          [maxLength]="4000"
+          [value]="i.motivo"
+          (valueChanged)="itemChange(n,'motivo',$event)"
+        />
+        <mnr-button variant="secondary" (pressed)="remove(n)">Remover perfume {{n+1}}</mnr-button>
+      </div>
+    </fieldset>
+    }
+    <div class="row">
+      <label
+        >Desconto global<select
+          id="compra-desconto-tipo"
+          [value]="descontoTipo"
+          (change)="descontoTipo=$any($event.target).value; touch()"
+        >
+          <option value="CENTAVOS">Reais</option>
+          <option value="PONTOS_BASE">Percentual</option>
+        </select></label
+      ><mnr-field
+        controlId="compra-desconto"
+        [label]="descontoTipo === 'CENTAVOS' ? 'Desconto global (R$)' : 'Desconto global (%)'"
+        [value]="desconto"
+        (valueChanged)="desconto=$event; touch()"
+      /><mnr-field
+        controlId="compra-frete"
+        label="Frete (R$)"
+        [value]="frete"
+        (valueChanged)="frete=$event; touch()"
+      /><mnr-field
+        controlId="compra-despesas"
+        label="Despesas diretas (R$)"
+        [value]="despesas"
+        (valueChanged)="despesas=$event; touch()"
+      />
+    </div>
+    <mnr-field
+      controlId="compra-observacoes"
+      label="Observações"
+      [multiline]="true"
+      [maxLength]="4000"
+      [value]="observacoes"
+      (valueChanged)="observacoes=$event; touch()"
+    />
+    <mnr-field
+      controlId="compra-motivo"
+      label="Justificativa da operação"
+      [required]="true"
+      [maxLength]="4000"
+      [value]="motivo"
+      (valueChanged)="motivo=$event; touch()"
+    />
+    <mnr-button [disabled]="stale()" (pressed)="save()">Salvar rascunho</mnr-button>
+  </fieldset>
+  <fieldset [disabled]="locked || !!readError()" class="stack">
+    <legend>Pagamento integral na confirmação</legend>
+    <p>Os pagamentos são preparados nesta sessão e só são gravados ao confirmar a compra.</p>
+    <div class="row">
+      <mnr-field
+        controlId="compra-forma-busca"
+        label="Pesquisar forma ativa"
+        [value]="formSearch()"
+        (valueChanged)="formSearch.set($event); options('form')"
+      />@if (formMore()) {
+      <mnr-button variant="secondary" (pressed)="options('form',true)">Mais formas</mnr-button>
+      }<mnr-button id="gerenciar-formas" variant="secondary" (pressed)="openForms()"
+        >Gerenciar formas de pagamento</mnr-button
+      >
+    </div>
+    @if (!formOptions().length) {
+    <p>
+      Nenhuma forma ativa encontrada. Cadastre sua primeira forma em “Gerenciar formas de
+      pagamento”. Compras de total positivo exigem uma forma ativa.
+    </p>
+    } @for (p of payments(); track $index; let n=$index) {
+    <div class="row">
+      <label
+        >Forma {{n+1}}<select
+          [id]="'pagamento-forma-'+n"
+          [value]="p.id"
+          (change)="paymentChange(n,'id',$any($event.target).value)"
+        >
+          <option value="0">Selecione uma forma ativa</option>
+          @if (p.id) {
+          <option [value]="p.id">Selecionada: {{p.id}} — revalidada na revisão</option>
+          }@for (f of formOptions(); track f.id) {
+          <option [value]="f.id">{{f.nome}}</option>
+          }
+        </select></label
+      ><mnr-field
+        [controlId]="'pagamento-valor-'+n"
+        label="Valor pago (R$)"
+        [value]="p.valor"
+        (valueChanged)="paymentChange(n,'valor',$event)"
+      /><mnr-button variant="secondary" (pressed)="removePayment(n)"
+        >Remover pagamento {{n+1}}</mnr-button
+      >
+    </div>
+    }
+    <mnr-button variant="secondary" (pressed)="addPayment()">Adicionar pagamento</mnr-button>
+    @if (paymentSum() !== null) {
+    <p>
+      Soma preenchida: {{reais(paymentSum()!)}} @if (doc()) { · Diferença para o total salvo:
+      {{reais(paymentDifference()!)}} }
+    </p>
+    }
+  </fieldset>
+  <div class="row">
+    <mnr-button [disabled]="locked || stale() || !!readError()" (pressed)="review()"
+      >Salvar e revisar compra</mnr-button
+    >@if (doc()) {
+    <mnr-button
+      variant="secondary"
+      [disabled]="locked || stale() || !!readError()"
+      (pressed)="prepareDiscard()"
+      >Descartar rascunho</mnr-button
+    >
+    }
+  </div>
+  } @if (doc(); as d) {
+  <section class="stack official" aria-labelledby="oficial-title">
+    <h3 id="oficial-title">
+      {{editable ? 'Valores oficiais do último rascunho salvo' : 'Histórico da compra'}}
+    </h3>
+    <p>
+      Fornecedor: {{d.contraparteNome || 'Não informado'}} · {{d.contraparteDocumento || 'Sem
+      documento'}} · Data: {{d.dataComercial}}
+    </p>
+    <p>
+      Subtotal: {{reais(d.subtotalCentavos)}} · Descontos dos itens:
+      {{reais(d.descontoItensCentavos)}} · Desconto global: {{reais(d.descontoGlobalCentavos)}} ·
+      Frete: {{reais(d.freteCentavos)}} · Despesas: {{reais(d.despesasDiretasCentavos)}}
+    </p>
+    <strong>Total oficial: {{reais(d.totalCentavos)}}</strong>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto / SKU</th>
+            <th>Quantidade</th>
+            <th>Unitário</th>
+            <th>Bruto</th>
+            <th>Desconto item</th>
+            <th>Global rateado</th>
+            <th>Frete rateado</th>
+            <th>Despesas rateadas</th>
+            <th>Líquido</th>
+            <th>Custo de aquisição</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of d.itens; track i.id) {
+          <tr>
+            <td>
+              {{i.descricaoHistorica || i.produtoId}} / {{i.skuHistorico}} @if(i.motivo) {
+              <p>{{i.motivo}}</p>
+              }
+            </td>
+            <td>{{i.quantidade}}</td>
+            <td>{{reais(i.valorUnitarioCentavos)}}</td>
+            <td>{{reais(i.valorBrutoCentavos)}}</td>
+            <td>{{reais(i.descontoItemCentavos)}}</td>
+            <td>{{reais(i.descontoGlobalRateadoCentavos)}}</td>
+            <td>{{reais(i.freteRateadoCentavos)}}</td>
+            <td>{{reais(i.despesasRateadasCentavos)}}</td>
+            <td>{{reais(i.valorLiquidoCentavos)}}</td>
+            <td>
+              {{reais(d.estado === 'CONFIRMADO' || d.estado === 'ESTORNADO' ?
+              i.valorCustoEstoqueCentavos : i.custoAquisicaoCentavos)}}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (d.observacoes) {
+    <p>Observações: {{d.observacoes}}</p>
+    } @if (!editable) {
+    <h3>Pagamentos históricos</h3>
+    @for (p of historicPayments; track p.id) {
+    <p>
+      {{p.nomeHistorico}} · {{reais(p.valorCentavos)}} · {{p.dataEfetiva}} · registro
+      {{p.registradoEm}}
+    </p>
+    }@if (!historicPayments.length) {
+    <p>Sem pagamentos de compra registrados.</p>
+    } }
+  </section>
+  } @if (reviewed(); as r) {
+  <section class="official stack" aria-label="Revisão pronta">
+    <h3>Revisão oficial · versão {{r.versao}}</h3>
+    <p>
+      Total revisado: {{reais(r.totalCentavos)}}. Confira os rateios acima e os pagamentos
+      preenchidos. Qualquer alteração invalida esta revisão.
+    </p>
+    <mnr-button [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar compra revisada</mnr-button
+    >
+  </section>
+  }
+</section>
+@if (confirmation()) {
+<mnr-confirm
+  [title]="confirmation() === 'leave' ? 'Sair da compra' : confirmation() === 'discard' ? 'Descartar rascunho' : 'Confirmar compra'"
+  [description]="description()"
+  [focusReview]="true"
+  (confirmed)="confirm()"
+  (cancelled)="cancelConfirmation()"
+/>
+} @if (managing()) {
+<dialog
+  #manageDialog
+  aria-label="Gerenciar formas de pagamento"
+  (cancel)="$event.preventDefault(); closeForms()"
+>
+  <div class="stack">
+    <mnr-formas-pagamento (pending)="formPending.set($event)" (changed)="invalidate()" /><mnr-button
+      variant="secondary"
+      [disabled]="formPending()"
+      (pressed)="closeForms()"
+      >Voltar à compra</mnr-button
+    >
+  </div>
+</dialog>
+}

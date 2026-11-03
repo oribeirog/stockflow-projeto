@@ -115,9 +115,15 @@ async function verify(window) {
   for (const [path, title] of destinations) {
     await route(path, title);
     if (
-      !['dashboard', 'configuracoes', 'perfumes', 'clientes', 'fornecedores', 'estoque'].includes(
-        path,
-      )
+      ![
+        'dashboard',
+        'configuracoes',
+        'perfumes',
+        'clientes',
+        'fornecedores',
+        'estoque',
+        'compras',
+      ].includes(path)
     ) {
       await until(
         `document.querySelector('main').textContent.includes('Disponível em uma próxima etapa')`,

@@ -41,6 +41,7 @@ export function criarHandlersCadastros(db: Database.Database, version: string) {
   for (const [name, kind] of [
     ['marcas', 'MARCA'],
     ['categorias', 'CATEGORIA'],
+    ['formasPagamento', 'FORMA_PAGAMENTO'],
   ] as const) {
     const c = CANAIS_CADASTROS[name];
     add(c.listar, (input) => service.listReferences(kind, input === undefined ? null : input));

@@ -1,5 +1,17 @@
 # MNR Perfumes
 
+## Etapa 4D.2 — Compras de fornecedores
+
+Compras e formas de pagamento estão disponíveis. Um teste isolado do Electron
+exercita a primeira forma em banco vazio, rascunho com dois perfumes, descontos,
+rateios oficiais, pagamentos múltiplos, conflito de versão, resposta perdida após
+commit, descarte e confirmação com rede emulada offline. O teste está incluído em
+`npm.cmd run test:ui` e não acessa o banco de desenvolvimento.
+
+O fluxo foi executado também por HTTP de desenvolvimento e no executável Windows
+empacotado. Veja [o relatório](docs/etapa-4D2-compras-em-andamento.md) para os
+cenários comprovados e os limites da validação.
+
 ## Etapa 4D.1 — Gestão de estoque
 
 Estoque agora oferece saldos reais paginados, pesquisa por nome/SKU, filtro abaixo

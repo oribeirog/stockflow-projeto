@@ -64,6 +64,22 @@ export const navigation: readonly {
 ];
 export const routes: Routes = [
   {
+    path: 'configuracoes/formas-pagamento',
+    title: 'Configurações • MNR Perfumes',
+    data: { formasEditor: true },
+    loadComponent: () => import('../features/compras/formas').then((m) => m.FormasPagamento),
+    canDeactivate: [(component: { canLeave(): boolean }) => component.canLeave()],
+  },
+  ...['compras/nova', 'compras/:id'].map((path) => ({
+    path,
+    title: 'Compras • MNR Perfumes',
+    data: { compraEditor: true },
+    loadComponent: () => import('../features/compras/editor').then((m) => m.CompraEditor),
+    canDeactivate: [
+      (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
+    ],
+  })),
+  {
     path: 'estoque/:id',
     title: 'Estoque • MNR Perfumes',
     data: { estoqueEditor: true },
@@ -105,9 +121,11 @@ export const routes: Routes = [
             ? () => import('../features/estoque/estoque').then((m) => m.Estoque)
             : item.path === 'configuracoes'
               ? () => import('../features/settings/settings').then((m) => m.Settings)
-              : ['clientes', 'fornecedores'].includes(item.path)
-                ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
-                : () => import('../features/module/module').then((m) => m.ModulePage),
+              : item.path === 'compras'
+                ? () => import('../features/compras/lista').then((m) => m.Compras)
+                : ['clientes', 'fornecedores'].includes(item.path)
+                  ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
+                  : () => import('../features/module/module').then((m) => m.ModulePage),
   })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },

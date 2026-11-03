@@ -29,6 +29,7 @@ export interface ApiCadastro<T, E> {
   salvar(comando: ComandoCadastro<E>): Promise<ResultadoCadastro<T>>;
 }
 export interface CadastrosApi {
+  formasPagamento: ApiCadastro<Referencia, EntradaReferencia>;
   produtos: ApiCadastro<Produto, EntradaProduto>;
   marcas: ApiCadastro<Referencia, EntradaReferencia>;
   categorias: ApiCadastro<Referencia, EntradaReferencia>;
@@ -36,6 +37,11 @@ export interface CadastrosApi {
   fornecedores: ApiCadastro<Pessoa, EntradaPessoa>;
 }
 export const CANAIS_CADASTROS = {
+  formasPagamento: {
+    listar: 'cadastros:formas-pagamento:listar',
+    obter: 'cadastros:formas-pagamento:obter',
+    salvar: 'cadastros:formas-pagamento:salvar',
+  },
   produtos: {
     listar: 'cadastros:produtos:listar',
     obter: 'cadastros:produtos:obter',

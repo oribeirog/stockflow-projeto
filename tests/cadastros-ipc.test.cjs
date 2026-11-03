@@ -33,10 +33,10 @@ function error(result, code) {
   assert.equal(result.error.message, MENSAGENS_CADASTRO[code]);
 }
 
-test('15 explicit handlers preserve full saves, idempotency, audit, history and isolated schema v4', async (t) => {
+test('18 explicit handlers preserve full saves, idempotency, audit, history and isolated schema v5', async (t) => {
   const { db, handlers, invoke } = await fixture(t);
-  assert.equal(handlers.size, 15);
-  assert.equal(handlers.has('cadastros:formas-pagamento:listar'), false);
+  assert.equal(handlers.size, 18);
+  assert.equal(handlers.has('cadastros:formas-pagamento:listar'), true);
   const saved = {};
   for (const name of ['marcas', 'categorias', 'clientes', 'fornecedores', 'produtos']) {
     const c = CANAIS_CADASTROS[name];
@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 23);
+  assert.equal(registered.size, 31);
   assert.equal(registered.has('cadastros:sql'), false);
   for (const [channel, handler] of registered) {
     for (const event of [
@@ -223,7 +223,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
     ]) {
       assert.throws(() => handler(event, cmd({ nome: 'Não autorizado' })), /não autorizada/);
     }
-    if (channel.startsWith('estoque:'))
+    if (channel.startsWith('estoque:') || channel.startsWith('compras:'))
       assert.equal(
         handler({ sender: window.webContents, senderFrame: frame }, {}, 'extra').error.code,
         'VALIDATION',
@@ -258,7 +258,13 @@ test('bundled preload exposes exactly system plus five fixed cadastral APIs', as
       };
     },
   });
-  assert.deepEqual(Object.keys(exposed).sort(), ['cadastros', 'estoque', 'fotos', 'system']);
+  assert.deepEqual(Object.keys(exposed).sort(), [
+    'cadastros',
+    'compras',
+    'estoque',
+    'fotos',
+    'system',
+  ]);
   assert.deepEqual(Object.keys(exposed.cadastros).sort(), Object.keys(CANAIS_CADASTROS).sort());
   for (const [name, channels] of Object.entries(CANAIS_CADASTROS)) {
     assert.deepEqual(Object.keys(exposed.cadastros[name]).sort(), ['listar', 'obter', 'salvar']);

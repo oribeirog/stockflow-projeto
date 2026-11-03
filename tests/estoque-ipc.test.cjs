@@ -194,7 +194,7 @@ test('preload exposes only seven stock operations and invokes fixed channels', a
     },
   });
   assert.deepEqual(Object.keys(api.estoque).sort(), Object.keys(CANAIS_ESTOQUE).sort());
-  assert.equal(api.compras, undefined);
+  assert.equal(typeof api.compras.confirmar, 'function');
   for (const [method, channel] of Object.entries(CANAIS_ESTOQUE)) {
     const input = method === 'obter' ? 1 : {};
     await api.estoque[method](input);

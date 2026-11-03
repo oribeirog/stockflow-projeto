@@ -1,0 +1,76 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.stack {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-3);
+}
+fieldset {
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-control);
+  min-width: 0;
+  padding: var(--space-4);
+}
+label {
+  display: grid;
+  gap: var(--space-2);
+}
+select {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-height);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-control);
+  padding: var(--space-2);
+}
+.table-wrap {
+  overflow: auto;
+  max-width: 100%;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.feedback {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  color: var(--warning);
+}
+a {
+  color: var(--focus);
+}
+dialog {
+  width: min(850px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow: auto;
+  padding: var(--space-5);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--text);
+}
+dialog::backdrop {
+  background: #0009;
+}
+.official {
+  padding: var(--space-4);
+  background: var(--surface-raised);
+  border-radius: var(--radius-card);
+}

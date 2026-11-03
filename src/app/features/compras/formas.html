@@ -1,0 +1,96 @@
+<section class="stack" aria-labelledby="formas-title">
+  <h2 id="formas-title">Formas de pagamento</h2>
+  <p>Cadastre as formas utilizadas no seu negócio. A inativação preserva pagamentos históricos.</p>
+  <div class="row">
+    <mnr-field
+      controlId="formas-busca"
+      label="Pesquisar nome"
+      [value]="search()"
+      (valueChanged)="search.set($event)"
+    />
+    <label
+      >Situação<select [value]="status()" (change)="status.set($any($event.target).value); load()">
+        <option value="true">Ativas</option>
+        <option value="false">Inativas</option>
+        <option value="">Todas</option>
+      </select></label
+    >
+    <mnr-button [disabled]="loading()" (pressed)="load()">Pesquisar</mnr-button>
+    <mnr-button [disabled]="locked() || busy() || dirty()" (pressed)="edit()"
+      >Cadastrar forma</mnr-button
+    >
+  </div>
+  @if (message()) {
+  <p role="status" class="feedback">{{ message() }}</p>
+  } @if (loading()) {
+  <p role="status">Carregando formas…</p>
+  } @else { @if (!rows().length) {
+  <p>Nenhuma forma encontrada. Use “Cadastrar forma” para configurar.</p>
+  } @for (r of rows(); track r.id) {
+  <div class="row">
+    <span>{{ r.nome }} · {{ r.ativo ? 'Ativa' : 'Inativa' }}</span
+    ><mnr-button
+      variant="secondary"
+      [disabled]="locked() || busy() || dirty()"
+      (pressed)="edit(r.id)"
+      >Consultar / editar {{ r.nome }}</mnr-button
+    >
+  </div>
+  }
+  <div class="row">
+    <mnr-button variant="secondary" [disabled]="page === 0" (pressed)="load(page - 1)"
+      >Anterior</mnr-button
+    ><span>Página {{ page + 1 }}</span
+    ><mnr-button variant="secondary" [disabled]="!more()" (pressed)="load(page + 1)"
+      >Próxima</mnr-button
+    >
+  </div>
+  } @if (editing()) {
+  <fieldset [disabled]="locked() || busy()" class="stack">
+    <legend>{{ id() ? 'Consultar / editar forma' : 'Primeira ou nova forma' }}</legend>
+    <mnr-field
+      controlId="forma-nome"
+      label="Nome"
+      [required]="true"
+      [error]="nameError()"
+      [maxLength]="120"
+      [value]="name()"
+      (valueChanged)="name.set($event); change()"
+    />
+    <label
+      ><input
+        id="forma-ativa"
+        type="checkbox"
+        [checked]="active()"
+        (change)="active.set($any($event.target).checked); change()"
+      />
+      Ativa</label
+    >
+    <mnr-field
+      controlId="forma-motivo"
+      label="Justificativa da alteração"
+      [required]="true"
+      [error]="reasonError()"
+      [maxLength]="4000"
+      [value]="reason()"
+      (valueChanged)="reason.set($event); change()"
+    />
+    <mnr-button (pressed)="prepare()">Salvar forma</mnr-button>
+  </fieldset>
+  <mnr-button variant="secondary" [disabled]="locked() || busy()" (pressed)="cancel()"
+    >Cancelar edição da forma</mnr-button
+  >
+  } @if (locked()) {
+  <mnr-button [disabled]="busy() || message().includes('outro conteúdo')" (pressed)="save()"
+    >Repetir o mesmo cadastro</mnr-button
+  >
+  }
+</section>
+@if (confirmation()) {
+<mnr-confirm
+  title="Salvar forma de pagamento"
+  [description]="name() + ' · ' + (active() ? 'Ativa' : 'Inativa') + '\n' + reason()"
+  (confirmed)="save()"
+  (cancelled)="confirmation.set(false)"
+/>
+}

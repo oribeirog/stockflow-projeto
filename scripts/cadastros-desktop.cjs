@@ -10,6 +10,7 @@ const { openDatabase } = require('../dist/electron/infrastructure/database/index
 const { registerIpc } = require('../dist/electron/ipc/index.js');
 const { CANAIS_CADASTROS } = require('../dist/shared/cadastros-ipc.js');
 const { CANAIS_ESTOQUE } = require('../dist/shared/estoque-ipc.js');
+const { CANAIS_COMPRAS } = require('../dist/shared/compras-ipc.js');
 const root = resolve('.cache/cadastros-renderer/browser');
 mkdirSync('.local-data/test', { recursive: true });
 const directory = mkdtempSync(resolve('.local-data/test/cadastros-ipc-'));
@@ -147,6 +148,7 @@ app
         for (const channel of Object.values(channels)) ipcMain.removeHandler(channel);
       ipcMain.removeHandler('system:get-status');
       for (const channel of Object.values(CANAIS_ESTOQUE)) ipcMain.removeHandler(channel);
+      for (const channel of Object.values(CANAIS_COMPRAS)) ipcMain.removeHandler(channel);
     }
     clearTimeout(timer);
     server.close();

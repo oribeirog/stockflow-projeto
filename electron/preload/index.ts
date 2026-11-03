@@ -3,6 +3,7 @@ import { STATUS_CHANNEL, type DesktopApi } from '../../shared/contracts';
 import { CANAIS_CADASTROS, type ApiCadastro } from '../../shared/cadastros-ipc';
 import { CANAIS_FOTOS } from '../../shared/fotos';
 import { CANAIS_ESTOQUE } from '../../shared/estoque-ipc';
+import { CANAIS_COMPRAS } from '../../shared/compras-ipc';
 function cadastro<T, E>(channels: {
   listar: string;
   obter: string;
@@ -15,6 +16,13 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  compras: {
+    listar: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.listar, input),
+    obter: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.obter, input),
+    salvarRascunho: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.salvarRascunho, input),
+    confirmar: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.confirmar, input),
+    descartarRascunho: (input) => ipcRenderer.invoke(CANAIS_COMPRAS.descartarRascunho, input),
+  },
   estoque: {
     listar: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.listar, input),
     obter: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.obter, input),
@@ -33,6 +41,7 @@ const api: DesktopApi = {
   },
   system: { getStatus: () => ipcRenderer.invoke(STATUS_CHANNEL) },
   cadastros: {
+    formasPagamento: cadastro(CANAIS_CADASTROS.formasPagamento),
     produtos: cadastro(CANAIS_CADASTROS.produtos),
     marcas: cadastro(CANAIS_CADASTROS.marcas),
     categorias: cadastro(CANAIS_CADASTROS.categorias),

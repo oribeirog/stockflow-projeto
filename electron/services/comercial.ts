@@ -550,10 +550,19 @@ export function createCommercialService(
           return { id: identifier(v['id']), versaoEsperada: identifier(v['versaoEsperada']) };
         },
         (data) => {
-          draft(data.id, data.versaoEsperada);
-          db.prepare("UPDATE documentos SET estado='DESCARTADO',versao=versao+1 WHERE id=?").run(
-            data.id,
-          );
+          const current = draft(data.id, data.versaoEsperada);
+          if (current.tipo === 'COMPRA') {
+            db.prepare(
+              `UPDATE itens_documento SET sku_historico=(SELECT sku FROM produtos WHERE id=produto_id), descricao_historica=(SELECT nome FROM produtos WHERE id=produto_id) WHERE documento_id=?`,
+            ).run(data.id);
+            db.prepare(
+              `UPDATE documentos SET estado='DESCARTADO',versao=versao+1,contraparte_nome=(SELECT nome FROM fornecedores WHERE id=fornecedor_id),contraparte_documento=(SELECT documento FROM fornecedores WHERE id=fornecedor_id) WHERE id=?`,
+            ).run(data.id);
+          } else {
+            db.prepare("UPDATE documentos SET estado='DESCARTADO',versao=versao+1 WHERE id=?").run(
+              data.id,
+            );
+          }
           return read(data.id);
         },
       ),
