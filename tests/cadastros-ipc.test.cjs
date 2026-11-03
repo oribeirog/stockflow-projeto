@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 16);
+  assert.equal(registered.size, 23);
   assert.equal(registered.has('cadastros:sql'), false);
   for (const [channel, handler] of registered) {
     for (const event of [
@@ -223,7 +223,12 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
     ]) {
       assert.throws(() => handler(event, cmd({ nome: 'Não autorizado' })), /não autorizada/);
     }
-    if (channel !== 'system:get-status')
+    if (channel.startsWith('estoque:'))
+      assert.equal(
+        handler({ sender: window.webContents, senderFrame: frame }, {}, 'extra').error.code,
+        'VALIDATION',
+      );
+    else if (channel !== 'system:get-status')
       error(handler({ sender: window.webContents, senderFrame: frame }, {}, 'extra'), 'VALIDATION');
   }
   assert.equal(db.prepare('SELECT count(*) n FROM operacoes').get().n, 0);
@@ -253,7 +258,7 @@ test('bundled preload exposes exactly system plus five fixed cadastral APIs', as
       };
     },
   });
-  assert.deepEqual(Object.keys(exposed).sort(), ['cadastros', 'fotos', 'system']);
+  assert.deepEqual(Object.keys(exposed).sort(), ['cadastros', 'estoque', 'fotos', 'system']);
   assert.deepEqual(Object.keys(exposed.cadastros).sort(), Object.keys(CANAIS_CADASTROS).sort());
   for (const [name, channels] of Object.entries(CANAIS_CADASTROS)) {
     assert.deepEqual(Object.keys(exposed.cadastros[name]).sort(), ['listar', 'obter', 'salvar']);

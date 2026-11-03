@@ -23,7 +23,7 @@ export const navigation: readonly {
     path: 'estoque',
     title: 'Estoque',
     icon: 'stock',
-    description: 'Espaço reservado para o acompanhamento do estoque.',
+    description: 'Saldos, movimentações e ajustes de estoque.',
   },
   {
     path: 'vendas',
@@ -63,6 +63,15 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  {
+    path: 'estoque/:id',
+    title: 'Estoque • MNR Perfumes',
+    data: { estoqueEditor: true },
+    loadComponent: () => import('../features/estoque/detalhe').then((m) => m.EstoqueDetalhe),
+    canDeactivate: [
+      (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
+    ],
+  },
   ...(['clientes', 'fornecedores'] as const).flatMap((path) =>
     ['novo', ':id/editar'].map((suffix) => ({
       path: `${path}/${suffix}`,
@@ -92,11 +101,13 @@ export const routes: Routes = [
         ? () => import('../features/dashboard/dashboard').then((m) => m.Dashboard)
         : item.path === 'perfumes'
           ? () => import('../features/perfumes/perfumes').then((m) => m.Perfumes)
-          : item.path === 'configuracoes'
-            ? () => import('../features/settings/settings').then((m) => m.Settings)
-            : ['clientes', 'fornecedores'].includes(item.path)
-              ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
-              : () => import('../features/module/module').then((m) => m.ModulePage),
+          : item.path === 'estoque'
+            ? () => import('../features/estoque/estoque').then((m) => m.Estoque)
+            : item.path === 'configuracoes'
+              ? () => import('../features/settings/settings').then((m) => m.Settings)
+              : ['clientes', 'fornecedores'].includes(item.path)
+                ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
+                : () => import('../features/module/module').then((m) => m.ModulePage),
   })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },

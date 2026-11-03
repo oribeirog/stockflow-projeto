@@ -13,6 +13,9 @@ declare global {
 }
 @Injectable({ providedIn: 'root' })
 export class DesktopService {
+  stockApi() {
+    return this.getApi()?.estoque;
+  }
   async foto<T>(
     operation: (api: FotosApi) => Promise<ResultadoCadastro<T>>,
   ): Promise<ResultadoCadastro<T>> {

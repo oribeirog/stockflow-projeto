@@ -9,6 +9,7 @@ import { CategoriasService } from '../../src/app/core/cadastros/categorias.servi
 import { ClientesService } from '../../src/app/core/cadastros/clientes.service';
 import { FornecedoresService } from '../../src/app/core/cadastros/fornecedores.service';
 import { DesktopService } from '../../src/app/core/desktop.service';
+import { EstoqueService, IntencaoEstoque } from '../../src/app/core/estoque.service';
 import { ConsultaEstado, GravacaoEstado } from '../../src/app/core/cadastros/estado';
 import type { ResultadoCadastro } from '../../shared/cadastros-ipc';
 import {
@@ -31,6 +32,7 @@ class Integration {
   private readonly clientes = inject(ClientesService);
   private readonly fornecedores = inject(FornecedoresService);
   private readonly desktop = inject(DesktopService);
+  private readonly estoque = inject(EstoqueService);
   constructor() {
     void this.verify()
       .then(() => {
@@ -190,6 +192,43 @@ class Integration {
       'Original command retained',
     );
     check(data(await this.produtos.obter(produto.id)).precoVendaCentavos === 12345, 'Exact price');
+    const stockList = await this.estoque.listar({ busca: 'INTEGRACAO', ativo: true });
+    check(
+      stockList.ok &&
+        stockList.data.itens.length === 1 &&
+        stockList.data.valorTotalFiltradoCentavos === '0',
+      'Stock real Angular query',
+    );
+    const stockRead = await this.estoque.obter(produto.id);
+    check(
+      stockRead.ok && stockRead.data.quantidade === 0 && stockRead.data.custoMedioDecimal === null,
+      'Stock empty balance',
+    );
+    const movements = await this.estoque.movimentos({ produtoId: produto.id });
+    check(movements.ok && movements.data.itens.length === 0, 'Stock real history query');
+    const stockCommands: string[] = [];
+    const stockInput = { produtoId: produto.id, quantidade: 3, custoTotalCentavos: 100 };
+    const stockIntention = new IntencaoEstoque(
+      async (command) => {
+        stockCommands.push(JSON.stringify(command));
+        return {
+          ok: false,
+          error: { code: 'IPC_UNAVAILABLE', message: 'Resposta perdida no teste' },
+        };
+      },
+      stockInput,
+      'Integração estoque',
+      '2026-10-31',
+    );
+    const stockPending = stockIntention.executar();
+    check(stockPending === stockIntention.executar(), 'Concurrent stock commands share promise');
+    await stockPending;
+    stockInput.quantidade = 999;
+    await stockIntention.executar();
+    check(
+      stockCommands.length === 2 && stockCommands[0] === stockCommands[1],
+      'Stock intention retains UUID and payload',
+    );
     check(
       data(await this.produtos.listar({ busca: 'integracao', limite: 1 })).length === 1,
       'Product list',

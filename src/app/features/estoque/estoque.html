@@ -1,0 +1,119 @@
+<section class="catalog stack" aria-label="Gestão de estoque">
+  <div class="catalog-heading">
+    <div>
+      <h2>Estoque disponível</h2>
+      <p>
+        Consulte os saldos ou registre um ajuste manual justificado. Compras são documentos do
+        módulo Compras.
+      </p>
+    </div>
+  </div>
+  <form class="filters" (submit)="$event.preventDefault(); load()">
+    <div>
+      <label for="estoque-search">Nome ou SKU</label
+      ><input
+        id="estoque-search"
+        type="search"
+        maxlength="200"
+        [value]="search()"
+        (input)="search.set($any($event.target).value)"
+      />
+    </div>
+    <div>
+      <label for="estoque-active">Situação</label
+      ><select
+        id="estoque-active"
+        [value]="active()"
+        (change)="active.set($any($event.target).value); load()"
+      >
+        <option value="true">Ativos</option>
+        <option value="false">Inativos</option>
+        <option value="all">Todos</option>
+      </select>
+    </div>
+    <mnr-button type="submit" variant="secondary">Pesquisar</mnr-button>
+    <label class="check"
+      ><input
+        type="checkbox"
+        [checked]="low()"
+        (change)="low.set($any($event.target).checked); load()"
+      />
+      Somente abaixo do mínimo</label
+    >
+  </form>
+  @if (loading()) {
+  <mnr-content-state
+    kind="loading"
+    title="Carregando estoque"
+    description="Consultando saldos locais."
+  />
+  } @else if (error()) {
+  <mnr-content-state kind="error" title="Não foi possível carregar" [description]="error()"
+    ><mnr-button (pressed)="retry()">Tentar novamente</mnr-button></mnr-content-state
+  >
+  } @else if (dados(); as d) {
+  <p role="status">
+    Valor total do estoque no filtro aplicado:
+    <strong>{{reais(d.valorTotalFiltradoCentavos)}}</strong>
+  </p>
+  @if (!d.itens.length) {
+  <mnr-content-state
+    kind="empty"
+    title="Nenhum produto encontrado"
+    description="Ajuste os filtros ou cadastre um perfume."
+  />
+  } @else {
+  <table>
+    <caption class="sr-only">
+      Saldos por perfume
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Perfume</th>
+        <th scope="col">Disponível / mínimo</th>
+        <th scope="col">Custo médio unitário*</th>
+        <th scope="col">Valor do saldo</th>
+        <th scope="col">Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(p of d.itens; track p.produtoId) {
+      <tr>
+        <td data-label="Perfume">
+          <strong>{{p.nome}}</strong
+          ><small>SKU {{p.sku}} · {{p.ativo ? 'Ativo' : 'Inativo'}}</small>
+        </td>
+        <td data-label="Quantidade">
+          <div>
+            {{p.quantidade}} / {{p.estoqueMinimo}} @if(p.quantidade===0){<mnr-badge tone="warning"
+              >Sem estoque</mnr-badge
+            >} @else if(p.baixo){<mnr-badge tone="warning">Abaixo do mínimo</mnr-badge>}
+          </div>
+        </td>
+        <td data-label="Custo médio">
+          {{p.custoMedioDecimal === null ? '—' : 'R$ '+p.custoMedioDecimal}}
+        </td>
+        <td data-label="Valor">{{reais(p.valorTotalCentavos)}}</td>
+        <td data-label="Ação">
+          <a
+            [routerLink]="['/estoque',p.produtoId]"
+            [attr.aria-label]="'Consultar estoque de '+p.nome"
+            >Consultar e ajustar</a
+          >
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  <nav class="pagination" aria-label="Páginas de estoque">
+    <mnr-button variant="secondary" [disabled]="page()===0" (pressed)="load(page()-1)"
+      >Anterior</mnr-button
+    ><span role="status">Página {{page()+1}}</span
+    ><mnr-button variant="secondary" [disabled]="!d.temMais" (pressed)="load(page()+1)"
+      >Próxima</mnr-button
+    >
+  </nav>
+  }
+  <p>* Média arredondada para consulta. Os movimentos utilizam o custeio exato do aplicativo.</p>
+  }
+</section>

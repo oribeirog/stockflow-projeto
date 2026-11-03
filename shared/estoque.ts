@@ -1,4 +1,4 @@
-// Internal service DTOs only; no preload or IPC exposure.
+// Platform-independent service DTOs. The limited desktop API is declared in estoque-ipc.ts.
 export type NaturezaEstoque =
   | 'AJUSTE_ENTRADA'
   | 'AJUSTE_SAIDA'

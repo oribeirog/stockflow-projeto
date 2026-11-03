@@ -1,5 +1,22 @@
 # MNR Perfumes
 
+## Etapa 4D.1 — Gestão de estoque
+
+Estoque agora oferece saldos reais paginados, pesquisa por nome/SKU, filtro abaixo
+do mínimo, valores e média unitária calculados no processo principal. O detalhe
+permite consultar movimentos e registrar entradas, saídas, perdas e contagens
+físicas com confirmação, justificativa, data e repetição idempotente.
+
+Contagens sem diferença registram somente auditoria, sem movimento zero. A tela
+informa que não existe consulta de auditoria nesta entrega. Custos oficiais e
+gravações permanecem nos serviços existentes; o Angular não recalcula custos.
+Sete canais específicos preservam isolamento, validações e erros sanitizados.
+Migrações 0001–0005 e dependências permanecem intactas.
+
+A 4D.2 não foi implementada. Antes dela será revisado o gerenciamento seguro de
+formas de pagamento, sem sementes automáticas. Detalhes, testes, limites e arquivos
+no [relatório da 4D.1](docs/etapa-4D1-gestao-estoque.md).
+
 ## Etapa 4C — Gestão visual de clientes e fornecedores
 
 Clientes e Fornecedores possuem listagens reais paginadas, pesquisa por nome,

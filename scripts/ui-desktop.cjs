@@ -114,7 +114,11 @@ async function verify(window) {
   ];
   for (const [path, title] of destinations) {
     await route(path, title);
-    if (!['dashboard', 'configuracoes', 'perfumes', 'clientes', 'fornecedores'].includes(path)) {
+    if (
+      !['dashboard', 'configuracoes', 'perfumes', 'clientes', 'fornecedores', 'estoque'].includes(
+        path,
+      )
+    ) {
       await until(
         `document.querySelector('main').textContent.includes('Disponível em uma próxima etapa')`,
       );
@@ -416,6 +420,18 @@ async function verify(window) {
   );
 
   await require('./pessoas-ui.cjs')({
+    window,
+    evaluate,
+    until,
+    click,
+    fill,
+    buttonText,
+    route,
+    screenshot,
+    noOverflow,
+    key,
+  });
+  await require('./estoque-ui.cjs')({
     window,
     evaluate,
     until,

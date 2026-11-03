@@ -1,5 +1,6 @@
 import { isTrustedRequest, isTrustedSender } from './trust';
 import { criarHandlersCadastros } from './cadastros';
+import { criarHandlersEstoque } from './estoque';
 import { app, ipcMain, type BrowserWindow } from 'electron';
 import type Database from 'better-sqlite3';
 import { STATUS_CHANNEL, type Result, type SystemStatus } from '../../shared/contracts';
@@ -12,7 +13,10 @@ export function registerIpc(
   photos?: FotoService,
 ) {
   if (photos) registerFotos(window, allowedUrl, photos);
-  for (const [channel, handler] of criarHandlersCadastros(db, app.getVersion())) {
+  for (const [channel, handler] of [
+    ...criarHandlersCadastros(db, app.getVersion()),
+    ...criarHandlersEstoque(db, app.getVersion()),
+  ]) {
     ipcMain.handle(channel, (event, ...args: unknown[]) => {
       if (!isTrustedSender(event, window, allowedUrl)) {
         throw new Error('Operação IPC não autorizada.');

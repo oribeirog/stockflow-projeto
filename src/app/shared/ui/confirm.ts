@@ -18,7 +18,7 @@ import { Field } from './field';
     (cancel)="$event.preventDefault(); cancelled.emit()"
   >
     <div class="stack">
-      <h2 id="confirm-title">{{ title() }}</h2>
+      <h2 id="confirm-title" tabindex="-1">{{ title() }}</h2>
       <p>{{ description() }}</p>
       @if (reasonRequired()) {
         <mnr-field
@@ -56,10 +56,15 @@ import { Field } from './field';
       dialog::backdrop {
         background: #0009;
       }
+      p {
+        white-space: pre-line;
+        overflow-wrap: anywhere;
+      }
     `,
   ],
 })
 export class Confirm {
+  readonly focusReview = input(false);
   readonly title = input.required<string>();
   readonly description = input('');
   readonly reasonRequired = input(false);
@@ -69,6 +74,10 @@ export class Confirm {
   readonly reason = signal('');
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
   constructor() {
-    afterNextRender(() => this.dialog().nativeElement.showModal());
+    afterNextRender(() => {
+      const dialog = this.dialog().nativeElement;
+      dialog.showModal();
+      if (this.focusReview()) dialog.querySelector<HTMLElement>('h2')?.focus();
+    });
   }
 }

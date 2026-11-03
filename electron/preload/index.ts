@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { STATUS_CHANNEL, type DesktopApi } from '../../shared/contracts';
 import { CANAIS_CADASTROS, type ApiCadastro } from '../../shared/cadastros-ipc';
 import { CANAIS_FOTOS } from '../../shared/fotos';
+import { CANAIS_ESTOQUE } from '../../shared/estoque-ipc';
 function cadastro<T, E>(channels: {
   listar: string;
   obter: string;
@@ -14,6 +15,15 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  estoque: {
+    listar: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.listar, input),
+    obter: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.obter, input),
+    listarMovimentacoes: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.listarMovimentacoes, input),
+    registrarEntrada: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.registrarEntrada, input),
+    registrarSaida: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.registrarSaida, input),
+    registrarPerda: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.registrarPerda, input),
+    registrarContagem: (input) => ipcRenderer.invoke(CANAIS_ESTOQUE.registrarContagem, input),
+  },
   fotos: {
     selecionar: () => ipcRenderer.invoke(CANAIS_FOTOS.selecionar),
     descartar: (token) => ipcRenderer.invoke(CANAIS_FOTOS.descartar, token),

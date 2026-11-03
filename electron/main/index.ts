@@ -161,11 +161,31 @@ else
         const updated=await api.obter(created.data[0].id);
         if(!updated.ok || updated.data.telefone!==null || updated.data.email!=='smoke@example.com' || updated.data.endereco!=='Endereço smoke' || updated.data.observacoes!=='Observação smoke')throw new Error('Person full replacement failed');
       }
+      document.querySelector('nav a[href="#/estoque"]').click();
+      await until(()=>document.getElementById('estoque-search'));
+      const stockList=await window.mnrApi.estoque.listar({limite:1,ativo:true});
+      if(!stockList.ok || !stockList.data.itens.length)throw new Error('Offline stock query failed');
+      const stockProduct=stockList.data.itens[0];
+      const filter=document.getElementById('estoque-search');
+      fill('estoque-search',stockProduct.sku);
+      filter.form.requestSubmit();
+      await until(()=>document.querySelector('a[href="#/estoque/'+stockProduct.produtoId+'"]'));
+      document.querySelector('a[href="#/estoque/'+stockProduct.produtoId+'"]').click();
+      await until(()=>document.querySelector('mnr-estoque-detalhe .summary'));
+      await button('Contagem física');
+      await until(()=>document.getElementById('estoque-quantidade'));
+      fill('estoque-quantidade',String(stockProduct.quantidade));
+      fill('estoque-motivo','Smoke de contagem sem diferença');
+      await button('Revisar operação');
+      await until(()=>document.querySelector('dialog[open]'));
+      await button('Confirmar');
+      await until(()=>document.querySelector('.feedback.success')?.textContent.includes('sem movimentação'));
       return result;
     })()`);
         console.log('SMOKE_OK', JSON.stringify(result));
         console.log(dev ? 'PERFUMES_DEVELOPMENT_OK' : 'PERFUMES_OFFLINE_OK');
         console.log(dev ? 'PESSOAS_DEVELOPMENT_OK' : 'PESSOAS_OFFLINE_OK');
+        console.log(dev ? 'ESTOQUE_DEVELOPMENT_OK' : 'ESTOQUE_OFFLINE_OK');
         app.quit();
       }
     })

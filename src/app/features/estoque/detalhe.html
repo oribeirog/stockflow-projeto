@@ -1,0 +1,214 @@
+<section class="stack" aria-label="Estoque do perfume">
+  <a routerLink="/estoque">Voltar ao estoque</a>
+  @if(loading()){<mnr-content-state
+    kind="loading"
+    title="Consultando saldo"
+    description="Lendo os dados locais."
+  />} @if(readError()){<mnr-content-state
+    kind="error"
+    title="Não foi possível consultar o saldo"
+    [description]="readError()"
+    ><mnr-button [disabled]="locked" (pressed)="refresh()"
+      >Consultar novamente</mnr-button
+    ></mnr-content-state
+  >} @if(message()){
+  <p
+    class="feedback"
+    [class.success]="success()"
+    [attr.role]="success()?'status':'alert'"
+    tabindex="-1"
+  >
+    {{message()}} @if(operationId()){<span class="operation">Identificação: {{operationId()}}</span
+    >}
+  </p>
+  } @if(uncertain()){<mnr-button [disabled]="busy()" (pressed)="retry()"
+    >Repetir o mesmo comando</mnr-button
+  >} @if(busy()){
+  <p role="status">Registrando operação…</p>
+  } @if(produto(); as p){
+  <div class="summary stack">
+    <h2>{{p.nome}}</h2>
+    <p>SKU {{p.sku}} · {{p.ativo?'Ativo':'Inativo — ajustes permitidos'}}</p>
+    <p>
+      Disponível: <strong>{{p.quantidade}}</strong> · Mínimo: {{p.estoqueMinimo}} · Versão:
+      {{p.versao}}
+    </p>
+    <p>
+      Valor do saldo: <strong>{{reais(p.valorTotalCentavos)}}</strong> · Custo médio unitário
+      (arredondado): {{p.custoMedioDecimal===null?'—':'R$ '+p.custoMedioDecimal}}
+    </p>
+    <mnr-button variant="secondary" [disabled]="locked || loading()" (pressed)="refresh()"
+      >Atualizar saldo</mnr-button
+    >
+  </div>
+  <div class="stack">
+    <h2>Ajustes manuais</h2>
+    <p>
+      Entradas, saídas, perdas e contagens não representam compras nem pagamentos. Para mudar o
+      estoque mínimo, edite o cadastro em Perfumes.
+    </p>
+    <div class="row" data-actions>
+      @for(action of actions; track action){<mnr-button
+        variant="secondary"
+        [disabled]="locked || dirty() || loading() || !!readError()"
+        (pressed)="start(action)"
+        >{{labels[action]}}</mnr-button
+      >}
+    </div>
+  </div>
+  @if(acao(); as action){ @if(!concluido()){
+  <form (submit)="$event.preventDefault(); prepare()" class="stack">
+    <fieldset [disabled]="locked || loading()">
+      <legend>{{labels[action]}} · {{p.sku}}</legend>
+      <div class="form-grid">
+        <mnr-field
+          controlId="estoque-quantidade"
+          [label]="action==='contagem'?'Quantidade contada fisicamente':'Quantidade'"
+          [required]="true"
+          [value]="quantidade()"
+          [error]="errors()['quantidade'] || ''"
+          hint="Unidades inteiras; até 1 bilhão."
+          (valueChanged)="changed('quantidade',$event)"
+        />
+        <mnr-field
+          controlId="estoque-data"
+          label="Data efetiva (AAAA-MM-DD)"
+          [required]="true"
+          [value]="data()"
+          [error]="errors()['data'] || ''"
+          (valueChanged)="changed('data',$event)"
+        />
+        @if(action==='contagem'){
+        <p class="wide">
+          Saldo consultado: {{p.quantidade}} · Versão esperada: {{p.versao}} · Diferença em
+          unidades: {{diferenca===null?'—':diferenca}}. Uma contagem sem diferença registra apenas
+          auditoria.
+        </p>
+        } @if(requiresCost){<mnr-field
+          controlId="estoque-custo"
+          [label]="action==='contagem'?'Custo total da sobra (R$)':'Custo total da entrada (R$)'"
+          [required]="true"
+          [value]="custo()"
+          [error]="errors()['custo'] || ''"
+          hint="Informe o total da entrada, não o custo unitário. Até duas casas decimais."
+          (valueChanged)="changed('custo',$event)"
+        />}
+        <mnr-field
+          class="wide"
+          controlId="estoque-motivo"
+          label="Justificativa"
+          [required]="true"
+          [multiline]="true"
+          [maxLength]="4000"
+          [value]="motivo()"
+          [error]="errors()['motivo'] || ''"
+          (valueChanged)="changed('motivo',$event)"
+        />
+      </div>
+    </fieldset>
+    @if(stale()){
+    <p role="alert">Atualize o saldo e revise a contagem. Os dados digitados foram mantidos.</p>
+    }
+    <div class="row">
+      <mnr-button
+        data-review
+        type="submit"
+        [disabled]="locked || stale() || loading() || !!readError()"
+        >Revisar operação</mnr-button
+      ><mnr-button variant="secondary" [disabled]="locked" (pressed)="cancelEdit()"
+        >Descartar preenchimento</mnr-button
+      >
+    </div>
+  </form>
+  } @else {
+  <p>
+    Para registrar outra operação, selecione uma das ações acima. O histórico abaixo contém somente
+    movimentações.
+  </p>
+  } }
+  <section class="stack history" aria-label="Histórico de movimentações">
+    <h2>Movimentações de estoque</h2>
+    <p>
+      Ordem de registro, da mais antiga à mais recente. Contagens sem diferença ficam apenas na
+      auditoria, que não possui consulta nesta tela.
+    </p>
+    @if(historyLoading()){<mnr-content-state
+      kind="loading"
+      title="Carregando movimentações"
+      description="Consultando o histórico local."
+    />} @else if(historyError()){<mnr-content-state
+      kind="error"
+      title="Não foi possível consultar o histórico"
+      [description]="historyError()"
+      ><mnr-button (pressed)="loadHistory(cursorPage())"
+        >Consultar histórico novamente</mnr-button
+      ></mnr-content-state
+    >} @else if(history(); as h){ @if(!h.itens.length){<mnr-content-state
+      kind="empty"
+      title="Nenhuma movimentação"
+      description="O produto ainda não possui movimentos de estoque."
+    />} @else {
+    <table>
+      <caption class="sr-only">
+        Movimentos registrados
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Identificação</th>
+          <th scope="col">Quantidade / valor</th>
+          <th scope="col">Saldo posterior</th>
+          <th scope="col">Datas e justificativa</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(m of h.itens;track m.id){
+        <tr>
+          <td data-label="Identificação">
+            <strong>Movimento {{m.id}} · {{naturezas[m.natureza]}}</strong
+            ><small
+              >{{m.contagem?'Originado de contagem física':'Operação registrada'}} ·
+              {{m.operacaoId}}</small
+            >
+          </td>
+          <td data-label="Movimentado">
+            {{m.quantidadeDelta>0?'+':''}}{{m.quantidadeDelta}} · {{reais(m.valorDeltaCentavos)}}
+          </td>
+          <td data-label="Saldo posterior">
+            {{m.quantidadeApos}} · {{reais(m.valorAposCentavos)}}<small
+              >Versão {{m.versaoApos}}</small
+            >
+          </td>
+          <td data-label="Registro">
+            <div>
+              Efetiva: {{m.dataEfetiva}}<small>Registrado: {{m.registradoEm}}</small>
+              <p>{{m.motivo}}</p>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <nav class="pagination" aria-label="Páginas de movimentações">
+      <mnr-button
+        variant="secondary"
+        [disabled]="cursorPage()===0"
+        (pressed)="loadHistory(cursorPage()-1)"
+        >Anterior</mnr-button
+      ><span role="status">Página {{cursorPage()+1}}</span
+      ><mnr-button
+        variant="secondary"
+        [disabled]="!h.temMais"
+        (pressed)="loadHistory(cursorPage()+1)"
+        >Próxima</mnr-button
+      >
+    </nav>
+    } }
+  </section>
+  } @if(confirmation(); as kind){<mnr-confirm
+    [focusReview]="kind==='write'"
+    [title]="kind==='leave'?'Descartar alterações não salvas?':'Confirmar operação de estoque'"
+    [description]="kind==='leave'?'O preenchimento ainda não foi registrado.':review()"
+    (confirmed)="confirm()"
+    (cancelled)="cancelConfirm()"
+  />}
+</section>
