@@ -8,7 +8,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, } from '@angular/router';
 import { ComprasService, IntencaoCompra } from '../../core/compras.service';
 import { FornecedoresService } from '../../core/cadastros/fornecedores.service';
 import { ProdutosService } from '../../core/cadastros/produtos.service';
@@ -44,7 +44,7 @@ interface PaymentInput {
 }
 @Component({
   selector: 'mnr-compra-editor',
-  imports: [RouterLink, Button, Field, Confirm, FormasPagamento],
+  imports: [Button, Field, Confirm, FormasPagamento],
   templateUrl: './editor.html',
   styleUrl: './compras.scss',
 })
