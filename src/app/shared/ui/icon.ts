@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 export type IconName =
+  | 'finance'
   | 'dashboard'
   | 'perfumes'
   | 'stock'
@@ -16,6 +17,7 @@ export type IconName =
   | 'warning'
   | 'clock';
 const paths: Record<IconName, string> = {
+  finance: 'M3 5h18v14H3z M3 9h18 M7 14h3 M16 13v3 M14 14.5h4',
   dashboard: 'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',
   perfumes: 'M9 3h6v4H9z M8 7h8v3H8z M6 10h12v11H6z M9 14h6',
   stock: 'M3 7l9-4 9 4-9 4z M3 7v10l9 4 9-4V7 M12 11v10',

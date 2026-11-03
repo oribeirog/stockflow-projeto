@@ -1,4 +1,6 @@
 import { CANAIS_VENDAS } from '../../shared/vendas-ipc';
+import { CANAIS_FINANCEIRO } from '../../shared/financeiro-ipc';
+import { CANAIS_CORRECOES } from '../../shared/correcoes-ipc';
 import { contextBridge, ipcRenderer } from 'electron';
 import { STATUS_CHANNEL, type DesktopApi } from '../../shared/contracts';
 import { CANAIS_CADASTROS, type ApiCadastro } from '../../shared/cadastros-ipc';
@@ -17,6 +19,20 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  financeiro: {
+    listarParcelas: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.listarParcelas, input),
+    obterParcela: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterParcela, input),
+    obterVenda: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterVenda, input),
+    listarMovimentos: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.listarMovimentos, input),
+    obterMovimento: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterMovimento, input),
+    listarReembolsos: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.listarReembolsos, input),
+    obterReembolso: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterReembolso, input),
+  },
+  correcoes: {
+    obterContextoVenda: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.obterContextoVenda, input),
+    listarDocumentos: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.listarDocumentos, input),
+    obterDocumento: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.obterDocumento, input),
+  },
   vendas: {
     listar: (input) => ipcRenderer.invoke(CANAIS_VENDAS.listar, input),
     obter: (input) => ipcRenderer.invoke(CANAIS_VENDAS.obter, input),

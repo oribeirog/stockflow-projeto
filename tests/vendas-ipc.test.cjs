@@ -274,7 +274,9 @@ test('sale boundary rejects malformed calls and cross-document IDs; preload has 
     await api.vendas[method](1);
     assert.deepEqual(calls.at(-1), [channel, 1]);
   }
-  assert.equal(api.financeiro, undefined);
-  assert.equal(api.correcoes, undefined);
+  assert.ok(api.financeiro);
+  assert.ok(api.correcoes);
+  assert.equal(api.financeiro.registrarRecebimento, undefined);
+  assert.equal(api.correcoes.devolverVenda, undefined);
   assert.equal(api.invoke, undefined);
 });

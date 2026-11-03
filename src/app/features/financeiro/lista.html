@@ -1,0 +1,203 @@
+<section class="stack" aria-label="Consultas financeiras">
+  <nav class="row" aria-label="Consultas do Financeiro">
+    <a routerLink="/financeiro/parcelas" [attr.aria-current]="!reembolsos ? 'page' : null"
+      >Contas a receber</a
+    >
+    <a routerLink="/financeiro/reembolsos" [attr.aria-current]="reembolsos ? 'page' : null"
+      >Obrigações de reembolso</a
+    >
+  </nav>
+  <h2>{{reembolsos ? 'Obrigações de reembolso' : 'Contas a receber'}}</h2>
+  <p>Consulta de valores e históricos. Nenhuma movimentação é realizada nesta tela.</p>
+  <div class="row">
+    <mnr-field
+      controlId="financeiro-cliente-busca"
+      label="Pesquisar cliente (inclui inativos)"
+      [value]="search()"
+      (valueChanged)="search.set($event); findClients()"
+    />
+    <label
+      >Cliente<select
+        id="financeiro-cliente"
+        [value]="client()"
+        (change)="client.set($any($event.target).value); load()"
+      >
+        <option value="" [selected]="!client()">Todos</option>
+        @if (client()) {
+        <option [value]="client()" [selected]="true">Cliente selecionado: {{client()}}</option>
+        } @for (c of clientOptions(); track c.id) {
+        <option [value]="c.id" [selected]="client() === c.id.toString()">
+          {{c.nome}}{{c.ativo ? '' : ' (inativo)'}}
+        </option>
+        }
+      </select></label
+    >
+    @if (clientMore()) {
+    <mnr-button variant="secondary" (pressed)="findClients(true)">Mais clientes</mnr-button> }
+    <mnr-field
+      controlId="financeiro-venda"
+      label="Venda (ID do número VENDA-ID)"
+      [value]="venda()"
+      inputMode="numeric"
+      (valueChanged)="venda.set($event)"
+    />
+    <label
+      >Situação<select
+        id="financeiro-situacao"
+        [value]="state()"
+        (change)="state.set($any($event.target).value); load()"
+      >
+        @if (reembolsos) {
+        <option value="ATIVAS">Ativas</option>
+        <option value="PENDENTES">Pendentes</option>
+        <option value="QUITADAS">Quitadas</option>
+        <option value="ANULADAS">Anuladas</option>
+        <option value="TODAS">Todas</option>
+        } @else {
+        <option value="EM_ABERTO">Em aberto</option>
+        <option value="PENDENTE">Pendentes, ainda não vencidas</option>
+        <option value="PARCIALMENTE_PAGO">Parcialmente pagas (inclui vencidas)</option>
+        <option value="QUITADO">Quitadas</option>
+        <option value="VENCIDO">Vencidas</option>
+        <option value="TODAS">Todas</option>
+        }
+      </select></label
+    >
+    @if (!reembolsos) {
+    <mnr-field
+      controlId="financeiro-de"
+      label="Vencimento de (AAAA-MM-DD)"
+      [value]="de()"
+      (valueChanged)="de.set($event)"
+    />
+    <mnr-field
+      controlId="financeiro-ate"
+      label="Vencimento até (AAAA-MM-DD)"
+      [value]="ate()"
+      (valueChanged)="ate.set($event)"
+    />
+    }
+    <mnr-button [disabled]="loading()" (pressed)="load(0,true)">Consultar financeiro</mnr-button>
+  </div>
+  @if (clientError()) {
+  <p role="alert">{{clientError()}}</p>
+  <mnr-button variant="secondary" (pressed)="findClients()"
+    >Consultar clientes novamente</mnr-button
+  >
+  } @if (loading()) {
+  <p role="status">Carregando consultas financeiras…</p>
+  } @if (error()) {
+  <p class="feedback" tabindex="-1" role="alert">{{error()}}</p>
+  <mnr-button (pressed)="load(page,true)">Tentar consulta novamente</mnr-button> } @if (loaded()) {
+  <h3 id="financeiro-resultados" tabindex="-1">
+    Resultados · data local de referência: {{reference()}}
+  </h3>
+  @if (reembolsos) { @if (!obrigacoes().length) {
+  <p>Nenhuma obrigação encontrada.</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <caption>
+        Obrigações individuais de reembolso
+      </caption>
+      <thead>
+        <tr>
+          <th>Obrigação / venda</th>
+          <th>Cliente histórico</th>
+          <th>Situação</th>
+          <th>Original</th>
+          <th>Pagamentos registrados</th>
+          <th>Estornos</th>
+          <th>Pago líquido</th>
+          <th>Pendente exigível</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of obrigacoes(); track r.id) {
+        <tr>
+          <td>
+            <a [routerLink]="['/financeiro/reembolsos',r.id]" [queryParams]="{vendaId:r.vendaId}"
+              >Reembolso {{r.id}}</a
+            ><br /><a [routerLink]="['/financeiro/vendas',r.vendaId]">{{r.vendaNumero}}</a>
+          </td>
+          <td>
+            {{r.clienteNomeHistorico || 'Não informado'}}{{r.clienteAtivo === false ? ' (cadastro
+            inativo)' : ''}}
+          </td>
+          <td>{{r.ativa ? 'Ativa' : 'Anulada por estorno da correção'}}</td>
+          <td>{{reais(r.valorOriginalCentavos)}}</td>
+          <td>{{reais(r.pagosCentavos)}}</td>
+          <td>{{reais(r.estornosCentavos)}}</td>
+          <td>{{reais(r.pagoLiquidoCentavos)}}</td>
+          <td>{{reais(r.saldoExigivelCentavos)}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  } @else { @if (!parcelas().length) {
+  <p>Nenhuma parcela encontrada.</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <caption>
+        Parcelas por vencimento
+      </caption>
+      <thead>
+        <tr>
+          <th>Parcela / venda</th>
+          <th>Cliente histórico</th>
+          <th>Vencimento</th>
+          <th>Identificação</th>
+          <th>Situação</th>
+          <th>Original</th>
+          <th>Recebido líquido alocado</th>
+          <th>Abatimentos líquidos</th>
+          <th>Saldo exigível</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of parcelas(); track p.id) {
+        <tr>
+          <td>
+            <a [routerLink]="['/financeiro/parcelas',p.id]">Parcela {{p.numero}}</a><br /><a
+              [routerLink]="['/financeiro/vendas',p.vendaId]"
+              >{{p.vendaNumero}}</a
+            >
+          </td>
+          <td>
+            {{p.clienteNomeHistorico || 'Não informado'}}{{p.clienteAtivo === false ? ' (cadastro
+            inativo)' : ''}}
+          </td>
+          <td>{{p.vencimento}}</td>
+          <td>
+            {{p.tipo === 'ENTRADA' ? 'Entrada da confirmação' : p.modalidadeVenda === 'A_VISTA' ?
+            'Parcela técnica à vista' : 'Regular'}}
+          </td>
+          <td>
+            {{p.status}}{{p.status === 'VENCIDO' && p.recebimentoParcial ? ' · parcialmente paga' :
+            ''}}
+          </td>
+          <td>{{reais(p.valorOriginalCentavos)}}</td>
+          <td>{{reais(p.recebimentosCentavos)}}</td>
+          <td>{{reais(p.abatimentosCentavos)}}</td>
+          <td>{{reais(p.saldoCentavos)}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+  <div class="row">
+    <mnr-button
+      variant="secondary"
+      [disabled]="page === 0 || loading()"
+      (pressed)="load(page-1,true)"
+      >Anterior</mnr-button
+    ><span>Página {{page+1}}</span
+    ><mnr-button variant="secondary" [disabled]="!more() || loading()" (pressed)="load(page+1,true)"
+      >Próxima</mnr-button
+    >
+  </div>
+  }
+</section>

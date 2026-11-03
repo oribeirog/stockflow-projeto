@@ -1,5 +1,19 @@
 # MNR Perfumes
 
+## Etapa 4E.2-A — Consultas financeiras
+
+Financeiro permite consultar parcelas com filtros e paginação, resumo oficial da
+venda, movimentos/alocações, reembolsos e documentos corretivos históricos.
+Os dez canais novos são somente de leitura; não há recebimentos, pagamentos,
+correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços da 3D,
+sem cálculos de saldo no Angular. Veja o
+[relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
+
+4E.2-B (recebimentos), C (correções de vendas), D (reembolsos/estornos) e E
+(consolidação) aguardam aprovação separada. **4F** continua reservada para
+Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
+e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
+
 ## Etapa 4E.1 — Vendas
 
 Vendas oferece rascunhos, descontos, revisão oficial no backend e confirmação

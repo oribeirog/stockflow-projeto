@@ -1,0 +1,30 @@
+@use '../vendas/vendas.scss';
+caption {
+  text-align: left;
+  padding-block: var(--space-3);
+  font-weight: 600;
+}
+dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+dl div {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+}
+dt {
+  color: var(--text-secondary);
+}
+dd {
+  margin: var(--space-2) 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}

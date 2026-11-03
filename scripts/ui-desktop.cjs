@@ -53,7 +53,10 @@ async function verify(window) {
       `document.querySelector('h1').textContent === ${JSON.stringify(title)} && document.activeElement === document.querySelector('h1')`,
     );
     assert.equal(await evaluate('document.title'), `${title} • MNR Perfumes`);
-    assert.equal(await evaluate('document.querySelectorAll("nav [aria-current=page]").length'), 1);
+    assert.equal(
+      await evaluate('document.querySelectorAll("#main-navigation [aria-current=page]").length'),
+      1,
+    );
     assert.equal(
       await evaluate('document.querySelector("nav [aria-current=page]").getAttribute("href")'),
       `#/${path}`,
@@ -106,6 +109,7 @@ async function verify(window) {
     ['perfumes', 'Perfumes'],
     ['estoque', 'Estoque'],
     ['vendas', 'Vendas'],
+    ['financeiro', 'Financeiro'],
     ['compras', 'Compras'],
     ['clientes', 'Clientes'],
     ['fornecedores', 'Fornecedores'],
@@ -124,6 +128,7 @@ async function verify(window) {
         'estoque',
         'compras',
         'vendas',
+        'financeiro',
       ].includes(path)
     ) {
       await until(

@@ -32,6 +32,12 @@ export const navigation: readonly {
     description: 'Registro, confirmação e histórico de vendas.',
   },
   {
+    path: 'financeiro',
+    title: 'Financeiro',
+    icon: 'finance',
+    description: 'Contas a receber, movimentos e obrigações de reembolso.',
+  },
+  {
     path: 'compras',
     title: 'Compras',
     icon: 'purchases',
@@ -63,6 +69,25 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  { path: 'financeiro', pathMatch: 'full', redirectTo: 'financeiro/parcelas' },
+  ...['parcelas', 'reembolsos'].map((kind) => ({
+    path: `financeiro/${kind}`,
+    title: 'Financeiro • MNR Perfumes',
+    data: { financeiroTipo: kind, financeiroConsulta: true },
+    loadComponent: () => import('../features/financeiro/lista').then((m) => m.FinanceiroLista),
+  })),
+  ...[
+    ['financeiro/parcelas/:id', 'parcela'],
+    ['financeiro/reembolsos/:id', 'reembolso'],
+    ['financeiro/vendas/:vendaId/movimentos/:id', 'movimento'],
+    ['financeiro/vendas/:id', 'venda'],
+    ['vendas/correcoes/:id', 'correcao'],
+  ].map(([path, kind]) => ({
+    path,
+    title: 'Financeiro • MNR Perfumes',
+    data: { financeiroTipo: kind, financeiroConsulta: true },
+    loadComponent: () => import('../features/financeiro/detalhe').then((m) => m.FinanceiroDetalhe),
+  })),
   ...['vendas/nova', 'vendas/:id'].map((path) => ({
     path,
     title: 'Vendas ? MNR Perfumes',
@@ -117,27 +142,29 @@ export const routes: Routes = [
       (component: { canLeave(): boolean | Promise<boolean> }) => component.canLeave(),
     ],
   })),
-  ...navigation.map((item) => ({
-    path: item.path,
-    title: `${item.title} • MNR Perfumes`,
-    data: { ...item, pessoa: item.path === 'fornecedores' ? 'fornecedor' : 'cliente' },
-    loadComponent:
-      item.path === 'dashboard'
-        ? () => import('../features/dashboard/dashboard').then((m) => m.Dashboard)
-        : item.path === 'perfumes'
-          ? () => import('../features/perfumes/perfumes').then((m) => m.Perfumes)
-          : item.path === 'estoque'
-            ? () => import('../features/estoque/estoque').then((m) => m.Estoque)
-            : item.path === 'configuracoes'
-              ? () => import('../features/settings/settings').then((m) => m.Settings)
-              : item.path === 'vendas'
-                ? () => import('../features/vendas/lista').then((m) => m.Vendas)
-                : item.path === 'compras'
-                  ? () => import('../features/compras/lista').then((m) => m.Compras)
-                  : ['clientes', 'fornecedores'].includes(item.path)
-                    ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
-                    : () => import('../features/module/module').then((m) => m.ModulePage),
-  })),
+  ...navigation
+    .filter((item) => item.path !== 'financeiro')
+    .map((item) => ({
+      path: item.path,
+      title: `${item.title} • MNR Perfumes`,
+      data: { ...item, pessoa: item.path === 'fornecedores' ? 'fornecedor' : 'cliente' },
+      loadComponent:
+        item.path === 'dashboard'
+          ? () => import('../features/dashboard/dashboard').then((m) => m.Dashboard)
+          : item.path === 'perfumes'
+            ? () => import('../features/perfumes/perfumes').then((m) => m.Perfumes)
+            : item.path === 'estoque'
+              ? () => import('../features/estoque/estoque').then((m) => m.Estoque)
+              : item.path === 'configuracoes'
+                ? () => import('../features/settings/settings').then((m) => m.Settings)
+                : item.path === 'vendas'
+                  ? () => import('../features/vendas/lista').then((m) => m.Vendas)
+                  : item.path === 'compras'
+                    ? () => import('../features/compras/lista').then((m) => m.Compras)
+                    : ['clientes', 'fornecedores'].includes(item.path)
+                      ? () => import('../features/pessoas/pessoas').then((m) => m.Pessoas)
+                      : () => import('../features/module/module').then((m) => m.ModulePage),
+    })),
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: '**', redirectTo: 'dashboard' },
 ];

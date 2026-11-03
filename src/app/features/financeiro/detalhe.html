@@ -1,0 +1,334 @@
+<section class="stack" aria-label="Detalhe financeiro">
+  <nav class="row" aria-label="Navegação financeira">
+    <a routerLink="/financeiro/parcelas">Contas a receber</a
+    ><a routerLink="/financeiro/reembolsos">Obrigações de reembolso</a>
+  </nav>
+  <mnr-button variant="secondary" [disabled]="loading()" (pressed)="load()"
+    >Atualizar consulta</mnr-button
+  >
+  @if (loading()) {
+  <p role="status">Carregando detalhe financeiro…</p>
+  } @if (error()) {
+  <p role="alert" class="feedback" tabindex="-1">{{error()}}</p>
+  } @if (!loading() && header(); as h) {
+  <h2 id="financeiro-detalhe-titulo" tabindex="-1">
+    {{h.vendaNumero}} · {{h.vendaEstado}} · {{kind === 'correcao' ? 'Documento corretivo' : 'Detalhe
+    financeiro'}}
+  </h2>
+  <p>
+    Cliente histórico: {{h.clienteNomeHistorico || 'Não informado'}}{{h.clienteAtivo === false ? ' ·
+    cadastro atualmente inativo' : ''}}
+  </p>
+  <nav class="row" aria-label="Vínculos da venda">
+    <a [routerLink]="['/vendas',h.vendaId]">Consultar venda original</a>
+    <a [routerLink]="['/financeiro/vendas',h.vendaId]">Resumo financeiro da venda</a>
+    <a routerLink="/financeiro/parcelas" [queryParams]="{vendaId:h.vendaId}"
+      >Parcelas desta venda</a
+    >
+    <a routerLink="/financeiro/reembolsos" [queryParams]="{vendaId:h.vendaId}"
+      >Reembolsos desta venda</a
+    >
+    @if (h.clienteId) {
+    <a [routerLink]="['/clientes',h.clienteId,'editar']">Consultar cadastro do cliente</a> }
+  </nav>
+  @if (venda(); as v) {
+  <h3>Resumo financeiro oficial</h3>
+  <p>
+    Data comercial: {{v.dataComercial}}. Alocações e abatimentos não são novos recebimentos. A
+    entrada já integra os recebimentos registrados.
+  </p>
+  <dl>
+    @for (field of summaryLabels; track field[0]) {
+    <div [attr.data-financial]="field[0]">
+      <dt>{{field[1]}}</dt>
+      <dd>{{reais(v.resumo[field[0]])}}</dd>
+    </div>
+    }
+  </dl>
+  } @if (parcela(); as p) {
+  <h3>
+    Parcela {{p.numero}} · {{p.status}}{{p.status === 'VENCIDO' && p.recebimentoParcial ? ' ·
+    parcialmente paga' : ''}}
+  </h3>
+  <p>Vencimento: {{p.vencimento}} · Data local de referência: {{p.dataReferencia}}</p>
+  <p>
+    {{p.tipo === 'ENTRADA' ? 'Entrada da confirmação' : p.modalidadeVenda === 'A_VISTA' ? 'Parcela
+    técnica à vista' : 'Parcela regular'}}. O saldo atual considera recebimentos, abatimentos e
+    estornos.
+  </p>
+  <dl>
+    <div>
+      <dt>Valor original</dt>
+      <dd>{{reais(p.valorOriginalCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Recebido líquido alocado</dt>
+      <dd>{{reais(p.recebimentosCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Abatimentos líquidos</dt>
+      <dd>{{reais(p.abatimentosCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Saldo exigível</dt>
+      <dd>{{reais(p.saldoCentavos)}}</dd>
+    </div>
+  </dl>
+  <h3>Histórico de abatimentos</h3>
+  @for (a of p.abatimentos; track a.id) {
+  <p>
+    {{a.natureza}} · {{reais(a.valorCentavos)}} ·
+    <a [routerLink]="['/vendas/correcoes',a.correcaoId]" [queryParams]="{vendaId:h.vendaId}"
+      >Documento {{a.correcaoId}}</a
+    >@if(a.estornaAbatimentoId) { · Estorna abatimento {{a.estornaAbatimentoId}} }
+  </p>
+  } @empty {
+  <p>Sem abatimentos.</p>
+  } } @if (reembolso(); as r) {
+  <h3>
+    Obrigação de reembolso {{r.id}} · {{r.ativa ? 'Ativa' : 'Anulada por estorno da correção'}}
+  </h3>
+  <p>
+    Data de origem: {{r.dataEfetiva}} ·
+    <a [routerLink]="['/vendas/correcoes',r.correcaoId]" [queryParams]="{vendaId:r.vendaId}"
+      >{{r.correcaoNumero}}</a
+    >
+  </p>
+  <dl>
+    <div>
+      <dt>Obrigação original</dt>
+      <dd>{{reais(r.valorOriginalCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Pagamentos registrados</dt>
+      <dd>{{reais(r.pagosCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Estornos dos pagamentos</dt>
+      <dd>{{reais(r.estornosCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Pago líquido</dt>
+      <dd>{{reais(r.pagoLiquidoCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Pendente exigível atual</dt>
+      <dd>{{reais(r.saldoExigivelCentavos)}}</dd>
+    </div>
+  </dl>
+  <p>
+    A obrigação não representa dinheiro devolvido. Os pagamentos e seus estornos constam no
+    histórico abaixo.
+  </p>
+  <h3>Recebimentos que originaram a obrigação</h3>
+  @for (o of r.origens; track $index) {
+  <p>
+    <a [routerLink]="['/financeiro/vendas',r.vendaId,'movimentos',o.movimentoId]"
+      >Movimento {{o.movimentoId}}</a
+    >
+    · <a [routerLink]="['/financeiro/parcelas',o.parcelaId]">Parcela {{o.parcelaId}}</a> · Valor
+    reservado: {{reais(o.valorCentavos)}}
+  </p>
+  } } @if (movimento(); as m) {
+  <h3>Movimento {{m.id}} · {{m.natureza}} · {{m.sentido}}</h3>
+  <dl>
+    <div>
+      <dt>Valor</dt>
+      <dd>{{reais(m.valorCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Forma histórica</dt>
+      <dd>{{m.formaHistorica}}</dd>
+    </div>
+    <div>
+      <dt>Data efetiva</dt>
+      <dd>{{m.dataEfetiva}}</dd>
+    </div>
+    <div>
+      <dt>Registrado em</dt>
+      <dd>{{m.registradoEm}}</dd>
+    </div>
+  </dl>
+  <p>Motivo: {{m.motivo}}</p>
+  <p>Operação: {{m.operacaoId}}</p>
+  @if (m.estornaMovimentoId) {
+  <a [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.estornaMovimentoId]"
+    >Movimento original {{m.estornaMovimentoId}}</a
+  >
+  } @if (m.estornadoPorId) {
+  <a [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.estornadoPorId]"
+    >Estornado pelo movimento {{m.estornadoPorId}}</a
+  >
+  }
+  <h3>Alocações históricas (não representam novos recebimentos)</h3>
+  @for (a of m.alocacoes; track $index) {
+  <p>
+    {{a.natureza}} · {{reais(a.valorCentavos)}} · @if (a.parcelaId) {
+    <a [routerLink]="['/financeiro/parcelas',a.parcelaId]">Parcela {{a.parcelaId}}</a> } @if
+    (a.reembolsoId) {
+    <a [routerLink]="['/financeiro/reembolsos',a.reembolsoId]" [queryParams]="{vendaId:m.vendaId}"
+      >Reembolso {{a.reembolsoId}}</a
+    >
+    } @if(a.estornaAlocacaoId) { · Estorna alocação {{a.estornaAlocacaoId}} }
+  </p>
+  } @empty {
+  <p>Sem alocações.</p>
+  } } @if (correcao(); as c) {
+  <h3>{{c.numero}} · {{c.categoria}} · {{c.estado}}</h3>
+  <p>Data efetiva: {{c.dataEfetiva}} · Valor comercial histórico: {{reais(c.totalCentavos)}}</p>
+  <p>Motivo: {{c.motivo}}</p>
+  <a
+    [routerLink]="c.origemId === h.vendaId ? ['/vendas',c.origemId] : ['/vendas/correcoes',c.origemId]"
+    [queryParams]="c.origemId === h.vendaId ? {} : {vendaId:h.vendaId}"
+    >Documento de origem {{c.origemId}}</a
+  >
+  @if (c.estornadoPorId) {
+  <a [routerLink]="['/vendas/correcoes',c.estornadoPorId]" [queryParams]="{vendaId:h.vendaId}"
+    >Estorno vinculado {{c.estornadoPorId}}</a
+  >
+  }
+  <div class="table-wrap">
+    <table>
+      <caption>
+        Itens históricos do documento corretivo
+      </caption>
+      <thead>
+        <tr>
+          <th>Produto / SKU</th>
+          <th>Quantidade</th>
+          <th>Impróprias</th>
+          <th>Valor líquido</th>
+          <th>Custo histórico</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(i of c.itens; track i.id) {
+        <tr>
+          <td>{{i.descricaoHistorica}} / {{i.skuHistorico}}</td>
+          <td>{{i.quantidade}}</td>
+          <td>{{i.quantidadePerda}}</td>
+          <td>{{reais(i.valorLiquidoCentavos)}}</td>
+          <td>{{reais(i.custoHistoricoCentavos)}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <h3>Efeitos históricos no estoque</h3>
+  @for (e of c.movimentosEstoque; track e.id) {
+  <p>
+    <a [routerLink]="['/estoque',e.produtoId]">Produto {{e.produtoId}}</a> · Movimento {{e.id}} ·
+    {{e.natureza}} · Quantidade: {{e.quantidadeDelta}} · Valor: {{reais(e.valorDeltaCentavos)}} ·
+    Origem: {{e.origemId}}
+  </p>
+  }
+  <h3>Efeitos históricos nas parcelas</h3>
+  @for(a of c.abatimentos; track $index) {
+  <p>
+    {{a.natureza}} · {{reais(a.valorCentavos)}} ·
+    <a [routerLink]="['/financeiro/parcelas',a.parcelaId]">Parcela {{a.parcelaId}}</a>
+  </p>
+  } @empty {
+  <p>Sem abatimentos neste documento.</p>
+  } @for(id of c.reembolsoIds; track id) {
+  <a [routerLink]="['/financeiro/reembolsos',id]" [queryParams]="{vendaId:h.vendaId}"
+    >Obrigação de reembolso {{id}}</a
+  >
+  } } @if (kind !== 'movimento' && kind !== 'correcao') {
+  <section class="stack" aria-label="Histórico de movimentos">
+    <h3>Histórico de movimentos financeiros</h3>
+    @if(historyLoading()) {
+    <p role="status">Consultando movimentos…</p>
+    }
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Movimento</th>
+            <th>Natureza</th>
+            <th>Forma histórica</th>
+            <th>Data efetiva</th>
+            <th>Valor</th>
+            <th>Vínculos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(m of movements(); track m.id) {
+          <tr>
+            <td>
+              <a [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.id]"
+                >Movimento {{m.id}}</a
+              >
+            </td>
+            <td>{{m.natureza}} · {{m.sentido}}</td>
+            <td>{{m.formaHistorica}}</td>
+            <td>{{m.dataEfetiva}}</td>
+            <td>{{reais(m.valorCentavos)}}</td>
+            <td>
+              @if(m.estornaMovimentoId) {
+              <a [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.estornaMovimentoId]"
+                >Original {{m.estornaMovimentoId}}</a
+              >
+              } @if(m.estornadoPorId) {
+              <a [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.estornadoPorId]"
+                >Estorno {{m.estornadoPorId}}</a
+              >
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if(!movements().length && !historyLoading()) {
+    <p>Nenhum movimento encontrado.</p>
+    }
+    <div class="row">
+      <mnr-button
+        variant="secondary"
+        [disabled]="historyPage === 0 || historyLoading()"
+        (pressed)="loadMovements(historyPage-1)"
+        >Movimentos anteriores</mnr-button
+      ><span>Página {{historyPage+1}}</span
+      ><mnr-button
+        variant="secondary"
+        [disabled]="!historyMore() || historyLoading()"
+        (pressed)="loadMovements(historyPage+1)"
+        >Próximos movimentos</mnr-button
+      >
+    </div>
+  </section>
+  } @if(kind === 'venda') {
+  <section class="stack" aria-label="Documentos corretivos">
+    <h3>Documentos corretivos vinculados</h3>
+    @if(correctionsLoading()) {
+    <p role="status">Consultando documentos…</p>
+    } @for(c of corrections(); track c.id) {
+    <p>
+      <a [routerLink]="['/vendas/correcoes',c.id]" [queryParams]="{vendaId:h.vendaId}"
+        >{{c.numero}}</a
+      >
+      · {{c.categoria}} · {{c.estado}} · {{reais(c.totalCentavos)}}
+    </p>
+    } @empty {
+    <p>Nenhum documento corretivo encontrado.</p>
+    }
+    <div class="row">
+      <mnr-button
+        variant="secondary"
+        [disabled]="correctionPage === 0 || correctionsLoading()"
+        (pressed)="loadCorrections(correctionPage-1)"
+        >Documentos anteriores</mnr-button
+      ><span>Página {{correctionPage+1}}</span
+      ><mnr-button
+        variant="secondary"
+        [disabled]="!correctionsMore() || correctionsLoading()"
+        (pressed)="loadCorrections(correctionPage+1)"
+        >Próximos documentos</mnr-button
+      >
+    </div>
+  </section>
+  } @if(historyError()) {
+  <p role="alert">{{historyError()}}</p>
+  <mnr-button variant="secondary" (pressed)="load()">Consultar históricos novamente</mnr-button> } }
+</section>

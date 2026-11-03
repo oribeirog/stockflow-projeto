@@ -44,7 +44,12 @@ module.exports = async function run({
     `({operacaoId:crypto.randomUUID(),motivo:'Vendas fixture isolada',dados:${JSON.stringify(d)}})`;
   await until(`!!window.mnrApi?.vendas&&!!document.querySelector('nav')`);
   assert.equal(await evaluate(`typeof require`), 'undefined');
-  assert.equal(await evaluate(`!!window.mnrApi.financeiro||!!window.mnrApi.correcoes`), false);
+  assert.equal(
+    await evaluate(
+      `!!window.mnrApi.financeiro.registrarRecebimento||!!window.mnrApi.correcoes.devolverVenda`,
+    ),
+    false,
+  );
   const marca = await api(
     `window.mnrApi.cadastros.marcas.salvar(${cmd({ nome: 'Marca vendas' })})`,
   );

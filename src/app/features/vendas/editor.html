@@ -297,6 +297,9 @@
     <h3 id="oficial-title">
       {{editable ? 'Valores oficiais do último rascunho salvo' : 'Histórico da venda'}}
     </h3>
+    @if (!editable && d.estado !== 'DESCARTADO') {
+    <a [routerLink]="['/financeiro/vendas',d.id]">Consultar financeiro e documentos vinculados</a>
+    }
     <p>
       Cliente: {{d.contraparteNome || 'Não informado'}} · {{d.contraparteDocumento || 'Sem
       documento'}} · Data: {{d.dataComercial}}
