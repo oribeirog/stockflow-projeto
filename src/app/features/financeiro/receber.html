@@ -1,0 +1,265 @@
+<section class="stack" aria-label="Registrar recebimento">
+  <div class="row">
+    <mnr-button variant="secondary" (pressed)="back()">Voltar ao financeiro da venda</mnr-button>
+    <h2>Registrar recebimento</h2>
+  </div>
+  @if(message()) {
+  <p class="feedback receipt-feedback" role="status" tabindex="-1">{{message()}}</p>
+  } @if(operationId()) {
+  <p>Operação: {{operationId()}}</p>
+  } @if(uncertain()) {
+  <p role="alert">
+    O resultado ainda não foi esclarecido. Preserve esta intenção e repita o mesmo recebimento.
+  </p>
+  <mnr-button [disabled]="busy()" (pressed)="retry()">Repetir o mesmo recebimento</mnr-button> }
+  @if(loading()) {
+  <p role="status">Consultando venda e parcelas…</p>
+  } @if(readError()) {
+  <p role="alert">{{readError()}}</p>
+  } @if(stale()) {
+  <p role="alert">
+    O financeiro mudou. Consulte os saldos e revise novamente; o preenchimento será preservado.
+  </p>
+  } @if(readError() || stale()) {
+  <mnr-button [disabled]="locked" (pressed)="load()">Consultar saldos novamente</mnr-button> }
+  @if(venda(); as v) {
+  <h3>{{v.vendaNumero}} · {{v.clienteNomeHistorico || 'Cliente não informado'}}</h3>
+  @if(v.clienteAtivo === false) {
+  <p>Cliente atualmente inativo. A dívida existente pode ser recebida.</p>
+  }
+  <dl>
+    <div>
+      <dt>Valor original</dt>
+      <dd>{{reais(v.resumo.valorOriginalCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Saldo exigível oficial atual</dt>
+      <dd id="receber-saldo">{{reais(v.resumo.saldoReceberCentavos)}}</dd>
+    </div>
+  </dl>
+  @if(result(); as r) {
+  <section class="stack official" aria-label="Recebimento concluído">
+    <h3>Recebimento confirmado</h3>
+    <p>Saldo após esta operação: {{reais(r.financeiro.saldoReceberCentavos)}}.</p>
+    <div class="row">
+      @for(id of r.movimentos; track id) {
+      <a [routerLink]="['/financeiro/vendas',v.vendaId,'movimentos',id]"
+        >Consultar movimento {{id}}</a
+      >
+      }
+    </div>
+    <a [routerLink]="['/financeiro/vendas',v.vendaId]">Consultar histórico e saldos atuais</a>
+    @if(eligible && !readError()) {
+    <mnr-button variant="secondary" (pressed)="another()">Registrar outro recebimento</mnr-button> }
+  </section>
+  } @else if(!eligible && !loading()) {
+  <p role="status">Esta venda não possui saldo a receber disponível.</p>
+  } @if(!result()) {
+  <fieldset [disabled]="locked || !eligible || !!readError()" class="stack">
+    <legend>Dinheiro recebido</legend>
+    <div class="row">
+      <mnr-field
+        controlId="receber-data"
+        label="Data efetiva (AAAA-MM-DD)"
+        [value]="data()"
+        [error]="errors()['receber-data'] || ''"
+        [required]="true"
+        (valueChanged)="data.set($event); changed()"
+      />
+      <mnr-field
+        controlId="receber-motivo"
+        label="Motivo deste recebimento"
+        [value]="motivo()"
+        [error]="errors()['receber-motivo'] || ''"
+        [required]="true"
+        [maxLength]="4000"
+        (valueChanged)="motivo.set($event); changed()"
+      />
+    </div>
+    <div class="row">
+      <mnr-field
+        controlId="receber-busca"
+        label="Pesquisar forma ativa"
+        [value]="busca()"
+        (valueChanged)="busca.set($event); findForms()"
+      />@if(moreForms()) {
+      <mnr-button variant="secondary" (pressed)="findForms(true)">Mais formas ativas</mnr-button> }
+    </div>
+    @if(formError()) {
+    <p role="alert">{{formError()}}</p>
+    <mnr-button variant="secondary" (pressed)="findForms()">Consultar formas novamente</mnr-button>
+    } @if(!formas().length && !formError()) {
+    <p>
+      Nenhuma forma ativa encontrada. Consulte o cadastro de formas de pagamento em Configurações.
+    </p>
+    }
+    <fieldset
+      id="receber-pagamentos"
+      class="stack"
+      tabindex="-1"
+      [attr.aria-describedby]="errors()['receber-pagamentos'] ? 'receber-pagamentos-error' : null"
+    >
+      <legend>Formas e valores</legend>
+      @for(p of payments(); track $index; let n=$index) {
+      <div class="row">
+        <label
+          >Forma {{n+1}}<select
+            [id]="'receber-forma-'+n"
+            [value]="p.id"
+            [attr.aria-invalid]="errors()['receber-forma-'+n] ? 'true' : null"
+            [attr.aria-describedby]="errors()['receber-forma-'+n] ? 'receber-forma-error-'+n : null"
+            (change)="payment(n,'id',$any($event.target).value)"
+          >
+            <option value="0" [selected]="!p.id">Selecione uma forma ativa</option>
+            @if(p.id) {
+            <option [value]="p.id" [selected]="true">{{formName(p.id)}} (selecionada)</option>
+            }@for(f of formas(); track f.id) {
+            <option [value]="f.id" [selected]="p.id===f.id">{{f.nome}}</option>
+            }
+          </select></label
+        ><mnr-field
+          [controlId]="'receber-valor-'+n"
+          label="Valor recebido (R$)"
+          inputMode="decimal"
+          [value]="p.valor"
+          [error]="errors()['receber-valor-'+n] || ''"
+          [required]="true"
+          (valueChanged)="payment(n,'valor',$event)"
+        /><mnr-button variant="secondary" (pressed)="removePayment(n)"
+          >Remover forma {{n+1}}</mnr-button
+        >
+      </div>
+      @if(errors()['receber-forma-'+n]; as error) {
+      <p [id]="'receber-forma-error-'+n" role="alert">{{error}}</p>
+      } } @if(errors()['receber-pagamentos']; as error) {
+      <p id="receber-pagamentos-error" role="alert">{{error}}</p>
+      }
+      <mnr-button variant="secondary" (pressed)="addPayment()"
+        >Adicionar forma de recebimento</mnr-button
+      >
+    </fieldset>
+    <label
+      >Distribuição entre parcelas<select
+        id="receber-modalidade"
+        [value]="manual() ? 'MANUAL' : 'AUTO'"
+        [attr.aria-invalid]="errors()['receber-modalidade'] ? 'true' : null"
+        [attr.aria-describedby]="errors()['receber-modalidade'] ? 'receber-modalidade-error' : null"
+        (change)="manual.set($any($event.target).value === 'MANUAL'); changed()"
+      >
+        <option value="AUTO" [selected]="!manual()">Automática por vencimento</option>
+        <option value="MANUAL" [selected]="manual()">Manual: selecionar parcelas</option>
+      </select></label
+    >
+    @if(errors()['receber-modalidade']; as error) {
+    <p id="receber-modalidade-error" role="alert">{{error}}</p>
+    }
+    <p>
+      {{manual() ? 'Selecione as parcelas e informe os valores. A revisão confere cada saldo e a
+      soma das alocações.' : 'A revisão distribui o dinheiro por vencimento, número e ID. A alocação
+      automática considera todas as parcelas da venda, inclusive futuras.'}}
+    </p>
+    <fieldset
+      id="receber-alocacoes"
+      class="stack"
+      tabindex="-1"
+      [attr.aria-describedby]="errors()['receber-alocacoes'] ? 'receber-alocacoes-error' : null"
+    >
+      <legend>Parcelas existentes e saldos oficiais</legend>
+      @for(p of parcelas(); track p.id) {
+      <div class="official stack">
+        <p>
+          Parcela {{p.numero}} · {{p.vencimento}} · {{p.status}} · {{p.tipo === 'ENTRADA' ? 'Entrada
+          da confirmação' : 'Regular'}} · Original: {{reais(p.valorOriginalCentavos)}} · Saldo:
+          {{reais(p.saldoCentavos)}}
+        </p>
+        @if(manual()) {
+        <div class="row">
+          <label
+            ><input
+              type="checkbox"
+              [id]="'receber-selecao-'+p.id"
+              [checked]="allocations()[p.id]?.selected || false"
+              [disabled]="p.saldoCentavos===0"
+              (change)="allocation(p.id,'selected',$any($event.target).checked)"
+            />Selecionar parcela {{p.numero}}</label
+          >
+          @if(allocations()[p.id]?.selected) {
+          <mnr-field
+            [controlId]="'receber-alocacao-'+p.id"
+            [label]="'Alocar na parcela '+p.numero+' (R$)'"
+            inputMode="decimal"
+            [value]="allocations()[p.id]?.valor || ''"
+            [error]="errors()['receber-alocacao-'+p.id] || ''"
+            [required]="true"
+            (valueChanged)="allocation(p.id,'valor',$event)"
+          />
+          }
+        </div>
+        }
+      </div>
+      } @if(errors()['receber-alocacoes']; as error) {
+      <p id="receber-alocacoes-error" role="alert">{{error}}</p>
+      }
+    </fieldset>
+    <mnr-button [disabled]="stale()" (pressed)="review()">Revisar recebimento</mnr-button>
+  </fieldset>
+  } } @if(reviewed(); as r) {
+  <section class="stack official" aria-label="Revisão do recebimento">
+    <h3 id="receber-revisao" tabindex="-1">Revisão oficial do recebimento</h3>
+    <p>
+      {{r.venda.numero}} · {{r.venda.cliente || 'Cliente não informado'}} · Data:
+      {{r.dados.dataEfetiva}} · Motivo: {{r.motivo}}
+    </p>
+    <p>
+      Total recebido: <strong id="receber-total">{{reais(r.plano.totalCentavos)}}</strong> · Saldo
+      anterior da venda: {{reais(r.resumo.saldoReceberCentavos)}} · Saldo previsto:
+      {{reais(r.saldoPrevistoCentavos)}}
+    </p>
+    @for(p of r.dados.pagamentos; track $index) {
+    <p>{{formName(p.formaPagamentoId)}}: {{reais(p.valorCentavos)}}</p>
+    }
+    <div class="table-wrap">
+      <table>
+        <caption>
+          Distribuição oficial por parcela
+        </caption>
+        <thead>
+          <tr>
+            <th>Parcela</th>
+            <th>Valor alocado</th>
+            <th>Saldo anterior</th>
+            <th>Saldo previsto</th>
+            <th>Situação prevista</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(e of r.efeitos; track e.parcelaId) {
+          <tr>
+            <td>Parcela {{parcelaName(e.parcelaId)}}</td>
+            <td>
+              @for(a of r.plano.alocacoes; track a.parcelaId) { @if(a.parcelaId === e.parcelaId) {
+              {{reais(a.valorCentavos)}} } }
+            </td>
+            <td>{{reais(e.saldoAnteriorCentavos)}}</td>
+            <td>{{reais(e.saldoPrevistoCentavos)}}</td>
+            <td>{{e.statusPrevisto}}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <mnr-button id="receber-confirmar" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar recebimento revisado</mnr-button
+    >
+  </section>
+  }
+</section>
+@if(dialog()) {
+<mnr-confirm
+  [title]="dialog()==='leave' ? 'Sair do recebimento' : 'Confirmar recebimento'"
+  [description]="description()"
+  [focusReview]="true"
+  (confirmed)="confirm()"
+  (cancelled)="cancel()"
+/>
+}

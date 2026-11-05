@@ -4,17 +4,56 @@ import { CANAIS_CORRECOES } from '../../shared/correcoes-ipc';
 import { createFinancialQueryService } from '../services/financeiro-consulta';
 import { erroCompra } from './compras';
 import { ComercialError } from '../services/comercial';
-export function criarHandlersConsultasFinanceiras(db: Database.Database, clock?: () => Date) {
+import { createReceiptService } from '../services/recebimentos';
+import { EstoqueError } from '../services/estoque-validation';
+export function criarHandlersConsultasFinanceiras(
+  db: Database.Database,
+  clock?: () => Date,
+  version = 'test',
+) {
   const query = createFinancialQueryService(db, clock);
+  const receipts = createReceiptService(db, version, clock);
+  const methods = { ...query, ...receipts };
   return new Map(
     Object.entries({ ...CANAIS_FINANCEIRO, ...CANAIS_CORRECOES }).map(([method, channel]) => [
       channel,
       (...args: unknown[]) => {
         try {
           if (args.length !== 1) throw new ComercialError('VALIDATION', 'Argumentos inválidos.');
-          return { ok: true as const, data: query[method as keyof typeof query](args[0]) };
+          return { ok: true as const, data: methods[method as keyof typeof methods](args[0]) };
         } catch (error) {
-          const result = erroCompra(error);
+          const result = erroCompra(
+            error instanceof EstoqueError
+              ? new ComercialError('VALIDATION', 'Data ou valor inválido.')
+              : error,
+          );
+          if (method === 'revisarRecebimento' || method === 'registrarRecebimento') {
+            if (!result.ok) {
+              if (result.error.code === 'VALIDATION')
+                result.error.message =
+                  'Confira os valores, parcelas, formas, motivo e data do recebimento.';
+              if (result.error.code === 'VALIDATION' && error instanceof ComercialError) {
+                const messages: Record<string, string> = {
+                  'Recebimento excedente ou vazio.':
+                    'O pagamento excede o saldo exigível ou está vazio.',
+                  'Alocações inválidas.':
+                    'A soma das alocações deve corresponder ao valor recebido, sem parcelas repetidas.',
+                  'Parcela inválida ou excedente.':
+                    'Esta parcela pertence a outra venda ou o valor excede o saldo da parcela.',
+                  'Recebimento anterior à venda.': 'Informe uma data igual ou posterior à venda.',
+                };
+                result.error.message = messages[error.message] ?? result.error.message;
+              }
+              if (result.error.code === 'VERSION_CONFLICT')
+                result.error.message =
+                  'O financeiro mudou após a revisão. Consulte e revise novamente.';
+              if (result.error.code === 'INACTIVE_REFERENCE')
+                result.error.message = 'Esta forma de pagamento está inativa ou não existe.';
+              if (result.error.code === 'INVALID_STATE')
+                result.error.message = 'Esta venda não permite registrar recebimento.';
+            }
+            return result;
+          }
           if (!result.ok) {
             if (result.error.code === 'NOT_FOUND')
               result.error.message = 'Registro financeiro ou vínculo não encontrado.';

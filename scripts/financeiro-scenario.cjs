@@ -46,6 +46,8 @@ module.exports = async function scenario({ evaluate, ids, capture, keyboard, rel
       'obterParcela',
       'obterReembolso',
       'obterVenda',
+      'revisarRecebimento',
+      'registrarRecebimento',
     ].sort(),
   );
   assert.deepEqual(

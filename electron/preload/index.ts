@@ -20,6 +20,9 @@ function cadastro<T, E>(channels: {
 }
 const api: DesktopApi = {
   financeiro: {
+    revisarRecebimento: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarRecebimento, input),
+    registrarRecebimento: (input) =>
+      ipcRenderer.invoke(CANAIS_FINANCEIRO.registrarRecebimento, input),
     listarParcelas: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.listarParcelas, input),
     obterParcela: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterParcela, input),
     obterVenda: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterVenda, input),

@@ -1,4 +1,4 @@
-import type { ResumoFinanceiro } from './financeiro';
+import type { ResumoFinanceiro, DadosRecebimento } from './financeiro';
 import type { ResultadoCompra } from './compras-ipc';
 
 export type ResultadoConsulta<T> = ResultadoCompra<T>;
@@ -120,6 +120,16 @@ export interface DetalheReembolso extends ReembolsoConsulta {
   origens: { movimentoId: number; parcelaId: number; valorCentavos: number }[];
 }
 export interface FinanceiroApi {
+  revisarRecebimento(input: {
+    motivo: string;
+    dados: DadosRecebimento;
+  }): Promise<ResultadoConsulta<RevisaoRecebimento>>;
+  registrarRecebimento(input: {
+    operacaoId: string;
+    motivo: string;
+    dados: DadosRecebimento;
+    revisao: string;
+  }): Promise<ResultadoConsulta<ResultadoRecebimento>>;
   listarParcelas(
     input: ConsultaParcelas,
   ): Promise<ResultadoConsulta<PaginaFinanceira<ParcelaConsulta>>>;
@@ -140,7 +150,39 @@ export interface FinanceiroApi {
     reembolsoId: number;
   }): Promise<ResultadoConsulta<DetalheReembolso>>;
 }
+export interface RevisaoRecebimento {
+  saldoPrevistoCentavos: number;
+  efeitos: {
+    parcelaId: number;
+    saldoAnteriorCentavos: number;
+    saldoPrevistoCentavos: number;
+    statusPrevisto: string;
+  }[];
+  dados: DadosRecebimento;
+  motivo: string;
+  revisao: string;
+  venda: { id: number; numero: string; versao: number; estado: string; cliente: string | null };
+  formas: { id: number; nome: string; ativo: number }[];
+  plano: {
+    parcelas: {
+      id: number;
+      numero: number;
+      vencimento: string;
+      saldoCentavos: number;
+      status: string;
+    }[];
+    totalCentavos: number;
+    alocacoes: { parcelaId: number; valorCentavos: number }[];
+  };
+  resumo: ResumoFinanceiro;
+}
+export interface ResultadoRecebimento {
+  movimentos: number[];
+  financeiro: ResumoFinanceiro;
+}
 export const CANAIS_FINANCEIRO = {
+  revisarRecebimento: 'financeiro:revisar-recebimento',
+  registrarRecebimento: 'financeiro:registrar-recebimento',
   listarParcelas: 'financeiro:listar-parcelas',
   obterParcela: 'financeiro:obter-parcela',
   obterVenda: 'financeiro:obter-venda',

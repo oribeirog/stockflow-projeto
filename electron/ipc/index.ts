@@ -21,7 +21,7 @@ export function registerIpc(
     ...criarHandlersEstoque(db, app.getVersion()),
     ...criarHandlersCompras(db, app.getVersion()),
     ...criarHandlersVendas(db, app.getVersion()),
-    ...criarHandlersConsultasFinanceiras(db),
+    ...criarHandlersConsultasFinanceiras(db, undefined, app.getVersion()),
   ]) {
     ipcMain.handle(channel, (event, ...args: unknown[]) => {
       if (!isTrustedSender(event, window, allowedUrl)) {

@@ -69,6 +69,13 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  {
+    path: 'financeiro/vendas/:id/receber',
+    title: 'Recebimentos • MNR Perfumes',
+    data: { financeiroConsulta: true },
+    loadComponent: () => import('../features/financeiro/receber').then((m) => m.Receber),
+    canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
+  },
   { path: 'financeiro', pathMatch: 'full', redirectTo: 'financeiro/parcelas' },
   ...['parcelas', 'reembolsos'].map((kind) => ({
     path: `financeiro/${kind}`,

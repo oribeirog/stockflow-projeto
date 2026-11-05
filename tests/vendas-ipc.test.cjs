@@ -276,7 +276,7 @@ test('sale boundary rejects malformed calls and cross-document IDs; preload has 
   }
   assert.ok(api.financeiro);
   assert.ok(api.correcoes);
-  assert.equal(api.financeiro.registrarRecebimento, undefined);
+  assert.equal(typeof api.financeiro.registrarRecebimento, 'function');
   assert.equal(api.correcoes.devolverVenda, undefined);
   assert.equal(api.invoke, undefined);
 });

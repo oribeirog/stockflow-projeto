@@ -181,7 +181,15 @@
           <td>{{reais(p.valorOriginalCentavos)}}</td>
           <td>{{reais(p.recebimentosCentavos)}}</td>
           <td>{{reais(p.abatimentosCentavos)}}</td>
-          <td>{{reais(p.saldoCentavos)}}</td>
+          <td>
+            {{reais(p.saldoCentavos)}} @if(p.saldoCentavos > 0 && p.vendaEstado === 'CONFIRMADO') {
+            <a
+              [routerLink]="['/financeiro/vendas',p.vendaId,'receber']"
+              [queryParams]="{parcelaId:p.id}"
+              >Registrar recebimento</a
+            >
+            }
+          </td>
         </tr>
         }
       </tbody>

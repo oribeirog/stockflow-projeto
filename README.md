@@ -1,5 +1,19 @@
 # MNR Perfumes
 
+## Etapa 4E.2-B — Recebimentos
+
+Financeiro permite registrar recebimentos parciais, integrais e antecipados de
+uma venda confirmada, com múltiplas formas ativas e alocação automática ou manual.
+A rota `/financeiro/vendas/:id/receber` usa revisão oficial sem gravação e
+confirmação explícita. UUID e comando imutáveis protegem a repetição após resposta
+perdida. Cliente inativo pode quitar a dívida existente.
+
+O único novo canal de gravação é o registro de recebimentos; correções, reembolsos
+e estornos continuam sem operações visuais. Execução isolada:
+`npm.cmd run test:financeiro`, `node scripts/recebimentos-ui-smoke.mjs --development`
+e `node scripts/recebimentos-package-smoke.mjs` (após `npm.cmd run pack`).
+Detalhes e resultados no [relatório da 4E.2-B](docs/etapa-4E2B-recebimentos.md).
+
 ## Etapa 4E.2-A — Consultas financeiras
 
 Financeiro permite consultar parcelas com filtros e paginação, resumo oficial da
@@ -9,7 +23,7 @@ correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços d
 sem cálculos de saldo no Angular. Veja o
 [relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
 
-4E.2-B (recebimentos), C (correções de vendas), D (reembolsos/estornos) e E
+4E.2-C (correções de vendas), D (reembolsos/estornos) e E
 (consolidação) aguardam aprovação separada. **4F** continua reservada para
 Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
 e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
@@ -33,8 +47,8 @@ Correções do fluxo a prazo, transições de modalidade e reabertura de rascunh
 sem repetir justificativas comerciais estão no
 [relatório da correção](docs/correcao-4E1-fluxos-rascunhos.md).
 
-A 4E.2 permanece planejada e aguarda aprovação separada. Interfaces de devolução e
-cancelamento de compras e estorno de ajustes manuais também ficam para escopo futuro.
+A aprovação atual da 4E.2 cobre A e B. Interfaces de devolução e cancelamento de
+compras e estorno de ajustes manuais ficam para a proposta 4G.
 
 ## Etapa 4D.2 — Compras de fornecedores
 

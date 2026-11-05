@@ -46,7 +46,7 @@ module.exports = async function run({
   assert.equal(await evaluate(`typeof require`), 'undefined');
   assert.equal(
     await evaluate(
-      `!!window.mnrApi.financeiro.registrarRecebimento||!!window.mnrApi.correcoes.devolverVenda`,
+      `!!window.mnrApi.correcoes.devolverVenda||!!window.mnrApi.financeiro.pagarReembolso||!!window.mnrApi.financeiro.estornarRecebimento`,
     ),
     false,
   );

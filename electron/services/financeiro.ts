@@ -312,6 +312,66 @@ export function inserirDinheiro(
       ).lastInsertRowid,
   );
 }
+/** Prepara a alocação usando as mesmas regras da gravação, sem escrever no banco. */
+export function normalizarRecebimento(
+  raw: unknown,
+  now: Date,
+): import('../../shared/financeiro').DadosRecebimento {
+  const v = record(raw, ['vendaId', 'dataEfetiva', 'pagamentos', 'alocacoes']);
+  return {
+    vendaId: identifier(v['vendaId']),
+    dataEfetiva: effectiveDate(v['dataEfetiva'], now),
+    pagamentos: pagamentos(v['pagamentos']),
+    alocacoes:
+      v['alocacoes'] === undefined
+        ? undefined
+        : lista(v['alocacoes']).map((raw) => {
+            const a = record(raw, ['parcelaId', 'valorCentavos']);
+            return {
+              parcelaId: identifier(a['parcelaId']),
+              valorCentavos: integer(a['valorCentavos'], 'valor', 1, 9_000_000_000_000),
+            };
+          }),
+  };
+}
+export function prepararRecebimento(
+  db: Database.Database,
+  data: import('../../shared/financeiro').DadosRecebimento,
+) {
+  const d = one<{ estado: string; tipo: string; data_comercial: string }>(
+    db,
+    'SELECT * FROM documentos WHERE id=?',
+    data.vendaId,
+  );
+  if (!d || d.tipo !== 'VENDA' || d.estado !== 'CONFIRMADO')
+    throw new ComercialError('INVALID_STATE', 'Venda não está confirmada.');
+  if (data.dataEfetiva < d.data_comercial) reject('Recebimento anterior à venda.');
+  const ps = parcelasFinanceiras(db, data.vendaId, data.dataEfetiva),
+    amount = somar(data.pagamentos.map((p) => p.valorCentavos));
+  if (!amount || amount > somar(ps.map((p) => p.saldoCentavos)))
+    reject('Recebimento excedente ou vazio.');
+  let left = amount;
+  const targets =
+    data.alocacoes?.map((a) => ({ ...a })) ??
+    ps.flatMap((p) => {
+      const value = Math.min(left, p.saldoCentavos);
+      left -= value;
+      return value ? [{ parcelaId: p.id, valorCentavos: value }] : [];
+    });
+  if (
+    somar(targets.map((a) => a.valorCentavos)) !== amount ||
+    new Set(targets.map((a) => a.parcelaId)).size !== targets.length
+  )
+    reject('Alocações inválidas.');
+  for (const a of targets)
+    if (!ps.some((p) => p.id === a.parcelaId && a.valorCentavos <= p.saldoCentavos))
+      reject('Parcela inválida ou excedente.');
+  targets.sort(
+    (a, b) => ps.findIndex((p) => p.id === a.parcelaId) - ps.findIndex((p) => p.id === b.parcelaId),
+  );
+  return { parcelas: ps, totalCentavos: amount, alocacoes: targets };
+}
+
 export function createFinancialService(
   db: Database.Database,
   appVersion: string,
@@ -358,88 +418,35 @@ export function createFinancialService(
         ).map((r) => ({ ...r, saldoCentavos: saldoReembolso(db, r.id) })),
       )(),
     registrarRecebimento: (input: unknown) =>
-      write(
-        'RECEBER',
-        input,
-        (raw, now) => {
-          const v = record(raw, ['vendaId', 'dataEfetiva', 'pagamentos', 'alocacoes']);
-          return {
-            vendaId: identifier(v['vendaId']),
-            dataEfetiva: date(v['dataEfetiva'], now),
-            pagamentos: pagamentos(v['pagamentos']),
-            alocacoes:
-              v['alocacoes'] === undefined
-                ? undefined
-                : lista(v['alocacoes']).map((raw) => {
-                    const a = record(raw, ['parcelaId', 'valorCentavos']);
-                    return {
-                      parcelaId: identifier(a['parcelaId']),
-                      valorCentavos: integer(a['valorCentavos'], 'valor', 1, 9_000_000_000_000),
-                    };
-                  }),
-          };
-        },
-        (data, op, _reason, now) => {
-          const d = one<{ estado: string; tipo: string; data_comercial: string }>(
+      write('RECEBER', input, normalizarRecebimento, (data, op, _reason, now) => {
+        const { alocacoes: targets } = prepararRecebimento(db, data);
+        const pending = targets.map((a) => ({ ...a })),
+          movimentos: number[] = [];
+        for (const p of data.pagamentos) {
+          const m = inserirDinheiro(
             db,
-            'SELECT * FROM documentos WHERE id=?',
             data.vendaId,
+            'RECEBIMENTO_CLIENTE',
+            'ENTRADA',
+            p,
+            data.dataEfetiva,
+            op,
+            now,
           );
-          if (!d || d.tipo !== 'VENDA' || d.estado !== 'CONFIRMADO')
-            throw new ComercialError('INVALID_STATE', 'Venda não está confirmada.');
-          if (data.dataEfetiva < d.data_comercial) reject('Recebimento anterior à venda.');
-          const ps = parcelasFinanceiras(db, data.vendaId, data.dataEfetiva),
-            amount = somar(data.pagamentos.map((p) => p.valorCentavos));
-          if (!amount || amount > somar(ps.map((p) => p.saldoCentavos)))
-            reject('Recebimento excedente ou vazio.');
-          let left = amount;
-          const targets =
-            data.alocacoes ??
-            ps.flatMap((p) => {
-              const value = Math.min(left, p.saldoCentavos);
-              left -= value;
-              return value ? [{ parcelaId: p.id, valorCentavos: value }] : [];
-            });
-          if (
-            somar(targets.map((a) => a.valorCentavos)) !== amount ||
-            new Set(targets.map((a) => a.parcelaId)).size !== targets.length
-          )
-            reject('Alocações inválidas.');
-          for (const a of targets)
-            if (!ps.some((p) => p.id === a.parcelaId && a.valorCentavos <= p.saldoCentavos))
-              reject('Parcela inválida ou excedente.');
-          targets.sort(
-            (a, b) =>
-              ps.findIndex((p) => p.id === a.parcelaId) - ps.findIndex((p) => p.id === b.parcelaId),
-          );
-          const pending = targets.map((a) => ({ ...a })),
-            movimentos: number[] = [];
-          for (const p of data.pagamentos) {
-            const m = inserirDinheiro(
-              db,
-              data.vendaId,
-              'RECEBIMENTO_CLIENTE',
-              'ENTRADA',
-              p,
-              data.dataEfetiva,
-              op,
-              now,
-            );
-            movimentos.push(m);
-            let remaining = p.valorCentavos;
-            for (const a of pending) {
-              const v = Math.min(remaining, a.valorCentavos);
-              if (v)
-                db.prepare(
-                  'INSERT INTO alocacoes_recebimento(movimento_financeiro_id,parcela_id,valor_centavos) VALUES (?,?,?)',
-                ).run(m, a.parcelaId, v);
-              remaining -= v;
-              a.valorCentavos -= v;
-            }
+          movimentos.push(m);
+          let remaining = p.valorCentavos;
+          for (const a of pending) {
+            const v = Math.min(remaining, a.valorCentavos);
+            if (v)
+              db.prepare(
+                'INSERT INTO alocacoes_recebimento(movimento_financeiro_id,parcela_id,valor_centavos) VALUES (?,?,?)',
+              ).run(m, a.parcelaId, v);
+            remaining -= v;
+            a.valorCentavos -= v;
           }
-          return { movimentos, financeiro: resumoFinanceiro(db, data.vendaId) };
-        },
-      ),
+        }
+        return { movimentos, financeiro: resumoFinanceiro(db, data.vendaId) };
+      }),
     pagarReembolso: (input: unknown) =>
       write(
         'REEMBOLSAR',

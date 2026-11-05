@@ -20,6 +20,15 @@
     cadastro atualmente inativo' : ''}}
   </p>
   <nav class="row" aria-label="Vínculos da venda">
+    @if((kind === 'venda' && venda()?.resumo?.saldoReceberCentavos && h.vendaEstado ===
+    'CONFIRMADO') || (kind === 'parcela' && parcela()?.saldoCentavos && h.vendaEstado ===
+    'CONFIRMADO')) {
+    <a
+      [routerLink]="['/financeiro/vendas',h.vendaId,'receber']"
+      [queryParams]="kind === 'parcela' ? {parcelaId:parcela()?.id} : {}"
+      >Registrar recebimento</a
+    >
+    }
     <a [routerLink]="['/vendas',h.vendaId]">Consultar venda original</a>
     <a [routerLink]="['/financeiro/vendas',h.vendaId]">Resumo financeiro da venda</a>
     <a routerLink="/financeiro/parcelas" [queryParams]="{vendaId:h.vendaId}"
