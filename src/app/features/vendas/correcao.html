@@ -1,0 +1,221 @@
+﻿<section class="stack" aria-label="Correção de venda">
+  <a [routerLink]="['/vendas',id]">Voltar à venda original</a>
+  <h2>{{cancelamento ? 'Cancelamento integral' : 'Devolução de venda'}}</h2>
+  <p>
+    Devolução permite corrigir parte ou todos os itens ainda elegíveis, indicando unidades
+    impróprias. Cancelamento é integral, retorna todas as mercadorias ao estoque e exige ausência de
+    devolução efetiva anterior.
+  </p>
+  <mnr-button variant="secondary" [disabled]="locked" (pressed)="load()"
+    >Consultar dados atuais</mnr-button
+  >
+  @if(loading()) {
+  <p role="status">Consultando venda…</p>
+  } @if(readError()) {
+  <p role="alert">{{readError()}}</p>
+  } @if(message()) {
+  <p id="correcao-feedback" tabindex="-1" role="alert">{{message()}}</p>
+  } @if(uncertain()) {
+  <mnr-button (pressed)="retry()" [disabled]="busy()">Repetir mesma correção</mnr-button> }
+  @if(contexto(); as c) {
+  <h3>{{c.vendaNumero}} · {{c.vendaEstado}}</h3>
+  <p>
+    Cliente histórico: {{c.clienteNomeHistorico || 'Não informado'}}{{c.clienteAtivo === false ? ' ·
+    cadastro atualmente inativo' : ''}}. Data comercial: {{c.dataComercial}}
+  </p>
+  @if(!eligible && !result()) {
+  <p role="status">
+    Venda indisponível para esta operação. Cancelamento exige venda confirmada sem devolução efetiva
+    anterior. Para unidades impróprias, utilize devolução com perda.
+  </p>
+  } @if(errors()['correcao-selecao']) {
+  <p id="correcao-itens-erro" role="alert">{{errors()['correcao-selecao']}}</p>
+  }
+  <div
+    class="table-wrap"
+    id="correcao-selecao"
+    tabindex="-1"
+    role="group"
+    aria-label="Seleção dos itens para correção"
+    [attr.aria-describedby]="errors()['correcao-selecao'] ? 'correcao-itens-erro' : null"
+  >
+    <table>
+      <caption>
+        Itens históricos da venda
+      </caption>
+      <thead>
+        <tr>
+          <th>Produto / SKU</th>
+          <th>Vendida</th>
+          <th>Devolvida efetiva</th>
+          <th>Disponível</th>
+          <th>Líquido original</th>
+          @if(!cancelamento && !result()) {
+          <th>Selecionar</th>
+          <th>Devolver</th>
+          <th>Impróprias</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for(i of c.itens; track i.id) {
+        <tr>
+          <td>{{i.descricaoHistorica}} / {{i.skuHistorico}}</td>
+          <td>{{i.quantidadeOriginal}}</td>
+          <td>{{i.quantidadeDevolvida}}</td>
+          <td>{{i.quantidadeDisponivel}}</td>
+          <td>{{reais(i.valorLiquidoCentavos)}}</td>
+          @if(!cancelamento && !result()) {
+          <td>
+            <label
+              ><input
+                type="checkbox"
+                [id]="'correcao-s-'+i.id"
+                [checked]="selecao()[i.id]?.selected || false"
+                [disabled]="locked || !eligible || !i.quantidadeDisponivel"
+                (change)="item(i.id,'selected',$any($event.target).checked)"
+              />
+              Devolver {{i.descricaoHistorica}}</label
+            >
+          </td>
+          <td>
+            <mnr-field
+              [controlId]="'correcao-q-'+i.id"
+              label="Quantidade devolvida"
+              [value]="selecao()[i.id]?.quantidade || ''"
+              [error]="errors()['correcao-q-'+i.id] || ''"
+              [disabled]="locked || !selecao()[i.id]?.selected"
+              (valueChanged)="item(i.id,'quantidade',$event)"
+            />
+          </td>
+          <td>
+            <mnr-field
+              [controlId]="'correcao-p-'+i.id"
+              label="Unidades impróprias"
+              [value]="selecao()[i.id]?.perda || '0'"
+              [error]="errors()['correcao-p-'+i.id] || ''"
+              [disabled]="locked || !selecao()[i.id]?.selected"
+              (valueChanged)="item(i.id,'perda',$event)"
+            />
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if(!result()) { @if(!cancelamento) {
+  <mnr-button
+    id="correcao-integral"
+    variant="secondary"
+    [disabled]="locked || !eligible"
+    (pressed)="integral()"
+    >Selecionar todos os itens restantes</mnr-button
+  >
+  <p>Unidades impróprias geram retorno e perda vinculados; não ficam disponíveis para venda.</p>
+  }
+  <mnr-field
+    controlId="correcao-data"
+    label="Data efetiva"
+    type="date"
+    [value]="data()"
+    [error]="errors()['correcao-data'] || ''"
+    [disabled]="locked || !eligible"
+    (valueChanged)="data.set($event); changed()"
+  />
+  <mnr-field
+    controlId="correcao-motivo"
+    label="Motivo da correção"
+    [multiline]="true"
+    [value]="motivo()"
+    [error]="errors()['correcao-motivo'] || ''"
+    [disabled]="locked || !eligible"
+    (valueChanged)="motivo.set($event); changed()"
+  />
+  <mnr-button
+    id="correcao-revisar"
+    [disabled]="locked || !eligible || stale() || !!readError()"
+    (pressed)="review()"
+    >Revisar efeitos oficiais</mnr-button
+  >
+  } } @if(reviewed(); as r) {
+  <section
+    id="correcao-revisao"
+    tabindex="-1"
+    class="stack"
+    aria-label="Revisão oficial da correção"
+  >
+    <h3>Revisão oficial</h3>
+    <p>Data: {{r.dados.dataEfetiva}} · Motivo: {{r.motivo}}</p>
+    <dl>
+      <div>
+        <dt>Valor comercial da correção</dt>
+        <dd>{{reais(r.valorCentavos)}}</dd>
+      </div>
+      <div>
+        <dt>Comercial líquido previsto</dt>
+        <dd>{{reais(r.comercialPrevistoCentavos)}}</dd>
+      </div>
+      <div>
+        <dt>Saldo exigível anterior</dt>
+        <dd>{{reais(r.resumoAnterior.saldoReceberCentavos)}}</dd>
+      </div>
+      <div>
+        <dt>Saldo exigível previsto</dt>
+        <dd>{{reais(r.saldoPrevistoCentavos)}}</dd>
+      </div>
+      <div>
+        <dt>Nova obrigação de reembolso pendente</dt>
+        <dd>{{reais(r.reembolsoCriadoCentavos)}}</dd>
+      </div>
+    </dl>
+    @for(i of r.itens; track i.itemId) {
+    <p>
+      {{i.descricao}} / {{i.sku}} · Devolver: {{i.quantidade}} · Impróprias: {{i.quantidadePerda}} ·
+      Líquido: {{reais(i.valorCentavos)}} · Custo histórico: {{reais(i.custoCentavos)}}
+    </p>
+    }
+    <h4>Efeitos previstos no estoque</h4>
+    @for(m of r.estoque; track $index) {
+    <p>
+      {{m.natureza}} · Produto {{m.produtoId}} · Quantidade {{m.quantidadeDelta}} · Valor
+      {{reais(m.valorDeltaCentavos)}}
+    </p>
+    }
+    <h4>Efeitos previstos nas parcelas</h4>
+    @for(p of r.parcelas; track p.parcelaId) {
+    <p>
+      Parcela {{p.parcelaId}} · Abatimento {{reais(p.abatimentoCentavos)}} · Saldo anterior
+      {{reais(p.saldoAnteriorCentavos)}} · Saldo previsto {{reais(p.saldoPrevistoCentavos)}}
+    </p>
+    } @for(a of r.avisos; track a) {
+    <p>{{a}}</p>
+    }
+    <mnr-button id="correcao-confirmar" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar correção revisada</mnr-button
+    >
+  </section>
+  } @if(result(); as r) {
+  <section class="stack" aria-label="Correção concluída">
+    <h3>Correção confirmada</h3>
+    @if(!cancelamento && eligible && !readError()) {<mnr-button (pressed)="another()"
+      >Registrar outra devolução</mnr-button
+    >}<a [routerLink]="['/vendas/correcoes',r.documentoId]" [queryParams]="{vendaId:id}"
+      >Consultar documento corretivo {{r.documentoId}}</a
+    ><a [routerLink]="['/financeiro/vendas',id]">Consultar financeiro atualizado</a
+    ><a routerLink="/financeiro/reembolsos" [queryParams]="{vendaId:id}"
+      >Consultar obrigações de reembolso pendentes</a
+    ><a [routerLink]="['/vendas',id]">Consultar venda original</a>
+    <p>
+      A obrigação de reembolso não representa pagamento. O pagamento será disponibilizado em uma
+      próxima etapa.
+    </p>
+  </section>
+  } @if(dialog()) {<mnr-confirm
+    [title]="dialog() === 'leave' ? 'Sair da correção' : 'Confirmar correção de venda'"
+    [description]="description()"
+    [focusReview]="true"
+    (cancelled)="cancel()"
+    (confirmed)="confirm()"
+  />}
+</section>

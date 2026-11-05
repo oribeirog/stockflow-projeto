@@ -52,7 +52,15 @@ module.exports = async function scenario({ evaluate, ids, capture, keyboard, rel
   );
   assert.deepEqual(
     await evaluate('Object.keys(window.mnrApi.correcoes).sort()'),
-    ['obterContextoVenda', 'listarDocumentos', 'obterDocumento'].sort(),
+    [
+      'obterContextoVenda',
+      'listarDocumentos',
+      'obterDocumento',
+      'revisarDevolucaoVenda',
+      'devolverVenda',
+      'revisarCancelamentoVenda',
+      'cancelarVenda',
+    ].sort(),
   );
   await evaluate(`document.querySelector('#main-navigation a[href="#/financeiro"]').click()`);
   await until(`!!document.querySelector('#financeiro-resultados')`);

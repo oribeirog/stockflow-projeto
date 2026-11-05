@@ -297,7 +297,10 @@
     <h3 id="oficial-title">
       {{editable ? 'Valores oficiais do último rascunho salvo' : 'Histórico da venda'}}
     </h3>
-    @if (!editable && d.estado !== 'DESCARTADO') {
+    @if (!editable && d.estado !== 'DESCARTADO') { @if(correctionContext(); as c) {
+    @if(c.vendaEstado === 'CONFIRMADO') { @if(podeDevolver) {
+    <a [routerLink]="['/vendas',d.id,'devolver']">Devolver mercadorias</a> } @if(c.cancelavel) {
+    <a [routerLink]="['/vendas',d.id,'cancelar']">Cancelar integralmente a venda</a> } } }
     <a [routerLink]="['/financeiro/vendas',d.id]">Consultar financeiro e documentos vinculados</a>
     }
     <p>

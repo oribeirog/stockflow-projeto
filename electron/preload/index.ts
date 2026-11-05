@@ -32,6 +32,12 @@ const api: DesktopApi = {
     obterReembolso: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterReembolso, input),
   },
   correcoes: {
+    revisarDevolucaoVenda: (input) =>
+      ipcRenderer.invoke(CANAIS_CORRECOES.revisarDevolucaoVenda, input),
+    devolverVenda: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.devolverVenda, input),
+    revisarCancelamentoVenda: (input) =>
+      ipcRenderer.invoke(CANAIS_CORRECOES.revisarCancelamentoVenda, input),
+    cancelarVenda: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.cancelarVenda, input),
     obterContextoVenda: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.obterContextoVenda, input),
     listarDocumentos: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.listarDocumentos, input),
     obterDocumento: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.obterDocumento, input),

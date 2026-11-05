@@ -258,7 +258,7 @@ export function createCorrectionService(
         ).lastInsertRowid,
     );
   }
-  function abatimento(venda: Documento, correctionId: number, amount: number, data: string) {
+  function prepararAbatimento(venda: Documento, amount: number, data: string) {
     const ps = parcelasFinanceiras(db, venda.id, data).reverse();
     let left = amount;
     const abat = new Map<number, number>();
@@ -275,22 +275,10 @@ export function createCorrectionService(
       left -= v;
     }
     if (left) reject('Correção excede dívida original.');
-    for (const [p, v] of abat)
-      if (v)
-        db.prepare(
-          "INSERT INTO abatimentos_parcela(documento_correcao_id,parcela_id,valor_centavos,natureza) VALUES (?,?,?,'ABATIMENTO')",
-        ).run(correctionId, p, v);
-    if (!refund) return;
-    const rid = Number(
-      db
-        .prepare(
-          'INSERT INTO reembolsos_cliente(documento_correcao_id,valor_centavos) VALUES (?,?)',
-        )
-        .run(correctionId, refund).lastInsertRowid,
-    );
+    const origens: { alocacaoId: number; valor: number }[] = [];
     left = refund;
     for (const p of ps) {
-      const after = parcelasFinanceiras(db, venda.id, data).find((x) => x.id === p.id)!;
+      const after = { ...p, abatimentosCentavos: p.abatimentosCentavos + (abat.get(p.id) ?? 0) };
       let needed =
         Math.max(
           after.recebimentosCentavos - (after.valorOriginalCentavos - after.abatimentosCentavos),
@@ -308,21 +296,143 @@ export function createCorrectionService(
       )) {
         const used = total(
           db,
-          "SELECT o.valor_centavos valor FROM origens_reembolso o JOIN reembolsos_cliente r ON r.id=o.reembolso_id JOIN documentos d ON d.id=r.documento_correcao_id WHERE o.alocacao_recebimento_id=? AND (d.estado='CONFIRMADO' OR d.id=?)",
+          "SELECT o.valor_centavos valor FROM origens_reembolso o JOIN reembolsos_cliente r ON r.id=o.reembolso_id JOIN documentos d ON d.id=r.documento_correcao_id WHERE o.alocacao_recebimento_id=? AND d.estado='CONFIRMADO'",
           a.id,
-          correctionId,
         );
         const v = Math.min(left, needed, a.valor_centavos - used);
         if (v > 0) {
-          db.prepare(
-            'INSERT INTO origens_reembolso(reembolso_id,alocacao_recebimento_id,valor_centavos) VALUES (?,?,?)',
-          ).run(rid, a.id, v);
+          origens.push({ alocacaoId: a.id, valor: v });
           left -= v;
           needed -= v;
         }
       }
     }
     if (left) throw new ComercialError('INTEGRITY', 'Reembolso sem origem disponível.');
+    return { ps, abat, refund, origens };
+  }
+  function abatimento(venda: Documento, correctionId: number, amount: number, data: string) {
+    const { abat, refund, origens } = prepararAbatimento(venda, amount, data);
+    for (const [p, v] of abat)
+      if (v)
+        db.prepare(
+          "INSERT INTO abatimentos_parcela(documento_correcao_id,parcela_id,valor_centavos,natureza) VALUES (?,?,?,'ABATIMENTO')",
+        ).run(correctionId, p, v);
+    if (!refund) return;
+    const rid = Number(
+      db
+        .prepare(
+          'INSERT INTO reembolsos_cliente(documento_correcao_id,valor_centavos) VALUES (?,?)',
+        )
+        .run(correctionId, refund).lastInsertRowid,
+    );
+    for (const o of origens)
+      db.prepare(
+        'INSERT INTO origens_reembolso(reembolso_id,alocacao_recebimento_id,valor_centavos) VALUES (?,?,?)',
+      ).run(rid, o.alocacaoId, o.valor);
+  }
+  function prepararVenda(data: Dados, cancel: boolean) {
+    const d = documento(data.documentoId);
+    if (d.tipo !== 'VENDA' || d.estado !== 'CONFIRMADO')
+      throw new ComercialError('INVALID_STATE', 'Venda não está confirmada.');
+    if (data.dataEfetiva < d.data_comercial) reject('Correção anterior à origem.');
+    if (data.pagamentos.length) reject('Reembolso ao cliente exige comando separado.');
+    if (
+      cancel &&
+      one(db, "SELECT id FROM documentos WHERE documento_origem_id=? AND estado='CONFIRMADO'", d.id)
+    )
+      throw new ComercialError('INVALID_STATE', 'Documento tem devolução anterior.');
+    const originals = itens(d.id);
+    const chosen = cancel
+      ? originals.map((i) => ({ itemId: i.id, quantidade: i.quantidade, quantidadePerda: 0 }))
+      : data.itens!;
+    const estoque: {
+      produtoId: number;
+      natureza: NaturezaEstoque;
+      quantidadeDelta: number;
+      valorDeltaCentavos: number;
+    }[] = [];
+    const rows = chosen.map((selection) => {
+      const source = originals.find((i) => i.id === selection.itemId);
+      if (!source) return reject('Item de outra origem.');
+      if (selection.quantidadePerda > selection.quantidade) reject('Condição física inválida.');
+      const previous = total(
+        db,
+        "SELECT i.quantidade valor FROM itens_documento i JOIN documentos d ON d.id=i.documento_id WHERE i.item_origem_id=? AND d.estado='CONFIRMADO'",
+        source.id,
+      );
+      if (previous + selection.quantidade > source.quantidade)
+        reject('Quantidade devolvida excedente.');
+      const part = (value: number, start = previous, q = selection.quantidade) =>
+        cancel ? value : reversaoAcumulada(value, source.quantidade, start, q);
+      const aptas = selection.quantidade - selection.quantidadePerda;
+      if (aptas)
+        estoque.push({
+          produtoId: source.produto_id,
+          natureza: cancel ? 'REVERSAO_ENTRADA' : 'DEV_VENDA',
+          quantidadeDelta: aptas,
+          valorDeltaCentavos: part(source.valor_custo_estoque_centavos, previous, aptas),
+        });
+      if (selection.quantidadePerda) {
+        const cost = part(
+          source.valor_custo_estoque_centavos,
+          previous + aptas,
+          selection.quantidadePerda,
+        );
+        estoque.push(
+          {
+            produtoId: source.produto_id,
+            natureza: 'DEV_VENDA',
+            quantidadeDelta: selection.quantidadePerda,
+            valorDeltaCentavos: cost,
+          },
+          {
+            produtoId: source.produto_id,
+            natureza: 'PERDA_DEVOLUCAO',
+            quantidadeDelta: -selection.quantidadePerda,
+            valorDeltaCentavos: -cost,
+          },
+        );
+      }
+      return {
+        ...selection,
+        descricao: source.descricao_historica,
+        sku: source.sku_historico,
+        valorCentavos: part(source.valor_liquido_centavos),
+        custoCentavos: part(source.valor_custo_estoque_centavos),
+      };
+    });
+    // Check intermediate limits, including the return immediately preceding a linked loss.
+    const balances = new Map<number, { quantidade: bigint; valor: bigint }>();
+    for (const m of estoque) {
+      let balance = balances.get(m.produtoId);
+      if (!balance) {
+        const b = one<{ quantidade: number; valor_total_centavos: number }>(
+          db,
+          'SELECT * FROM saldos_estoque WHERE produto_id=?',
+          m.produtoId,
+        );
+        if (!b) throw new ComercialError('INTEGRITY', 'Saldo ausente.');
+        balance = { quantidade: BigInt(b.quantidade), valor: BigInt(b.valor_total_centavos) };
+        balances.set(m.produtoId, balance);
+      }
+      balance.quantidade += BigInt(m.quantidadeDelta);
+      balance.valor += BigInt(m.valorDeltaCentavos);
+      if (
+        balance.quantidade < 0n ||
+        balance.quantidade > 1_000_000_000n ||
+        balance.valor < 0n ||
+        balance.valor > 9_000_000_000_000n
+      )
+        reject('Limite de estoque excedido.');
+    }
+    const valorCentavos = somar(rows.map((i) => i.valorCentavos));
+    return {
+      d,
+      rows,
+      estoque,
+      valorCentavos,
+      financeiro: prepararAbatimento(d, valorCentavos, data.dataEfetiva),
+    };
   }
   function correction(input: unknown, buy: boolean, cancel: boolean) {
     return comandoFinanceiro(
@@ -333,6 +443,7 @@ export function createCorrectionService(
       input,
       (raw, now) => normalize(raw, now, !cancel),
       (data, op, reason, now) => {
+        const salePlan = !buy ? prepararVenda(data, cancel) : undefined;
         const d = documento(data.documentoId);
         if (d.tipo !== (buy ? 'COMPRA' : 'VENDA') || d.estado !== 'CONFIRMADO')
           throw new ComercialError('INVALID_STATE', 'Origem incompatível.');
@@ -409,61 +520,21 @@ export function createCorrectionService(
             db.prepare(
               'UPDATE itens_documento SET valor_custo_estoque_centavos=?,resultado_ajuste_centavos=? WHERE id=?',
             ).run(cost, cancel ? 0 : item.valor_liquido_centavos - cost, iid);
-          } else if (cancel)
-            stock(
-              iid,
-              origin,
-              'REVERSAO_ENTRADA',
-              selection.quantidade,
-              s.valor_custo_estoque_centavos,
-              data,
-              op,
-              reason,
-              now,
-            );
-          else {
-            const revenda = selection.quantidade - selection.quantidadePerda;
-            if (revenda)
-              stock(
+          } else {
+            let returned: Movimento | undefined;
+            for (const planned of salePlan!.estoque.filter((m) => m.produtoId === s.produto_id)) {
+              const movement = stock(
                 iid,
-                origin,
-                'DEV_VENDA',
-                revenda,
-                reversaoAcumulada(s.valor_custo_estoque_centavos, s.quantidade, previous, revenda),
+                planned.natureza === 'PERDA_DEVOLUCAO' ? returned! : origin,
+                planned.natureza,
+                Math.abs(planned.quantidadeDelta),
+                Math.abs(planned.valorDeltaCentavos),
                 data,
                 op,
                 reason,
                 now,
               );
-            if (selection.quantidadePerda) {
-              const cost = reversaoAcumulada(
-                s.valor_custo_estoque_centavos,
-                s.quantidade,
-                previous + revenda,
-                selection.quantidadePerda,
-              );
-              const returned = stock(
-                iid,
-                origin,
-                'DEV_VENDA',
-                selection.quantidadePerda,
-                cost,
-                data,
-                op,
-                reason,
-                now,
-              );
-              stock(
-                iid,
-                returned,
-                'PERDA_DEVOLUCAO',
-                selection.quantidadePerda,
-                cost,
-                data,
-                op,
-                reason,
-                now,
-              );
+              if (planned.natureza === 'DEV_VENDA') returned = movement;
             }
           }
         }
@@ -505,6 +576,8 @@ export function createCorrectionService(
     );
   }
   return {
+    normalizarVenda: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
+    prepararVenda,
     devolverVenda: (input: unknown) => correction(input, false, false),
     cancelarVenda: (input: unknown) => correction(input, false, true),
     devolverCompra: (input: unknown) => correction(input, true, false),

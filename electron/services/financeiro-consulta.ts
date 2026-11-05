@@ -337,12 +337,21 @@ export function createFinancialQueryService(
           produtoId: number;
           descricaoHistorica: string;
           quantidadeOriginal: number;
+          skuHistorico: string;
+          valorLiquidoCentavos: number;
         }>(
-          `SELECT id,produto_id AS produtoId,descricao_historica AS descricaoHistorica,quantidade AS quantidadeOriginal FROM itens_documento WHERE documento_id=? ORDER BY sequencia`,
+          `SELECT id,produto_id AS produtoId,descricao_historica AS descricaoHistorica,sku_historico AS skuHistorico,valor_liquido_centavos AS valorLiquidoCentavos,quantidade AS quantidadeOriginal FROM itens_documento WHERE documento_id=? ORDER BY sequencia`,
           id,
         );
         return {
           ...link(d),
+          dataComercial: d.dataComercial,
+          cancelavel:
+            d.vendaEstado === 'CONFIRMADO' &&
+            !get(
+              "SELECT id FROM documentos WHERE documento_origem_id=? AND estado='CONFIRMADO'",
+              id,
+            ),
           itens: rows.map((i) => {
             const quantidadeDevolvida = total(
               db,

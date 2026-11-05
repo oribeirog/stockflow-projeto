@@ -1,5 +1,23 @@
 # MNR Perfumes
 
+## Etapa 4E.2-C — Correções de Vendas
+
+Vendas permite devoluções parciais, sucessivas e integrais dos itens restantes,
+com indicação de unidades impróprias, e cancelamento integral quando elegível.
+As rotas `/vendas/:id/devolver` e `/vendas/:id/cancelar` usam revisão oficial
+somente de leitura, confirmação explícita, impressão do estado e intenção
+idempotente. Custos históricos, retorno/perda vinculados, abatimentos e obrigações
+de reembolso usam os serviços da 3D, preservando os documentos originais.
+
+Obrigações geradas aparecem pendentes no Financeiro, sem ação para pagar ou
+estornar nesta etapa. Migrações 0001–0005 e dependências permanecem preservadas.
+Execução específica: `npm.cmd run test:correcoes`,
+`node scripts/correcoes-ui-smoke.mjs --development` e
+`node scripts/correcoes-package-smoke.mjs` (após `npm.cmd run pack`).
+Detalhes, evidências e limitações no
+[relatório da 4E.2-C](docs/etapa-4E2C-correcoes-vendas.md).
+A implementação aguarda validação manual do proprietário antes da próxima etapa.
+
 ## Etapa 4E.2-B — Recebimentos
 
 Financeiro permite registrar recebimentos parciais, integrais e antecipados de
@@ -23,8 +41,7 @@ correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços d
 sem cálculos de saldo no Angular. Veja o
 [relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
 
-4E.2-C (correções de vendas), D (reembolsos/estornos) e E
-(consolidação) aguardam aprovação separada. **4F** continua reservada para
+4E.2-D (reembolsos/estornos) e E (consolidação) aguardam aprovação separada. **4F** continua reservada para
 Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
 e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
 
@@ -47,7 +64,7 @@ Correções do fluxo a prazo, transições de modalidade e reabertura de rascunh
 sem repetir justificativas comerciais estão no
 [relatório da correção](docs/correcao-4E1-fluxos-rascunhos.md).
 
-A aprovação atual da 4E.2 cobre A e B. Interfaces de devolução e cancelamento de
+A autorização atual da 4E.2 cobre A, B e a implementação de C. Interfaces de devolução e cancelamento de
 compras e estorno de ajustes manuais ficam para a proposta 4G.
 
 ## Etapa 4D.2 — Compras de fornecedores

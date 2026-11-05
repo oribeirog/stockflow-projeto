@@ -6,6 +6,7 @@ import { erroCompra } from './compras';
 import { ComercialError } from '../services/comercial';
 import { createReceiptService } from '../services/recebimentos';
 import { EstoqueError } from '../services/estoque-validation';
+import { createSaleCorrectionService } from '../services/correcoes-vendas';
 export function criarHandlersConsultasFinanceiras(
   db: Database.Database,
   clock?: () => Date,
@@ -13,7 +14,7 @@ export function criarHandlersConsultasFinanceiras(
 ) {
   const query = createFinancialQueryService(db, clock);
   const receipts = createReceiptService(db, version, clock);
-  const methods = { ...query, ...receipts };
+  const methods = { ...query, ...receipts, ...createSaleCorrectionService(db, version, clock) };
   return new Map(
     Object.entries({ ...CANAIS_FINANCEIRO, ...CANAIS_CORRECOES }).map(([method, channel]) => [
       channel,
@@ -27,6 +28,29 @@ export function criarHandlersConsultasFinanceiras(
               ? new ComercialError('VALIDATION', 'Data ou valor inválido.')
               : error,
           );
+          if (
+            [
+              'revisarDevolucaoVenda',
+              'revisarCancelamentoVenda',
+              'devolverVenda',
+              'cancelarVenda',
+            ].includes(method)
+          ) {
+            if (!result.ok) {
+              const messages: Record<string, string> = {
+                VALIDATION:
+                  'Confira itens, quantidades disponíveis, unidades impróprias, motivo e data da correção.',
+                INVALID_STATE:
+                  'Venda indisponível para esta correção. Cancelamento exige venda confirmada sem devolução efetiva anterior.',
+                VERSION_CONFLICT:
+                  'A venda, o estoque ou o financeiro mudou. Consulte e revise novamente.',
+                INTERNAL_ERROR:
+                  'Resultado não confirmado. Repita a mesma intenção antes de editar ou sair.',
+              };
+              result.error.message = messages[result.error.code] ?? result.error.message;
+            }
+            return result;
+          }
           if (method === 'revisarRecebimento' || method === 'registrarRecebimento') {
             if (!result.ok) {
               if (result.error.code === 'VALIDATION')

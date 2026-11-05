@@ -9,6 +9,8 @@
   viewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CorrecoesService } from '../../core/correcoes.service';
+import type { ContextoVendaConsulta } from '../../../../shared/correcoes-ipc';
 import { VendasService, IntencaoVenda } from '../../core/vendas.service';
 import { EstoqueService } from '../../core/estoque.service';
 import { ClientesService } from '../../core/cadastros/clientes.service';
@@ -49,6 +51,14 @@ interface PaymentInput {
 })
 export class VendaEditor implements OnInit, OnDestroy {
   private readonly service = inject(VendasService);
+  get podeDevolver() {
+    return (
+      this.correctionContext()?.vendaEstado === 'CONFIRMADO' &&
+      this.correctionContext()!.itens.some((i) => i.quantidadeDisponivel > 0)
+    );
+  }
+  private readonly correctionsService = inject(CorrecoesService);
+  readonly correctionContext = signal<ContextoVendaConsulta | null>(null);
   private readonly stock = inject(EstoqueService);
   readonly saldos = signal<Record<number, number>>({});
   private readonly clients = inject(ClientesService);
@@ -255,6 +265,14 @@ export class VendaEditor implements OnInit, OnDestroy {
     }
   }
   private adopt(d: Venda, preserve = false) {
+    this.correctionContext.set(null);
+    if (d.estado === 'CONFIRMADO')
+      void this.correctionsService
+        .consultar((api) => api.obterContextoVenda(d.id))
+        .then((r) => {
+          if (!this.destroyed && this.doc()?.id === d.id && r.ok)
+            this.correctionContext.set(r.data);
+        });
     const pending = preserve
       ? {
           cliente: this.cliente,

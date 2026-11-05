@@ -69,6 +69,13 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...['devolver', 'cancelar'].map((action) => ({
+    path: `vendas/:id/${action}`,
+    title: 'Correções de Vendas • MNR Perfumes',
+    data: { vendaEditor: true, cancelamento: action === 'cancelar' },
+    loadComponent: () => import('../features/vendas/correcao').then((m) => m.CorrecaoVenda),
+    canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
+  })),
   {
     path: 'financeiro/vendas/:id/receber',
     title: 'Recebimentos • MNR Perfumes',
