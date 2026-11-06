@@ -216,7 +216,25 @@ export function parcelasFinanceiras(
     };
   });
 }
-export function resumoFinanceiro(db: Database.Database, id: number): ResumoFinanceiro {
+export function resumoFinanceiro(
+  db: Database.Database,
+  id: number,
+  efeitos: Partial<
+    Pick<
+      ResumoFinanceiro,
+      | 'abatimentosDividaCentavos'
+      | 'reembolsosPagosCentavos'
+      | 'estornosReembolsoCentavos'
+      | 'estornosRecebimentoCentavos'
+    >
+  > = {},
+): ResumoFinanceiro {
+  const aplicar = (valor: number, delta = 0) => {
+    const n = BigInt(valor) + BigInt(delta);
+    if (n < 0n || n > BigInt(Number.MAX_SAFE_INTEGER))
+      throw new ComercialError('INTEGRITY', 'Total financeiro fora do limite seguro.');
+    return Number(n);
+  };
   const d = one<{ total_centavos: number; tipo: string }>(
     db,
     'SELECT total_centavos,tipo FROM documentos WHERE id=?',
@@ -238,15 +256,27 @@ export function resumoFinanceiro(db: Database.Database, id: number): ResumoFinan
       id,
       natureza,
     );
-  const abatimentosDividaCentavos = total(
-    db,
-    "SELECT CASE a.natureza WHEN 'ABATIMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END AS valor FROM abatimentos_parcela a JOIN parcelas_receber p ON p.id=a.parcela_id WHERE p.venda_id=?",
-    id,
+  const abatimentosDividaCentavos = aplicar(
+    total(
+      db,
+      "SELECT CASE a.natureza WHEN 'ABATIMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END AS valor FROM abatimentos_parcela a JOIN parcelas_receber p ON p.id=a.parcela_id WHERE p.venda_id=?",
+      id,
+    ),
+    efeitos.abatimentosDividaCentavos,
   );
   const recebimentosEfetivosCentavos = query('RECEBIMENTO_CLIENTE'),
-    estornosRecebimentoCentavos = reversed('RECEBIMENTO_CLIENTE');
-  const reembolsosPagosCentavos = query('REEMBOLSO_CLIENTE'),
-    estornosReembolsoCentavos = reversed('REEMBOLSO_CLIENTE');
+    estornosRecebimentoCentavos = aplicar(
+      reversed('RECEBIMENTO_CLIENTE'),
+      efeitos.estornosRecebimentoCentavos,
+    );
+  const reembolsosPagosCentavos = aplicar(
+      query('REEMBOLSO_CLIENTE'),
+      efeitos.reembolsosPagosCentavos,
+    ),
+    estornosReembolsoCentavos = aplicar(
+      reversed('REEMBOLSO_CLIENTE'),
+      efeitos.estornosReembolsoCentavos,
+    );
   const valorComercialLiquidoCentavos = dinheiro(
     BigInt(d.total_centavos) - BigInt(abatimentosDividaCentavos),
   );
@@ -277,6 +307,16 @@ export function resumoFinanceiro(db: Database.Database, id: number): ResumoFinan
     ),
   };
 }
+export function validarFormaAtiva(db: Database.Database, id: number) {
+  const form = one<{ nome: string; ativo: number }>(
+    db,
+    'SELECT nome,ativo FROM formas_pagamento WHERE id=?',
+    id,
+  );
+  if (!form?.ativo)
+    throw new ComercialError('INACTIVE_REFERENCE', 'Forma de pagamento inativa ou inexistente.');
+  return form;
+}
 export function inserirDinheiro(
   db: Database.Database,
   documentoId: number,
@@ -287,13 +327,7 @@ export function inserirDinheiro(
   op: string,
   now: string,
 ): number {
-  const form = one<{ nome: string; ativo: number }>(
-    db,
-    'SELECT nome,ativo FROM formas_pagamento WHERE id=?',
-    p.formaPagamentoId,
-  );
-  if (!form?.ativo)
-    throw new ComercialError('INACTIVE_REFERENCE', 'Forma de pagamento inativa ou inexistente.');
+  const form = validarFormaAtiva(db, p.formaPagamentoId);
   return Number(
     db
       .prepare(
@@ -372,6 +406,96 @@ export function prepararRecebimento(
   return { parcelas: ps, totalCentavos: amount, alocacoes: targets };
 }
 
+export function normalizarPagamentoReembolso(raw: unknown, now: Date) {
+  const v = record(raw, ['reembolsoId', 'dataEfetiva', 'pagamentos']);
+  return {
+    reembolsoId: identifier(v['reembolsoId']),
+    dataEfetiva: effectiveDate(v['dataEfetiva'], now),
+    pagamentos: pagamentos(v['pagamentos']),
+  };
+}
+export function prepararPagamentoReembolso(
+  db: Database.Database,
+  data: ReturnType<typeof normalizarPagamentoReembolso>,
+) {
+  const r = one<{ venda: number; data: string }>(
+    db,
+    "SELECT d.documento_origem_id venda,d.data_comercial data FROM reembolsos_cliente r JOIN documentos d ON d.id=r.documento_correcao_id WHERE r.id=? AND d.estado='CONFIRMADO'",
+    data.reembolsoId,
+  );
+  if (!r) throw new ComercialError('INVALID_STATE', 'Obrigação indisponível.');
+  const amount = somar(data.pagamentos.map((p) => p.valorCentavos));
+  if (!amount || amount > saldoReembolso(db, data.reembolsoId) || data.dataEfetiva < r.data)
+    reject('Pagamento excedente ou data inválida.');
+  const origins = many<{ id: number; valor_centavos: number }>(
+    db,
+    'SELECT * FROM origens_reembolso WHERE reembolso_id=? ORDER BY id',
+    data.reembolsoId,
+  ).map((o) => ({
+    ...o,
+    remaining:
+      o.valor_centavos -
+      total(
+        db,
+        "SELECT CASE natureza WHEN 'PAGAMENTO' THEN valor_centavos ELSE -valor_centavos END valor FROM alocacoes_reembolso WHERE origem_reembolso_id=?",
+        o.id,
+      ),
+  }));
+
+  for (const p of data.pagamentos) validarFormaAtiva(db, p.formaPagamentoId);
+  const pending = origins.map((o) => ({ ...o }));
+  const plano = data.pagamentos.map((pagamento) => {
+    let left = pagamento.valorCentavos;
+    const alocacoes = pending.flatMap((o) => {
+      const valorCentavos = Math.min(left, o.remaining);
+      left -= valorCentavos;
+      o.remaining -= valorCentavos;
+      return valorCentavos ? [{ origemId: o.id, valorCentavos }] : [];
+    });
+    if (left) throw new ComercialError('INTEGRITY', 'Origens insuficientes.');
+    return { pagamento, alocacoes };
+  });
+  return { r, amount, origins, plano };
+}
+export function normalizarEstornoFinanceiro(raw: unknown, now: Date) {
+  const v = record(raw, ['movimentoId', 'dataEfetiva']);
+  return {
+    movimentoId: identifier(v['movimentoId']),
+    dataEfetiva: effectiveDate(v['dataEfetiva'], now),
+  };
+}
+export function prepararEstornoFinanceiro(
+  db: Database.Database,
+  data: ReturnType<typeof normalizarEstornoFinanceiro>,
+  natureza: string,
+) {
+  const m = one<MovimentoFinanceiro>(
+    db,
+    'SELECT * FROM movimentos_financeiros WHERE id=?',
+    data.movimentoId,
+  );
+  if (
+    !m ||
+    m.natureza !== natureza ||
+    one(db, 'SELECT id FROM movimentos_financeiros WHERE estorna_movimento_id=?', m.id)
+  )
+    throw new ComercialError('INVALID_STATE', 'Movimento indisponível para estorno.');
+  if (data.dataEfetiva < m.data_efetiva) reject('Estorno anterior ao movimento.');
+  if (
+    natureza === 'RECEBIMENTO_CLIENTE' &&
+    one(
+      db,
+      `SELECT 1 FROM alocacoes_recebimento a JOIN parcelas_receber p ON p.id=a.parcela_id WHERE a.movimento_financeiro_id=? AND (EXISTS(SELECT 1 FROM origens_reembolso o JOIN reembolsos_cliente r ON r.id=o.reembolso_id JOIN documentos d ON d.id=r.documento_correcao_id WHERE o.alocacao_recebimento_id=a.id AND d.estado='CONFIRMADO') OR EXISTS(SELECT 1 FROM abatimentos_parcela b JOIN documentos d ON d.id=b.documento_correcao_id WHERE b.parcela_id=p.id AND b.natureza='ABATIMENTO' AND d.estado='CONFIRMADO')) LIMIT 1`,
+      m.id,
+    )
+  )
+    throw new ComercialError(
+      'INVALID_STATE',
+      'Recebimento sustenta correção; desfaça dependências primeiro.',
+    );
+
+  return m;
+}
 export function createFinancialService(
   db: Database.Database,
   appVersion: string,
@@ -383,7 +507,6 @@ export function createFinancialService(
     normalize: (raw: unknown, now: Date) => T,
     action: (data: T, op: string, reason: string, now: string) => R,
   ) => comandoFinanceiro(db, appVersion, clock, `FINANCEIRO_${kind}`, input, normalize, action);
-  const date = (raw: unknown, now: Date) => effectiveDate(raw, now);
   return {
     consultarVenda: (input: unknown) =>
       db.transaction(() => resumoFinanceiro(db, identifier(input)))(),
@@ -448,69 +571,28 @@ export function createFinancialService(
         return { movimentos, financeiro: resumoFinanceiro(db, data.vendaId) };
       }),
     pagarReembolso: (input: unknown) =>
-      write(
-        'REEMBOLSAR',
-        input,
-        (raw, now) => {
-          const v = record(raw, ['reembolsoId', 'dataEfetiva', 'pagamentos']);
-          return {
-            reembolsoId: identifier(v['reembolsoId']),
-            dataEfetiva: date(v['dataEfetiva'], now),
-            pagamentos: pagamentos(v['pagamentos']),
-          };
-        },
-        (data, op, _reason, now) => {
-          const r = one<{ venda: number; data: string }>(
+      write('REEMBOLSAR', input, normalizarPagamentoReembolso, (data, op, _reason, now) => {
+        const { r, plano } = prepararPagamentoReembolso(db, data);
+        const movimentos: number[] = [];
+        for (const planned of plano) {
+          const m = inserirDinheiro(
             db,
-            "SELECT d.documento_origem_id venda,d.data_comercial data FROM reembolsos_cliente r JOIN documentos d ON d.id=r.documento_correcao_id WHERE r.id=? AND d.estado='CONFIRMADO'",
-            data.reembolsoId,
+            r.venda,
+            'REEMBOLSO_CLIENTE',
+            'SAIDA',
+            planned.pagamento,
+            data.dataEfetiva,
+            op,
+            now,
           );
-          if (!r) throw new ComercialError('INVALID_STATE', 'Obrigação indisponível.');
-          const amount = somar(data.pagamentos.map((p) => p.valorCentavos));
-          if (!amount || amount > saldoReembolso(db, data.reembolsoId) || data.dataEfetiva < r.data)
-            reject('Pagamento excedente ou data inválida.');
-          const origins = many<{ id: number; valor_centavos: number }>(
-            db,
-            'SELECT * FROM origens_reembolso WHERE reembolso_id=? ORDER BY id',
-            data.reembolsoId,
-          ).map((o) => ({
-            ...o,
-            remaining:
-              o.valor_centavos -
-              total(
-                db,
-                "SELECT CASE natureza WHEN 'PAGAMENTO' THEN valor_centavos ELSE -valor_centavos END valor FROM alocacoes_reembolso WHERE origem_reembolso_id=?",
-                o.id,
-              ),
-          }));
-          const movimentos: number[] = [];
-          for (const p of data.pagamentos) {
-            const m = inserirDinheiro(
-              db,
-              r.venda,
-              'REEMBOLSO_CLIENTE',
-              'SAIDA',
-              p,
-              data.dataEfetiva,
-              op,
-              now,
-            );
-            movimentos.push(m);
-            let left = p.valorCentavos;
-            for (const o of origins) {
-              const v = Math.min(left, o.remaining);
-              if (v)
-                db.prepare(
-                  "INSERT INTO alocacoes_reembolso(origem_reembolso_id,movimento_financeiro_id,valor_centavos,natureza) VALUES (?,?,?,'PAGAMENTO')",
-                ).run(o.id, m, v);
-              o.remaining -= v;
-              left -= v;
-            }
-            if (left) throw new ComercialError('INTEGRITY', 'Origens insuficientes.');
-          }
-          return { movimentos, financeiro: resumoFinanceiro(db, r.venda) };
-        },
-      ),
+          movimentos.push(m);
+          for (const a of planned.alocacoes)
+            db.prepare(
+              "INSERT INTO alocacoes_reembolso(origem_reembolso_id,movimento_financeiro_id,valor_centavos,natureza) VALUES (?,?,?,'PAGAMENTO')",
+            ).run(a.origemId, m, a.valorCentavos);
+        }
+        return { movimentos, financeiro: resumoFinanceiro(db, r.venda) };
+      }),
     estornarRecebimento: (input: unknown) => estornar(input, 'RECEBIMENTO_CLIENTE'),
     estornarReembolso: (input: unknown) => estornar(input, 'REEMBOLSO_CLIENTE'),
   };
@@ -518,38 +600,9 @@ export function createFinancialService(
     return write(
       `ESTORNAR_${natureza}`,
       input,
-      (raw, now) => {
-        const v = record(raw, ['movimentoId', 'dataEfetiva']);
-        return {
-          movimentoId: identifier(v['movimentoId']),
-          dataEfetiva: date(v['dataEfetiva'], now),
-        };
-      },
+      normalizarEstornoFinanceiro,
       (data, op, _reason, now) => {
-        const m = one<MovimentoFinanceiro>(
-          db,
-          'SELECT * FROM movimentos_financeiros WHERE id=?',
-          data.movimentoId,
-        );
-        if (
-          !m ||
-          m.natureza !== natureza ||
-          one(db, 'SELECT id FROM movimentos_financeiros WHERE estorna_movimento_id=?', m.id)
-        )
-          throw new ComercialError('INVALID_STATE', 'Movimento indisponível para estorno.');
-        if (data.dataEfetiva < m.data_efetiva) reject('Estorno anterior ao movimento.');
-        if (
-          natureza === 'RECEBIMENTO_CLIENTE' &&
-          one(
-            db,
-            `SELECT 1 FROM alocacoes_recebimento a JOIN parcelas_receber p ON p.id=a.parcela_id WHERE a.movimento_financeiro_id=? AND (EXISTS(SELECT 1 FROM origens_reembolso o JOIN reembolsos_cliente r ON r.id=o.reembolso_id JOIN documentos d ON d.id=r.documento_correcao_id WHERE o.alocacao_recebimento_id=a.id AND d.estado='CONFIRMADO') OR EXISTS(SELECT 1 FROM abatimentos_parcela b JOIN documentos d ON d.id=b.documento_correcao_id WHERE b.parcela_id=p.id AND b.natureza='ABATIMENTO' AND d.estado='CONFIRMADO')) LIMIT 1`,
-            m.id,
-          )
-        )
-          throw new ComercialError(
-            'INVALID_STATE',
-            'Recebimento sustenta correção; desfaça dependências primeiro.',
-          );
+        const m = prepararEstornoFinanceiro(db, data, natureza);
         const id = estornarMovimento(db, m, data.dataEfetiva, op, now);
         return { movimentoId: id, financeiro: resumoFinanceiro(db, m.documento_id) };
       },

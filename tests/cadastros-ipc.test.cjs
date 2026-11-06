@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 54);
+  assert.equal(registered.size, 62);
   assert.equal(registered.has('financeiro:registrar-recebimento'), true);
   assert.equal(registered.has('correcoes:devolver-venda'), true);
   assert.equal(registered.has('cadastros:sql'), false);

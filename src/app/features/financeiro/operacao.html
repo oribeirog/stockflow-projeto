@@ -1,0 +1,277 @@
+﻿<section class="stack" aria-label="Operação financeira">
+  <a [routerLink]="['/financeiro/vendas',vendaId]">Voltar ao resumo da venda</a>
+  <h2>{{title}}</h2>
+  <p>
+    Pagamentos liquidam somente a obrigação selecionada. Estornos são integrais e individuais por
+    movimento ou documento. Não existe reversão automática de dependências.
+  </p>
+  <mnr-button variant="secondary" [disabled]="locked" (pressed)="load()"
+    >Consultar dados atuais</mnr-button
+  >
+  @if(loading()){
+  <p role="status">Consultando dados oficiais…</p>
+  } @if(readError()){
+  <p role="alert">{{readError()}}</p>
+  } @if(message()){
+  <p id="operacao-feedback" class="feedback" role="alert" tabindex="-1">{{message()}}</p>
+  } @if(uncertain()){<mnr-button [disabled]="busy()" (pressed)="retry()"
+    >Repetir mesma intenção</mnr-button
+  >} @if(venda();as v){
+  <h3>{{v.vendaNumero}} · {{v.vendaEstado}}</h3>
+  <p>
+    Cliente histórico: {{v.clienteNomeHistorico||'Não informado'}}{{v.clienteAtivo===false?' ·
+    cadastro atualmente inativo':''}}
+  </p>
+  } @if(reembolso();as r){
+  <h3>Obrigação de reembolso {{r.id}} · {{r.ativa?'Ativa':'Anulada'}}</h3>
+  <a [routerLink]="['/vendas/correcoes',r.correcaoId]" [queryParams]="{vendaId:vendaId}"
+    >Correção de origem {{r.correcaoNumero}}</a
+  >
+  <dl>
+    <div>
+      <dt>Obrigação original</dt>
+      <dd>{{reais(r.valorOriginalCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Pago líquido de estornos</dt>
+      <dd>{{reais(r.pagoLiquidoCentavos)}}</dd>
+    </div>
+    <div>
+      <dt>Saldo pendente oficial</dt>
+      <dd>{{reais(r.saldoExigivelCentavos)}}</dd>
+    </div>
+  </dl>
+  @if(!eligible&&!result()){
+  <p>Esta obrigação está quitada, anulada ou indisponível para pagamento.</p>
+  }} @if(movimento();as m){ @if(m.estornadoPorId){<a
+    [routerLink]="['/financeiro/vendas',vendaId,'movimentos',m.estornadoPorId]"
+    >Estorno vinculado {{m.estornadoPorId}}</a
+  >} @if(m.estornaMovimentoId){<a
+    [routerLink]="['/financeiro/vendas',vendaId,'movimentos',m.estornaMovimentoId]"
+    >Movimento original {{m.estornaMovimentoId}}</a
+  >}
+  <h3>
+    Movimento {{m.id}} · {{m.natureza}} · {{m.estornadoPorId?'Estornado':'Original preservado'}}
+  </h3>
+  <p>
+    Forma histórica: {{m.formaHistorica}} · Valor integral: {{reais(m.valorCentavos)}} · Data
+    efetiva: {{m.dataEfetiva}} · Registro: {{m.registradoEm}}
+  </p>
+  <a [routerLink]="['/financeiro/vendas',vendaId,'movimentos',m.id]"
+    >Consultar movimento e vínculos</a
+  >@for(a of m.alocacoes;track a.id){
+  <p>
+    {{a.natureza}} · {{reais(a.valorCentavos)}} · @if(a.parcelaId){<a
+      [routerLink]="['/financeiro/parcelas',a.parcelaId]"
+      >Parcela {{a.parcelaId}}</a
+    >}@if(a.reembolsoId){<a
+      [routerLink]="['/financeiro/reembolsos',a.reembolsoId]"
+      [queryParams]="{vendaId:vendaId}"
+      >Obrigação {{a.reembolsoId}}</a
+    >}
+  </p>
+  }} @if(correcao();as c){
+  <h3>{{c.numero}} · {{c.categoria}} · {{c.estado}}</h3>
+  <p>Data: {{c.dataEfetiva}} · Valor histórico: {{reais(c.totalCentavos)}}</p>
+  <a [routerLink]="['/vendas/correcoes',c.id]" [queryParams]="{vendaId:vendaId}"
+    >Consultar devolução, estoque e obrigações vinculados</a
+  >@for(i of c.itens;track i.id){
+  <p>
+    {{i.descricaoHistorica}} / {{i.skuHistorico}} · Quantidade {{i.quantidade}} · Impróprias
+    {{i.quantidadePerda}} · Custo histórico {{reais(i.custoHistoricoCentavos)}}
+  </p>
+  }}
+  <mnr-estorno-elegibilidade [value]="elegibilidade" />
+  @if(!result() && (reembolso()||movimento()||correcao())){ @if(mode==='pagar'){
+  <fieldset
+    id="operacao-pagamentos"
+    tabindex="-1"
+    [disabled]="locked||!eligible"
+    [attr.aria-describedby]="errors()['operacao-pagamentos']?'operacao-pagamentos-erro':null"
+  >
+    <legend>Formas e valores do pagamento</legend>
+    @if(errors()['operacao-pagamentos']){
+    <p id="operacao-pagamentos-erro" role="alert">{{errors()['operacao-pagamentos']}}</p>
+    }
+    <mnr-field
+      controlId="operacao-busca"
+      label="Pesquisar formas ativas"
+      [value]="busca()"
+      [disabled]="locked||!eligible"
+      (valueChanged)="busca.set($event)"
+    /><mnr-button variant="secondary" [disabled]="locked||!eligible" (pressed)="findForms()"
+      >Buscar formas</mnr-button
+    >
+    @if(formError()){
+    <p role="alert">{{formError()}}</p>
+    }@if(moreForms()){<mnr-button
+      variant="secondary"
+      [disabled]="locked||!eligible"
+      (pressed)="findForms(true)"
+      >Mais formas</mnr-button
+    >} @for(p of payments();track $index;let n=$index){
+    <div class="row">
+      <label [for]="'operacao-forma-'+n"
+        >Forma de pagamento {{n+1}}<select
+          [id]="'operacao-forma-'+n"
+          [value]="p.id"
+          [disabled]="locked||!eligible"
+          [attr.aria-invalid]="errors()['operacao-forma-'+n]?'true':null"
+          [attr.aria-describedby]="errors()['operacao-forma-'+n]?'operacao-forma-erro-'+n:null"
+          (change)="payment(n,'id',$any($event.target).value)"
+        >
+          <option value="0" [selected]="p.id===0">Selecione</option>
+          @if(p.id&&!containsForm(p.id)){
+          <option [value]="p.id" selected>{{formName(p.id)}}</option>
+          }@for(f of formas();track f.id){
+          <option [value]="f.id" [selected]="p.id===f.id">{{f.nome}}</option>
+          }</select
+        >@if(errors()['operacao-forma-'+n]){<span [id]="'operacao-forma-erro-'+n"
+          >{{errors()['operacao-forma-'+n]}}</span
+        >}</label
+      ><mnr-field
+        [controlId]="'operacao-valor-'+n"
+        [label]="'Valor da forma '+(n+1)"
+        [value]="p.valor"
+        [error]="errors()['operacao-valor-'+n]||''"
+        [disabled]="locked||!eligible"
+        (valueChanged)="payment(n,'valor',$event)"
+      /><mnr-button variant="secondary" [disabled]="locked||!eligible" (pressed)="removePayment(n)"
+        >Remover forma {{n+1}}</mnr-button
+      >
+    </div>
+    }
+    <mnr-button
+      variant="secondary"
+      [disabled]="locked||!eligible||payments().length>=200"
+      (pressed)="addPayment()"
+      >Adicionar forma</mnr-button
+    >
+    <p>O total oficial a reembolsar será apresentado na revisão.</p>
+  </fieldset>
+  }
+  <mnr-field
+    controlId="operacao-data"
+    label="Data efetiva"
+    type="date"
+    [value]="data()"
+    [error]="errors()['operacao-data']||''"
+    [disabled]="locked||!eligible"
+    (valueChanged)="data.set($event);changed()"
+  />
+  <mnr-field
+    controlId="operacao-motivo"
+    label="Motivo da operação"
+    [multiline]="true"
+    [value]="motivo()"
+    [error]="errors()['operacao-motivo']||''"
+    [disabled]="locked||!eligible"
+    (valueChanged)="motivo.set($event);changed()"
+  />
+  <mnr-button
+    id="operacao-revisar"
+    [disabled]="locked||!eligible||stale()||!!readError()"
+    (pressed)="review()"
+    >Revisar operação</mnr-button
+  >
+  } @if(reviewed();as r){
+  <section
+    id="operacao-revisao"
+    tabindex="-1"
+    class="stack"
+    aria-label="Revisão oficial da operação"
+  >
+    <h3>Revisão oficial · {{title}}</h3>
+    <p>
+      Valor desta operação: {{reais(r.valorCentavos)}} · Data: {{r.dados.dataEfetiva}} · Motivo:
+      {{r.motivo}}
+    </p>
+    @for(f of r.formas;track f.id){
+    <p>{{f.nome}} · {{reais(f.valorCentavos)}}</p>
+    }
+    <div class="table-wrap">
+      <table>
+        <caption>
+          Efeitos oficiais na venda
+        </caption>
+        <thead>
+          <tr>
+            <th>Informação</th>
+            <th>Antes</th>
+            <th>Depois</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(field of summaryFields;track field[0]){
+          <tr>
+            <th>{{field[1]}}</th>
+            <td>{{reais(r.anterior[field[0]])}}</td>
+            <td>{{reais(r.previsto[field[0]])}}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @for(o of r.obrigacoes;track o.id){
+    <h4>
+      Obrigação {{o.id}} · {{o.ativaPrevista?'Ativa após a operação':'Anulada após a operação'}}
+    </h4>
+    <p>
+      Original: {{reais(o.originalCentavos)}} · Pago líquido antes:
+      {{reais(o.pagoAnteriorCentavos)}} · Pago líquido depois: {{reais(o.pagoPrevistoCentavos)}} ·
+      Saldo antes: {{reais(o.saldoAnteriorCentavos)}} · Saldo depois:
+      {{reais(o.saldoPrevistoCentavos)}}
+    </p>
+    }
+    <h4>Parcelas</h4>
+    @for(p of r.parcelas;track p.id){
+    <p>
+      Parcela {{p.id}} · Saldo antes {{reais(p.saldoAnteriorCentavos)}} · Saldo depois
+      {{reais(p.saldoPrevistoCentavos)}} · Abatimento revertido
+      {{reais(p.abatimentoRevertidoCentavos)}}
+    </p>
+    } @for(i of r.itens;track $index){
+    <p>
+      {{i.descricao}} / {{i.sku}} · Quantidade {{i.quantidade}} · Custo histórico
+      {{reais(i.custoCentavos)}}
+    </p>
+    } @for(m of r.estoque;track m.id){
+    <p>
+      {{m.natureza}} · Reverte movimento {{m.id}} · Produto {{m.produtoId}} · Quantidade
+      {{m.quantidadeDelta}} · Valor {{reais(m.valorDeltaCentavos)}}
+    </p>
+    } @for(a of r.avisos;track a){
+    <p>{{a}}</p>
+    }<mnr-button id="operacao-confirmar" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar operação revisada</mnr-button
+    >
+  </section>
+  } @if(result();as r){
+  <section aria-label="Operação concluída" class="stack">
+    <h3>Operação confirmada</h3>
+    @if(mode==='pagar'&&eligible&&!readError()){<mnr-button (pressed)="another()"
+      >Registrar outro pagamento</mnr-button
+    >}@for(id of r.movimentos;track id){<a
+      [routerLink]="['/financeiro/vendas',vendaId,'movimentos',id]"
+      >Consultar pagamento {{id}}</a
+    >}@if(r.movimentoId){<a [routerLink]="['/financeiro/vendas',vendaId,'movimentos',r.movimentoId]"
+      >Consultar estorno financeiro {{r.movimentoId}}</a
+    >}@if(r.documentoId){<a
+      [routerLink]="['/vendas/correcoes',r.documentoId]"
+      [queryParams]="{vendaId:vendaId}"
+      >Consultar documento de estorno {{r.documentoId}}</a
+    >}<a [routerLink]="['/financeiro/vendas',vendaId]">Consultar financeiro atualizado</a
+    >@if(reembolso();as o){<a
+      [routerLink]="['/financeiro/reembolsos',o.id]"
+      [queryParams]="{vendaId:vendaId}"
+      >Consultar obrigação {{o.id}}</a
+    >}
+  </section>
+  } @if(dialog()){<mnr-confirm
+    [title]="dialog()==='leave'?'Sair sem registrar':title"
+    [description]="description()"
+    [focusReview]="true"
+    (cancelled)="cancel()"
+    (confirmed)="confirm()"
+  />}
+</section>

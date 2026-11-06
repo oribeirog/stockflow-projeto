@@ -69,6 +69,18 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...[
+    ['financeiro/reembolsos/:id/pagar', 'pagar'],
+    ['financeiro/vendas/:vendaId/movimentos/:id/estornar', 'movimento'],
+    ['vendas/correcoes/:id/estornar', 'devolucao'],
+  ].map(([path, operacaoFinanceira]) => ({
+    path,
+    title: 'Reembolsos e Estornos • MNR Perfumes',
+    data: { financeiroConsulta: true, operacaoFinanceira },
+    loadComponent: () =>
+      import('../features/financeiro/operacao').then((m) => m.OperacaoFinanceira),
+    canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
+  })),
   ...['devolver', 'cancelar'].map((action) => ({
     path: `vendas/:id/${action}`,
     title: 'Correções de Vendas • MNR Perfumes',

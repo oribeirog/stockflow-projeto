@@ -48,6 +48,12 @@ module.exports = async function scenario({ evaluate, ids, capture, keyboard, rel
       'obterVenda',
       'revisarRecebimento',
       'registrarRecebimento',
+      'revisarPagamentoReembolso',
+      'pagarReembolso',
+      'revisarEstornoRecebimento',
+      'estornarRecebimento',
+      'revisarEstornoReembolso',
+      'estornarReembolso',
     ].sort(),
   );
   assert.deepEqual(
@@ -60,6 +66,8 @@ module.exports = async function scenario({ evaluate, ids, capture, keyboard, rel
       'devolverVenda',
       'revisarCancelamentoVenda',
       'cancelarVenda',
+      'revisarEstornoDevolucaoVenda',
+      'estornarDevolucaoVenda',
     ].sort(),
   );
   await evaluate(`document.querySelector('#main-navigation a[href="#/financeiro"]').click()`);

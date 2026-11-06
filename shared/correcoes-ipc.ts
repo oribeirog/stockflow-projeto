@@ -1,5 +1,9 @@
 import type {
   VinculoVenda,
+  ElegibilidadeEstorno,
+  IntencaoFinanceira,
+  RevisaoOperacaoFinanceira,
+  ResultadoOperacaoFinanceira,
   PaginaFinanceira,
   PaginacaoFinanceira,
   ResultadoConsulta,
@@ -63,6 +67,7 @@ export interface DocumentoCorretivo extends VinculoVenda {
   estornadoPorId: number | null;
 }
 export interface DetalheCorrecao extends DocumentoCorretivo {
+  elegibilidadeEstorno: ElegibilidadeEstorno;
   itens: {
     id: number;
     itemOrigemId: number;
@@ -99,7 +104,15 @@ export interface ContextoVendaConsulta extends VinculoVenda {
     quantidadeDisponivel: number;
   }[];
 }
+export type DadosEstornoDevolucaoPublico = DadosCancelamento & { vendaId: number };
 export interface CorrecoesApi {
+  revisarEstornoDevolucaoVenda(input: {
+    motivo: string;
+    dados: DadosEstornoDevolucaoPublico;
+  }): Promise<ResultadoConsulta<RevisaoOperacaoFinanceira>>;
+  estornarDevolucaoVenda(
+    input: IntencaoFinanceira<DadosEstornoDevolucaoPublico>,
+  ): Promise<ResultadoConsulta<ResultadoOperacaoFinanceira>>;
   revisarDevolucaoVenda(input: {
     motivo: string;
     dados: DadosDevolucaoVenda;
@@ -124,6 +137,8 @@ export interface CorrecoesApi {
   }): Promise<ResultadoConsulta<DetalheCorrecao>>;
 }
 export const CANAIS_CORRECOES = {
+  revisarEstornoDevolucaoVenda: 'correcoes:revisar-estorno-devolucao-venda',
+  estornarDevolucaoVenda: 'correcoes:estornar-devolucao-venda',
   revisarDevolucaoVenda: 'correcoes:revisar-devolucao-venda',
   devolverVenda: 'correcoes:devolver-venda',
   revisarCancelamentoVenda: 'correcoes:revisar-cancelamento-venda',

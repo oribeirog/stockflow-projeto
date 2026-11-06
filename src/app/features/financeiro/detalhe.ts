@@ -11,11 +11,12 @@ import type {
   VinculoVenda,
 } from '../../../../shared/financeiro-ipc';
 import type { DetalheCorrecao, DocumentoCorretivo } from '../../../../shared/correcoes-ipc';
+import { EstornoElegibilidade } from '../../shared/ui/estorno-elegibilidade';
 import { Button } from '../../shared/ui/button';
 import { reais } from '../estoque/format';
 @Component({
   selector: 'mnr-financeiro-detalhe',
-  imports: [RouterLink, Button],
+  imports: [RouterLink, Button, EstornoElegibilidade],
   templateUrl: './detalhe.html',
   styleUrl: './financeiro.scss',
 })

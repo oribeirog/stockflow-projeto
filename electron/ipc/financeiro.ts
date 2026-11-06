@@ -1,3 +1,4 @@
+import { createRefundReversalService } from '../services/reembolsos-estornos';
 import type Database from 'better-sqlite3';
 import { CANAIS_FINANCEIRO } from '../../shared/financeiro-ipc';
 import { CANAIS_CORRECOES } from '../../shared/correcoes-ipc';
@@ -14,7 +15,12 @@ export function criarHandlersConsultasFinanceiras(
 ) {
   const query = createFinancialQueryService(db, clock);
   const receipts = createReceiptService(db, version, clock);
-  const methods = { ...query, ...receipts, ...createSaleCorrectionService(db, version, clock) };
+  const methods = {
+    ...query,
+    ...receipts,
+    ...createSaleCorrectionService(db, version, clock),
+    ...createRefundReversalService(db, version, clock),
+  };
   return new Map(
     Object.entries({ ...CANAIS_FINANCEIRO, ...CANAIS_CORRECOES }).map(([method, channel]) => [
       channel,
@@ -28,6 +34,33 @@ export function criarHandlersConsultasFinanceiras(
               ? new ComercialError('VALIDATION', 'Data ou valor inválido.')
               : error,
           );
+          if (
+            [
+              'revisarPagamentoReembolso',
+              'pagarReembolso',
+              'revisarEstornoRecebimento',
+              'estornarRecebimento',
+              'revisarEstornoReembolso',
+              'estornarReembolso',
+              'revisarEstornoDevolucaoVenda',
+              'estornarDevolucaoVenda',
+            ].includes(method)
+          ) {
+            if (!result.ok) {
+              const messages: Record<string, string> = {
+                VALIDATION: 'Confira data, motivo, valores e vínculos desta operação.',
+                INVALID_STATE:
+                  'Operação indisponível. Consulte a elegibilidade e resolva as dependências vinculadas.',
+                VERSION_CONFLICT:
+                  'O financeiro, a correção ou o estoque mudou. Consulte e revise novamente.',
+                INACTIVE_REFERENCE: 'Selecione uma forma de pagamento ativa.',
+                INTERNAL_ERROR:
+                  'Resposta não confirmada. Repita a mesma intenção antes de editar ou sair.',
+              };
+              result.error.message = messages[result.error.code] ?? result.error.message;
+            }
+            return result;
+          }
           if (
             [
               'revisarDevolucaoVenda',

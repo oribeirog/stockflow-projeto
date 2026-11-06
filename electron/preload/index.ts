@@ -20,6 +20,17 @@ function cadastro<T, E>(channels: {
 }
 const api: DesktopApi = {
   financeiro: {
+    revisarPagamentoReembolso: (input) =>
+      ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarPagamentoReembolso, input),
+    pagarReembolso: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.pagarReembolso, input),
+    revisarEstornoRecebimento: (input) =>
+      ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarEstornoRecebimento, input),
+    estornarRecebimento: (input) =>
+      ipcRenderer.invoke(CANAIS_FINANCEIRO.estornarRecebimento, input),
+    revisarEstornoReembolso: (input) =>
+      ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarEstornoReembolso, input),
+    estornarReembolso: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.estornarReembolso, input),
+
     revisarRecebimento: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarRecebimento, input),
     registrarRecebimento: (input) =>
       ipcRenderer.invoke(CANAIS_FINANCEIRO.registrarRecebimento, input),
@@ -32,6 +43,11 @@ const api: DesktopApi = {
     obterReembolso: (input) => ipcRenderer.invoke(CANAIS_FINANCEIRO.obterReembolso, input),
   },
   correcoes: {
+    revisarEstornoDevolucaoVenda: (input) =>
+      ipcRenderer.invoke(CANAIS_CORRECOES.revisarEstornoDevolucaoVenda, input),
+    estornarDevolucaoVenda: (input) =>
+      ipcRenderer.invoke(CANAIS_CORRECOES.estornarDevolucaoVenda, input),
+
     revisarDevolucaoVenda: (input) =>
       ipcRenderer.invoke(CANAIS_CORRECOES.revisarDevolucaoVenda, input),
     devolverVenda: (input) => ipcRenderer.invoke(CANAIS_CORRECOES.devolverVenda, input),

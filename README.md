@@ -1,5 +1,25 @@
 # MNR Perfumes
 
+## Etapa 4E.2-D — Reembolsos e Estornos
+
+Financeiro permite pagar parcialmente ou integralmente uma obrigação ativa, por
+uma ou várias formas, e estornar individualmente recebimentos e pagamentos de
+reembolso. Documentos de devolução de venda podem ser estornados quando a 3D
+permitir, após resolver pagamentos dependentes e sem movimentações posteriores
+incompatíveis de estoque. Dependências possuem orientação e links para o histórico.
+
+Todas as operações exigem revisão somente de leitura e confirmação explícita,
+com revalidação em IMMEDIATE e intenção imutável para respostas incertas. Formas
+e dados históricos são preservados. Não há reversões em cascata, estorno de
+cancelamento integral, correções de compras ou ajustes manuais nesta entrega.
+
+A rota de pagamento é `/financeiro/reembolsos/:id/pagar?vendaId=…`; ações nos
+detalhes abrem os estornos. Execução específica: `npm.cmd run test:reembolsos`,
+`node scripts/reembolsos-ui-smoke.mjs --development` e
+`node scripts/reembolsos-package-smoke.mjs` após o pack.
+Detalhes e resultados no [relatório da 4E.2-D](docs/etapa-4E2D-reembolsos-estornos.md).
+A entrega aguarda validação manual do proprietário antes de qualquer próxima etapa.
+
 ## Etapa 4E.2-C — Correções de Vendas
 
 Vendas permite devoluções parciais, sucessivas e integrais dos itens restantes,
@@ -16,7 +36,7 @@ Execução específica: `npm.cmd run test:correcoes`,
 `node scripts/correcoes-package-smoke.mjs` (após `npm.cmd run pack`).
 Detalhes, evidências e limitações no
 [relatório da 4E.2-C](docs/etapa-4E2C-correcoes-vendas.md).
-A implementação aguarda validação manual do proprietário antes da próxima etapa.
+A validação manual da 4E.2-C foi concluída pelo proprietário.
 
 ## Etapa 4E.2-B — Recebimentos
 
@@ -41,7 +61,7 @@ correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços d
 sem cálculos de saldo no Angular. Veja o
 [relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
 
-4E.2-D (reembolsos/estornos) e E (consolidação) aguardam aprovação separada. **4F** continua reservada para
+4E.2-E (consolidação) aguarda aprovação separada. **4F** continua reservada para
 Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
 e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
 
@@ -64,7 +84,7 @@ Correções do fluxo a prazo, transições de modalidade e reabertura de rascunh
 sem repetir justificativas comerciais estão no
 [relatório da correção](docs/correcao-4E1-fluxos-rascunhos.md).
 
-A autorização atual da 4E.2 cobre A, B e a implementação de C. Interfaces de devolução e cancelamento de
+A autorização atual da 4E.2 cobre A–C concluídas e a implementação de D. Interfaces de devolução e cancelamento de
 compras e estorno de ajustes manuais ficam para a proposta 4G.
 
 ## Etapa 4D.2 — Compras de fornecedores

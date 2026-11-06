@@ -93,7 +93,11 @@
   </p>
   } @empty {
   <p>Sem abatimentos.</p>
-  } } @if (reembolso(); as r) {
+  } } @if (reembolso(); as r) { @if(r.ativa && r.saldoExigivelCentavos>0){<a
+    [routerLink]="['/financeiro/reembolsos',r.id,'pagar']"
+    [queryParams]="{vendaId:r.vendaId}"
+    >Pagar reembolso</a
+  >}
   <h3>
     Obrigação de reembolso {{r.id}} · {{r.ativa ? 'Ativa' : 'Anulada por estorno da correção'}}
   </h3>
@@ -139,6 +143,12 @@
     reservado: {{reais(o.valorCentavos)}}
   </p>
   } } @if (movimento(); as m) {
+  <mnr-estorno-elegibilidade [value]="m.elegibilidadeEstorno" />
+  @if(m.elegibilidadeEstorno.permitido){<a
+    [routerLink]="['/financeiro/vendas',m.vendaId,'movimentos',m.id,'estornar']"
+    >{{m.natureza==='RECEBIMENTO_CLIENTE'?'Estornar recebimento':'Estornar pagamento de
+    reembolso'}}</a
+  >}
   <h3>Movimento {{m.id}} · {{m.natureza}} · {{m.sentido}}</h3>
   <dl>
     <div>
@@ -183,6 +193,12 @@
   } @empty {
   <p>Sem alocações.</p>
   } } @if (correcao(); as c) {
+  <mnr-estorno-elegibilidade [value]="c.elegibilidadeEstorno" />
+  @if(c.elegibilidadeEstorno.permitido){<a
+    [routerLink]="['/vendas/correcoes',c.id,'estornar']"
+    [queryParams]="{vendaId:c.vendaId}"
+    >Estornar devolução de venda</a
+  >}
   <h3>{{c.numero}} · {{c.categoria}} · {{c.estado}}</h3>
   <p>Data efetiva: {{c.dataEfetiva}} · Valor comercial histórico: {{reais(c.totalCentavos)}}</p>
   <p>Motivo: {{c.motivo}}</p>

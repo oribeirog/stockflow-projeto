@@ -434,6 +434,40 @@ export function createCorrectionService(
       financeiro: prepararAbatimento(d, valorCentavos, data.dataEfetiva),
     };
   }
+  function prepararEstornoDevolucao(data: Pick<Dados, 'documentoId' | 'dataEfetiva'>) {
+    const d = documento(data.documentoId);
+    if (!['DEV_VENDA', 'DEV_COMPRA'].includes(d.tipo) || d.estado !== 'CONFIRMADO')
+      throw new ComercialError('INVALID_STATE', 'Devolução indisponível.');
+    if (data.dataEfetiva < d.data_comercial) reject('Estorno anterior à devolução.');
+    noLater(d);
+    if (
+      total(
+        db,
+        "SELECT CASE a.natureza WHEN 'PAGAMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END valor FROM alocacoes_reembolso a JOIN origens_reembolso o ON o.id=a.origem_reembolso_id JOIN reembolsos_cliente r ON r.id=o.reembolso_id WHERE r.documento_correcao_id=?",
+        d.id,
+      ) > 0
+    )
+      throw new ComercialError('INVALID_STATE', 'Estorne pagamentos dependentes primeiro.');
+    const movimentos = movements(d).reverse();
+    const saldos = new Map<number, { q: bigint; v: bigint }>();
+    for (const m of movimentos) {
+      let saldo = saldos.get(m.produto_id);
+      if (!saldo) {
+        const b = one<{ quantidade: number; valor_total_centavos: number }>(
+          db,
+          'SELECT * FROM saldos_estoque WHERE produto_id=?',
+          m.produto_id,
+        )!;
+        saldo = { q: BigInt(b.quantidade), v: BigInt(b.valor_total_centavos) };
+        saldos.set(m.produto_id, saldo);
+      }
+      saldo.q -= BigInt(m.quantidade_delta);
+      saldo.v -= BigInt(m.valor_delta_centavos);
+      if (saldo.q < 0n || saldo.q > 1_000_000_000n || saldo.v < 0n || saldo.v > 9_000_000_000_000n)
+        reject('Limite de estoque excedido.');
+    }
+    return { d, movimentos };
+  }
   function correction(input: unknown, buy: boolean, cancel: boolean) {
     return comandoFinanceiro(
       db,
@@ -578,6 +612,7 @@ export function createCorrectionService(
   return {
     normalizarVenda: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
     prepararVenda,
+    prepararEstornoDevolucao,
     devolverVenda: (input: unknown) => correction(input, false, false),
     cancelarVenda: (input: unknown) => correction(input, false, true),
     devolverCompra: (input: unknown) => correction(input, true, false),
@@ -591,19 +626,7 @@ export function createCorrectionService(
         input,
         (raw, now) => normalize(raw, now, false),
         (data, op, reason, now) => {
-          const d = documento(data.documentoId);
-          if (!['DEV_VENDA', 'DEV_COMPRA'].includes(d.tipo) || d.estado !== 'CONFIRMADO')
-            throw new ComercialError('INVALID_STATE', 'Devolução indisponível.');
-          if (data.dataEfetiva < d.data_comercial) reject('Estorno anterior à devolução.');
-          noLater(d);
-          if (
-            total(
-              db,
-              "SELECT CASE a.natureza WHEN 'PAGAMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END valor FROM alocacoes_reembolso a JOIN origens_reembolso o ON o.id=a.origem_reembolso_id JOIN reembolsos_cliente r ON r.id=o.reembolso_id WHERE r.documento_correcao_id=?",
-              d.id,
-            ) > 0
-          )
-            throw new ComercialError('INVALID_STATE', 'Estorne pagamentos dependentes primeiro.');
+          const { d, movimentos } = prepararEstornoDevolucao(data);
           const cid = createDocument(d, 'ESTORNO', data.dataEfetiva, op, now, reason);
           prepareDocument(cid, op);
           const map = new Map<number, number>();
@@ -612,7 +635,7 @@ export function createCorrectionService(
               i.id,
               insertItem(cid, i, i.quantidade, i.quantidade_perda, 0, true, reason, true),
             );
-          for (const m of movements(d).reverse()) {
+          for (const m of movimentos) {
             const link = one<{ item_documento_id: number }>(
               db,
               'SELECT item_documento_id FROM vinculos_estoque_comercial WHERE movimentacao_id=?',

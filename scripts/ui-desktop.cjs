@@ -41,10 +41,18 @@ async function verify(window) {
       if (await evaluate(expression)) return;
       await pause(50);
     }
-    throw new Error('Timed out: ' + expression);
+    const state = await evaluate(
+      `JSON.stringify({hash:location.hash,active:document.activeElement?.outerHTML,content:document.querySelector('main')?.innerText.slice(-5000)})`,
+    );
+    throw new Error('Timed out: ' + expression + '\n' + state);
   }
+  const settle = () =>
+    evaluate(
+      'new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))',
+    );
   async function click(selector) {
     await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
+    await settle();
     await pause(80);
   }
   async function route(path, title) {
@@ -78,8 +86,17 @@ async function verify(window) {
     );
   }
   async function screenshot(name) {
+    await settle();
     await pause(100);
-    writeFileSync(resolve('.cache/ui', name + '.png'), (await web.capturePage()).toPNG());
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        writeFileSync(resolve('.cache/ui', name + '.png'), (await web.capturePage()).toPNG());
+        return;
+      } catch (error) {
+        if (error.message !== 'UnknownVizError' || attempt === 2) throw error;
+        await pause(200);
+      }
+    }
   }
   async function key(keyCode, modifiers = []) {
     window.focus();
@@ -88,6 +105,7 @@ async function verify(window) {
     web.sendInputEvent({ type: 'keyDown', keyCode, modifiers });
     if (keyCode === 'Enter') web.sendInputEvent({ type: 'char', keyCode: '\r', modifiers });
     web.sendInputEvent({ type: 'keyUp', keyCode, modifiers });
+    await settle();
     await pause(40);
   }
   mkdirSync(resolve('.cache/ui'), { recursive: true });
@@ -187,11 +205,16 @@ async function verify(window) {
     await evaluate(
       `(() => { const input = document.querySelector(${JSON.stringify(selector)}); input.value = ${JSON.stringify(value)}; input.dispatchEvent(new Event('input', { bubbles: true })); })()`,
     );
+    await settle();
   }
   async function buttonText(text) {
-    await evaluate(
-      `Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === ${JSON.stringify(text)}).click()`,
+    await until(
+      `Array.from(document.querySelectorAll('button')).some(b => b.textContent.trim() === ${JSON.stringify(text)} && !b.disabled && !b.closest('fieldset:disabled'))`,
     );
+    await evaluate(
+      `Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === ${JSON.stringify(text)} && !b.disabled && !b.closest('fieldset:disabled')).click()`,
+    );
+    await settle();
     await pause(80);
   }
   await buttonText('Salvar perfume');

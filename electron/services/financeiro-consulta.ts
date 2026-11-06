@@ -1,3 +1,4 @@
+import { inspecionarEstorno } from './estornos-elegibilidade';
 import type Database from 'better-sqlite3';
 import type {
   ConsultaParcelas,
@@ -277,6 +278,7 @@ export function createFinancialQueryService(
         const m = movement(id, identifier(v['vendaId']));
         return {
           ...m,
+          elegibilidadeEstorno: inspecionarEstorno(db, m.vendaId, id, false, today()),
           alocacoes: all(
             `SELECT id,natureza,valor_centavos AS valorCentavos,parcela_id AS parcelaId,NULL AS reembolsoId,estorna_alocacao_id AS estornaAlocacaoId FROM alocacoes_recebimento WHERE movimento_financeiro_id=? UNION ALL SELECT a.id,a.natureza,a.valor_centavos,NULL,o.reembolso_id,a.estorna_alocacao_id FROM alocacoes_reembolso a JOIN origens_reembolso o ON o.id=a.origem_reembolso_id WHERE a.movimento_financeiro_id=? ORDER BY id`,
             id,
@@ -393,6 +395,7 @@ export function createFinancialQueryService(
           d = correction(id, identifier(v['vendaId']));
         return {
           ...d,
+          elegibilidadeEstorno: inspecionarEstorno(db, d.vendaId, id, true, today()),
           itens: all(
             `SELECT id,item_origem_id AS itemOrigemId,produto_id AS produtoId,descricao_historica AS descricaoHistorica,sku_historico AS skuHistorico,quantidade,quantidade_perda AS quantidadePerda,valor_liquido_centavos AS valorLiquidoCentavos,valor_custo_estoque_centavos AS custoHistoricoCentavos FROM itens_documento WHERE documento_id=? ORDER BY sequencia`,
             id,
