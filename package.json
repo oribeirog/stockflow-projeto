@@ -28,7 +28,9 @@
     "test:correcoes": "npm run build && node --test tests/correcoes-vendas.test.cjs && node scripts/correcoes-ui-smoke.mjs",
     "test:reembolsos": "npm run build && node --test tests/reembolsos-estornos.test.cjs && node scripts/reembolsos-ui-smoke.mjs",
     "test:consolidacao": "npm run build && node --test tests/consolidacao-financeiro.test.cjs && node scripts/reembolsos-ui-smoke.mjs --consolidacao",
-    "benchmark:financeiro": "node scripts/benchmark-financeiro.cjs"
+    "benchmark:financeiro": "node scripts/benchmark-financeiro.cjs",
+    "test:relatorios": "npm run build && node --test tests/relatorios.test.cjs && node scripts/relatorios-smoke.mjs",
+    "benchmark:relatorios": "node scripts/benchmark-relatorios.cjs"
   },
   "dependencies": {
     "@angular/common": "22.2.4",

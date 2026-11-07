@@ -661,6 +661,9 @@ export function estornarMovimento(
     ).run(a.origem_reembolso_id, id, a.valor_centavos, a.id);
   return id;
 }
+export function saldoReembolsoApurado(original: number, pagoLiquido: number): number {
+  return dinheiro(BigInt(original) - BigInt(pagoLiquido));
+}
 export function saldoReembolso(db: Database.Database, id: number): number {
   const r = one<{ valor_centavos: number }>(
     db,
@@ -668,15 +671,13 @@ export function saldoReembolso(db: Database.Database, id: number): number {
     id,
   );
   if (!r) throw new ComercialError('NOT_FOUND', 'Reembolso inexistente.');
-  return dinheiro(
-    BigInt(r.valor_centavos) -
-      BigInt(
-        total(
-          db,
-          "SELECT CASE a.natureza WHEN 'PAGAMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END valor FROM alocacoes_reembolso a JOIN origens_reembolso o ON o.id=a.origem_reembolso_id WHERE o.reembolso_id=?",
-          id,
-        ),
-      ),
+  return saldoReembolsoApurado(
+    r.valor_centavos,
+    total(
+      db,
+      "SELECT CASE a.natureza WHEN 'PAGAMENTO' THEN a.valor_centavos ELSE -a.valor_centavos END valor FROM alocacoes_reembolso a JOIN origens_reembolso o ON o.id=a.origem_reembolso_id WHERE o.reembolso_id=?",
+      id,
+    ),
   );
 }
 export function localDay(now: Date): string {

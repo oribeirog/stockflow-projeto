@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 62);
+  assert.equal(registered.size, 75);
   assert.equal(registered.has('financeiro:registrar-recebimento'), true);
   assert.equal(registered.has('correcoes:devolver-venda'), true);
   assert.equal(registered.has('cadastros:sql'), false);
@@ -225,7 +225,14 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
     ]) {
       assert.throws(() => handler(event, cmd({ nome: 'Não autorizado' })), /não autorizada/);
     }
-    if (
+    if (channel.startsWith('relatorios:')) {
+      const response = handler({ sender: window.webContents, senderFrame: frame }, {}, 'extra');
+      assert.equal(response.error.code, 'VALIDATION');
+      assert.equal(
+        response.error.message,
+        'Confira os filtros, o período e a paginação do relatório.',
+      );
+    } else if (
       channel.startsWith('estoque:') ||
       channel.startsWith('compras:') ||
       channel.startsWith('financeiro:') ||
@@ -242,7 +249,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   assert.equal(db.prepare('SELECT count(*) n FROM operacoes').get().n, 0);
 });
 
-test('bundled preload exposes exactly system plus five fixed cadastral APIs', async () => {
+test('bundled preload exposes only the approved fixed namespaces and cadastral APIs', async () => {
   const { readFileSync } = require('node:fs');
   const vm = require('node:vm');
   let exposed;
@@ -273,6 +280,7 @@ test('bundled preload exposes exactly system plus five fixed cadastral APIs', as
     'estoque',
     'financeiro',
     'fotos',
+    'relatorios',
     'system',
     'vendas',
   ]);

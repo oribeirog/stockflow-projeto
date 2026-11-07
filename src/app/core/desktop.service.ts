@@ -13,6 +13,9 @@ declare global {
 }
 @Injectable({ providedIn: 'root' })
 export class DesktopService {
+  reportsApi() {
+    return this.getApi()?.relatorios;
+  }
   financialApi() {
     return this.getApi()?.financeiro;
   }

@@ -1,5 +1,27 @@
 # MNR Perfumes
 
+## Etapa 4F.1 — Indicadores e consultas para relatórios
+
+Camada gerencial somente de leitura no processo principal, com contratos e
+preload tipados e serviço Angular preparado para a próxima etapa. Fornece resumo,
+séries diárias/mensais, vendas analíticas, rankings de produtos/clientes,
+movimentos e totais por forma, parcelas, reembolsos, estoque atual e movimentação.
+Fluxos por data efetiva são separados de posições atuais e da coorte de vendas.
+CMV usa custo histórico; perdas impróprias são identificadas separadamente.
+Resultado bruto comercial estimado não é lucro líquido.
+
+Não há novas telas, gráficos ou exportações Excel/PDF. Dashboard visual permanece
+para 4F.2; exportações para 4F.3; 4F.4, 4G e Etapa 5 não foram antecipadas.
+As migrações 0001–0005 e as identidades idempotentes foram preservadas.
+
+Execução específica: `npm.cmd run test:relatorios`,
+`node scripts/relatorios-smoke.mjs --development` e
+`node scripts/relatorios-smoke.mjs --package` após o pack.
+`npm.cmd run benchmark:relatorios` mede consultas com 50, 200 e 500 vendas.
+Dicionário, critérios temporais, contratos, resultados e limitações estão no
+[relatório da 4F.1](docs/etapa-4F1-indicadores-relatorios.md).
+Verificações automatizadas concluídas; a etapa aguarda validação manual do proprietário.
+
 ## Etapa 4E.2-E — Consolidação do Financeiro
 
 A–D foram implementadas, validadas manualmente e commitadas, conforme informado
@@ -21,11 +43,11 @@ paginação e detalhes no Angular/Electron sobre uma cópia isolada do volume fi
 Resultados, matriz de cobertura, limitações e validação manual estão no
 [relatório da 4E.2-E](docs/etapa-4E2E-consolidacao-financeiro.md).
 As seções anteriores abaixo são registros dos respectivos escopos de entrega;
-o estado integrado atual é A–D disponíveis e E consolidada pela automação,
-aguardando validação manual do proprietário antes de avançar.
+o estado integrado atual é A–E disponíveis e validadas manualmente pelo proprietário,
+conforme informado na autorização da 4F.1.
 
-Permanecem futuras: **4F — Dashboard e Relatórios** (indicadores, relatórios
-financeiros, Excel/PDF); **4G — Correções de Compras e Ajustes de Estoque**
+Permanecem futuras: **4F.2–4F.4 — Dashboard e Relatórios** (interface, relatórios
+visuais e Excel/PDF); **4G — Correções de Compras e Ajustes de Estoque**
 (devoluções a fornecedores, cancelamentos de compras e estorno de ajustes);
 **Etapa 5 — Preparação para entrega** (backup/restauração pela interface,
 instalador, distribuição/máquina limpa e validação final do proprietário).
@@ -93,8 +115,8 @@ correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços d
 sem cálculos de saldo no Angular. Veja o
 [relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
 
-4E.2-E (consolidação) foi autorizada separadamente. **4F** continua reservada para
-Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
+4E.2-E (consolidação) foi autorizada separadamente. **4F.2–4F.4** continuam reservadas para
+Dashboard visual e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
 e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
 
 ## Etapa 4E.1 — Vendas

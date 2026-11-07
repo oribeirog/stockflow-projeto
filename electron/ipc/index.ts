@@ -1,4 +1,5 @@
 import { criarHandlersVendas } from './vendas';
+import { criarHandlersRelatorios } from './relatorios';
 import { criarHandlersConsultasFinanceiras } from './financeiro';
 import { isTrustedRequest, isTrustedSender } from './trust';
 import { criarHandlersCadastros } from './cadastros';
@@ -21,6 +22,7 @@ export function registerIpc(
     ...criarHandlersEstoque(db, app.getVersion()),
     ...criarHandlersCompras(db, app.getVersion()),
     ...criarHandlersVendas(db, app.getVersion()),
+    ...criarHandlersRelatorios(db),
     ...criarHandlersConsultasFinanceiras(db, undefined, app.getVersion()),
   ]) {
     ipcMain.handle(channel, (event, ...args: unknown[]) => {

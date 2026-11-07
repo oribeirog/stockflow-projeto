@@ -1,4 +1,5 @@
 import { CANAIS_VENDAS } from '../../shared/vendas-ipc';
+import { CANAIS_RELATORIOS } from '../../shared/relatorios-ipc';
 import { CANAIS_FINANCEIRO } from '../../shared/financeiro-ipc';
 import { CANAIS_CORRECOES } from '../../shared/correcoes-ipc';
 import { contextBridge, ipcRenderer } from 'electron';
@@ -19,6 +20,23 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  relatorios: {
+    listarMovimentacaoProdutos: (i) =>
+      ipcRenderer.invoke(CANAIS_RELATORIOS.listarMovimentacaoProdutos, i),
+    listarTotaisPorForma: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarTotaisPorForma, i),
+    obterResumoGerencial: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.obterResumoGerencial, i),
+    obterSeriesVendas: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.obterSeriesVendas, i),
+    obterSeriesRecebimentos: (i) =>
+      ipcRenderer.invoke(CANAIS_RELATORIOS.obterSeriesRecebimentos, i),
+    listarVendas: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarVendas, i),
+    listarProdutos: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarProdutos, i),
+    listarClientes: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarClientes, i),
+    listarMovimentos: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarMovimentos, i),
+    listarContasReceber: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarContasReceber, i),
+    listarReembolsos: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarReembolsos, i),
+    obterResumoEstoque: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.obterResumoEstoque, i),
+    listarSaldos: (i) => ipcRenderer.invoke(CANAIS_RELATORIOS.listarSaldos, i),
+  },
   financeiro: {
     revisarPagamentoReembolso: (input) =>
       ipcRenderer.invoke(CANAIS_FINANCEIRO.revisarPagamentoReembolso, input),
