@@ -1,5 +1,37 @@
 # MNR Perfumes
 
+## Etapa 4E.2-E — Consolidação do Financeiro
+
+A–D foram implementadas, validadas manualmente e commitadas, conforme informado
+pelo proprietário. A consolidação verifica a integração entre compras, estoque,
+vendas, recebimentos, correções, reembolsos e estornos, sem novas regras comerciais.
+O ciclo de referência de R$ 300 inclui pagamentos de R$ 100 e de R$ 90 + R$ 60,
+estornos individuais, anulação da obrigação e restauração do saldo de R$ 50.
+
+`npm.cmd run test:consolidacao` executa os novos testes e o ciclo em Angular/Electron
+real. O mesmo fluxo pode ser executado com
+`node scripts/reembolsos-ui-smoke.mjs --consolidacao --development` e
+`node scripts/reembolsos-package-smoke.mjs --consolidacao` após o pack.
+`test:ui` e `test:financeiro` incluem esse ciclo; `npm.cmd test` inclui os testes
+de integração de serviços. `npm.cmd run benchmark:financeiro` mede consultas
+em bancos isolados de 50, 200 e 500 vendas, gerados pelos serviços reais.
+Depois, `node scripts/benchmark-financeiro-ui.mjs` mede a abertura, filtro,
+paginação e detalhes no Angular/Electron sobre uma cópia isolada do volume final.
+
+Resultados, matriz de cobertura, limitações e validação manual estão no
+[relatório da 4E.2-E](docs/etapa-4E2E-consolidacao-financeiro.md).
+As seções anteriores abaixo são registros dos respectivos escopos de entrega;
+o estado integrado atual é A–D disponíveis e E consolidada pela automação,
+aguardando validação manual do proprietário antes de avançar.
+
+Permanecem futuras: **4F — Dashboard e Relatórios** (indicadores, relatórios
+financeiros, Excel/PDF); **4G — Correções de Compras e Ajustes de Estoque**
+(devoluções a fornecedores, cancelamentos de compras e estorno de ajustes);
+**Etapa 5 — Preparação para entrega** (backup/restauração pela interface,
+instalador, distribuição/máquina limpa e validação final do proprietário).
+Windows 11, instalação/atualização/desinstalação NSIS, máquina fisicamente offline,
+leitor de tela e assinatura digital não foram validados nesta consolidação.
+
 ## Etapa 4E.2-D — Reembolsos e Estornos
 
 Financeiro permite pagar parcialmente ou integralmente uma obrigação ativa, por
@@ -18,7 +50,7 @@ detalhes abrem os estornos. Execução específica: `npm.cmd run test:reembolsos
 `node scripts/reembolsos-ui-smoke.mjs --development` e
 `node scripts/reembolsos-package-smoke.mjs` após o pack.
 Detalhes e resultados no [relatório da 4E.2-D](docs/etapa-4E2D-reembolsos-estornos.md).
-A entrega aguarda validação manual do proprietário antes de qualquer próxima etapa.
+A validação manual da 4E.2-D foi concluída pelo proprietário.
 
 ## Etapa 4E.2-C — Correções de Vendas
 
@@ -61,7 +93,7 @@ correções ou estornos disponíveis nesta entrega. Valores vêm dos serviços d
 sem cálculos de saldo no Angular. Veja o
 [relatório técnico](docs/etapa-4E2A-consultas-financeiras.md).
 
-4E.2-E (consolidação) aguarda aprovação separada. **4F** continua reservada para
+4E.2-E (consolidação) foi autorizada separadamente. **4F** continua reservada para
 Dashboard e Relatórios Excel/PDF. **4G** será a proposta de Correções de Compras
 e Ajustes de Estoque. Nenhuma dessas etapas foi antecipada.
 
@@ -84,7 +116,7 @@ Correções do fluxo a prazo, transições de modalidade e reabertura de rascunh
 sem repetir justificativas comerciais estão no
 [relatório da correção](docs/correcao-4E1-fluxos-rascunhos.md).
 
-A autorização atual da 4E.2 cobre A–C concluídas e a implementação de D. Interfaces de devolução e cancelamento de
+A autorização atual da 4E.2 cobre A–D concluídas e a consolidação E. Interfaces de devolução e cancelamento de
 compras e estorno de ajustes manuais ficam para a proposta 4G.
 
 ## Etapa 4D.2 — Compras de fornecedores

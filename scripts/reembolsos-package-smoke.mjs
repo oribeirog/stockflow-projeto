@@ -6,7 +6,11 @@ import { environment } from './env.mjs';
 const require = createRequire(import.meta.url);
 const { openDatabase } = require('../dist/electron/infrastructure/database');
 const { seedReembolsos } = require('../tests/helpers/reembolsos-ui-fixture.cjs');
-const scenario = require('./reembolsos-scenario.cjs');
+const scenario = require(
+  process.argv.includes('--consolidacao')
+    ? './consolidacao-scenario.cjs'
+    : './reembolsos-scenario.cjs',
+);
 mkdirSync('.local-data/test', { recursive: true });
 const isolated = mkdtempSync(resolve('.local-data/test/reembolsos-package-'));
 mkdirSync(resolve(isolated, 'MNR Software/MNR Perfumes/data'), { recursive: true });

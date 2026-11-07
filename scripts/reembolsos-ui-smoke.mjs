@@ -57,6 +57,7 @@ try {
         MNR_DEV: development ? '1' : '0',
         MNR_UI_TEST_RUN: basename(dir),
         MNR_REEMBOLSOS_REOPEN: reopen ? '1' : '0',
+        MNR_CONSOLIDACAO: process.argv.includes('--consolidacao') ? '1' : '0',
       }),
     });
     let passed = false;

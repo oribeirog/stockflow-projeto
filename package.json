@@ -22,11 +22,13 @@
     "dist": "npm run build && node scripts/package.mjs",
     "test": "npm run build && node --test tests/*.test.cjs && npm run test:cadastros && node scripts/smoke.mjs",
     "test:cadastros": "ng build --configuration integration && node scripts/cadastros-smoke.mjs",
-    "test:ui": "npm run build && node scripts/ui-smoke.mjs && node scripts/compras-ui-smoke.mjs && node scripts/vendas-ui-smoke.mjs && node scripts/financeiro-ui-smoke.mjs && node scripts/recebimentos-ui-smoke.mjs && node scripts/correcoes-ui-smoke.mjs && node scripts/reembolsos-ui-smoke.mjs",
-    "test:financeiro": "npm run build && node --test tests/financeiro.test.cjs tests/financeiro-consulta.test.cjs tests/recebimentos.test.cjs tests/recebimentos-ipc.test.cjs tests/correcoes-vendas.test.cjs tests/reembolsos-estornos.test.cjs && node scripts/financeiro-ui-smoke.mjs && node scripts/recebimentos-ui-smoke.mjs && node scripts/correcoes-ui-smoke.mjs && node scripts/reembolsos-ui-smoke.mjs",
+    "test:ui": "npm run build && node scripts/ui-smoke.mjs && node scripts/compras-ui-smoke.mjs && node scripts/vendas-ui-smoke.mjs && node scripts/financeiro-ui-smoke.mjs && node scripts/recebimentos-ui-smoke.mjs && node scripts/correcoes-ui-smoke.mjs && node scripts/reembolsos-ui-smoke.mjs --consolidacao",
+    "test:financeiro": "npm run build && node --test tests/financeiro.test.cjs tests/financeiro-consulta.test.cjs tests/recebimentos.test.cjs tests/recebimentos-ipc.test.cjs tests/correcoes-vendas.test.cjs tests/reembolsos-estornos.test.cjs tests/consolidacao-financeiro.test.cjs && node scripts/financeiro-ui-smoke.mjs && node scripts/recebimentos-ui-smoke.mjs && node scripts/correcoes-ui-smoke.mjs && node scripts/reembolsos-ui-smoke.mjs --consolidacao",
     "test:vendas": "npm run build && node --test tests/vendas-ipc.test.cjs && node scripts/vendas-ui-smoke.mjs",
     "test:correcoes": "npm run build && node --test tests/correcoes-vendas.test.cjs && node scripts/correcoes-ui-smoke.mjs",
-    "test:reembolsos": "npm run build && node --test tests/reembolsos-estornos.test.cjs && node scripts/reembolsos-ui-smoke.mjs"
+    "test:reembolsos": "npm run build && node --test tests/reembolsos-estornos.test.cjs && node scripts/reembolsos-ui-smoke.mjs",
+    "test:consolidacao": "npm run build && node --test tests/consolidacao-financeiro.test.cjs && node scripts/reembolsos-ui-smoke.mjs --consolidacao",
+    "benchmark:financeiro": "node scripts/benchmark-financeiro.cjs"
   },
   "dependencies": {
     "@angular/common": "22.2.4",

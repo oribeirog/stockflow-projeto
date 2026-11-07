@@ -101,7 +101,11 @@ async function verify(win) {
     for (const key of ['sandbox', 'contextIsolation'])
       assert.equal(web.getLastWebPreferences()[key], true);
     assert.equal(web.getLastWebPreferences().nodeIntegration, false);
-    await require('./reembolsos-scenario.cjs')({
+    await require(
+      process.env.MNR_CONSOLIDACAO === '1'
+        ? './consolidacao-scenario.cjs'
+        : './reembolsos-scenario.cjs',
+    )({
       evaluate,
       ids,
       capture: async (name) => {
@@ -136,7 +140,7 @@ async function verify(win) {
       keyboard: async () => {
         win.focus();
         web.focus();
-        await evaluate(`document.querySelector('#operacao-confirmar button').focus()`);
+        await evaluate(`document.getElementById('operacao-data').focus()`);
         const key = async (keyCode, modifiers = []) => {
           web.sendInputEvent({ type: 'keyDown', keyCode, modifiers });
           if (keyCode === 'Enter') web.sendInputEvent({ type: 'char', keyCode: '\r' });
@@ -146,6 +150,7 @@ async function verify(win) {
         await key('Tab');
         assert.equal(await evaluate('document.activeElement!==document.body'), true);
         await key('Tab', ['shift']);
+        assert.equal(await evaluate('document.activeElement.id'), 'operacao-data');
         await evaluate(`document.querySelector('#operacao-confirmar button').focus()`);
         await key('Enter');
         assert.equal(await evaluate(`!!document.querySelector('dialog[open]')`), true);
@@ -190,6 +195,8 @@ async function verify(win) {
         checkRead: () => assert.equal(writeCount, beforeRead + 1),
       },
     });
+    if (process.env.MNR_CONSOLIDACAO === '1')
+      writeFileSync(resolve(dir, 'fixture.json'), JSON.stringify(ids));
     writeFileSync(
       resolve(dir, 'expected-stock.json'),
       JSON.stringify(
