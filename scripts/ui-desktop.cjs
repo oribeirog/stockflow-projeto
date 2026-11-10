@@ -26,11 +26,22 @@ async function verify(window) {
   assert.match(app.getPath('userData'), /[\\/]test[\\/]ui-[a-zA-Z0-9_-]+$/);
   assert.equal(app.getPath('sessionData'), resolve(app.getPath('userData'), 'chromium'));
   const web = window.webContents;
+  // This test schedules animation frames between interactions. Keep them running
+  // when the automation window is occluded by another desktop window.
+  web.setBackgroundThrottling(false);
   const evaluate = async (expression) => {
+    let timer;
     try {
-      return await web.executeJavaScript(expression);
+      return await Promise.race([
+        web.executeJavaScript(expression),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error('Renderer evaluation timeout')), 10000);
+        }),
+      ]);
     } catch (error) {
       throw new Error('Renderer expression failed: ' + expression + '\n' + error);
+    } finally {
+      clearTimeout(timer);
     }
   };
   web.on('console-message', (event) => {
@@ -534,41 +545,25 @@ async function verify(window) {
     for (let tab = 0; tab < index + 3; tab++) await key('Tab');
   }
   await route('dashboard', 'Dashboard');
+  // The stage-2 demonstrations were replaced by the real read-only Dashboard.
+  await until(`document.querySelector('[data-dashboard-ready]') !== null`);
   await click('mnr-dashboard mnr-button button');
-  await until(`document.querySelector('main').textContent.includes('Exemplo executado.')`);
-  await evaluate(
-    `document.querySelector('#demo-name').value = 'Exemplo'; document.querySelector('#demo-name').dispatchEvent(new Event('input', { bubbles: true }))`,
-  );
-  await pause(80);
-  await click('mnr-dashboard mnr-button:nth-of-type(2) button');
-  assert.equal(await evaluate('document.querySelector("#demo-name").value'), '');
-  assert.equal(await evaluate('document.querySelector("#demo-disabled").disabled'), true);
+  await until(`document.querySelector('[data-dashboard-ready]') !== null`);
+  assert.equal(await evaluate('document.querySelectorAll("[data-metric]").length'), 13);
+  assert.equal(await evaluate('document.querySelectorAll("mnr-dashboard-chart svg").length'), 2);
+  await evaluate(`document.querySelector('#dashboard-start').focus()`);
   assert.equal(
-    await evaluate('document.querySelectorAll("mnr-dashboard mnr-content-state").length'),
-    3,
+    await evaluate('document.querySelector("#dashboard-start").labels[0].textContent'),
+    'De',
   );
-  assert.equal(
-    await evaluate(
-      'document.querySelector("mnr-dashboard mnr-button:last-child button:disabled") !== null',
-    ),
-    true,
-  );
-  // Disabled controls are skipped, field has its native label, and focus remains visible.
-  await evaluate(`document.querySelector('#demo-name').focus()`);
-  assert.equal(
-    await evaluate('document.querySelector("#demo-name").labels[0].textContent'),
-    'Nome de exemplo',
-  );
+  assert.equal(await evaluate('document.querySelector("#dashboard-start").readOnly'), true);
   await key('Tab');
-  assert.notEqual(await evaluate('document.activeElement.id'), 'demo-disabled');
-  await evaluate(`document.querySelector('#components-title').scrollIntoView()`);
-  await screenshot('components-actions');
-  await evaluate(
-    `document.querySelector('main').scrollTop = document.querySelector('main').scrollHeight`,
-  );
-  await screenshot('components-states');
+  await key('Tab', ['shift']);
+  assert.equal(await evaluate('document.activeElement.id'), 'dashboard-start');
+  await screenshot('dashboard-filters');
   assert.equal(await evaluate('getComputedStyle(document.activeElement).outlineStyle'), 'solid');
   // Reload Dashboard and visit a lazy module while emulating offline network conditions.
+  console.log('DASHBOARD_UI_FILTERS_OK');
   await web.debugger.attach('1.3');
   await web.debugger.sendCommand('Network.enable');
   await web.debugger.sendCommand('Emulation.setEmulatedMedia', {
@@ -584,8 +579,14 @@ async function verify(window) {
     downloadThroughput: 0,
     uploadThroughput: 0,
   });
+  // Wait for the new document: querying immediately can still see the old Dashboard
+  // and schedule a frame in the context that reload is about to destroy.
+  const reloaded = new Promise((resolve) => web.once('did-finish-load', resolve));
   web.reload();
+  await reloaded;
   await until(`document.querySelector('mnr-dashboard') !== null`);
+  await until(`document.querySelector('[data-dashboard-ready]') !== null`);
+  console.log('DASHBOARD_UI_OFFLINE_RELOAD_OK');
   await route('estoque', 'Estoque');
   await route('perfumes', 'Perfumes');
   await fill('#perfume-search', 'UI-001');

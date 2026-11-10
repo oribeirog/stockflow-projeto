@@ -1,5 +1,25 @@
 # MNR Perfumes
 
+## Etapa 4F.2 — Dashboard visual gerencial
+
+Dashboard Angular com 13 cartões oficiais, séries de vendas e recebimentos,
+rankings de produtos/clientes e alertas de estoque. Usa os contratos somente de
+leitura da 4F.1, sem recalcular indicadores financeiros no renderer. Períodos,
+coortes e posições atuais são identificados separadamente. Inclui filtros de
+calendário local e cliente, atualização, carregamento, erro, nova tentativa,
+ausência de movimentos e tabelas acessíveis dos gráficos.
+
+`npm.cmd run test:dashboard` executa os testes específicos e o cenário real no
+Electron; também está incluído em `test:ui`. Smokes adicionais:
+`node scripts/dashboard-smoke.mjs --development` e
+`node scripts/dashboard-smoke.mjs --package` após o pack. Todos usam bancos e
+perfis isolados, com conferência de ausência de escrita pelas consultas.
+
+Recuperação da execução interrompida, critérios, evidências e roteiro de validação
+manual estão no [relatório da 4F.2](docs/etapa-4F2-dashboard-visual-gerencial.md).
+A etapa aguarda validação manual do proprietário. Exportações 4F.3, 4F.4, 4G e
+Etapa 5 permanecem futuras. As seções abaixo registram as entregas anteriores.
+
 ## Etapa 4F.1 — Indicadores e consultas para relatórios
 
 Camada gerencial somente de leitura no processo principal, com contratos e

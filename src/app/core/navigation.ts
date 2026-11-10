@@ -11,7 +11,7 @@ export const navigation: readonly {
     path: 'dashboard',
     title: 'Dashboard',
     icon: 'dashboard',
-    description: 'Visão geral do aplicativo e do design system.',
+    description: 'Indicadores comerciais, financeiros e posição atual de estoque.',
   },
   {
     path: 'perfumes',

@@ -1,114 +1,361 @@
-<div class="stack">
-  <section class="welcome" aria-labelledby="welcome-title">
-    <div class="welcome-copy stack">
-      <div class="row">
-        <span class="eyebrow">Seu espaço de trabalho</span
-        ><mnr-badge>Etapa 2 · Estrutura visual</mnr-badge>
-      </div>
-      <h2 id="welcome-title">Tudo começa com uma boa base.</h2>
-      <p>
-        Bem-vindo ao MNR Perfumes. A identidade visual e a navegação estão prontas para receber a
-        gestão do seu negócio.
-      </p>
-      <a routerLink="/configuracoes" class="diagnostic-link"
-        >Ver diagnóstico do aplicativo <mnr-icon name="arrow"
-      /></a>
+<div class="dashboard stack">
+  <header class="intro">
+    <div>
+      <span class="eyebrow">Visão gerencial</span>
+      <h2>Seu negócio em perspectiva</h2>
+      <p>Desempenho comercial, recebimentos e posições atuais, com indicadores oficiais.</p>
     </div>
-    <div class="welcome-symbol" aria-hidden="true"><mnr-icon name="perfumes" /></div>
-  </section>
-  <div class="notice">
-    <mnr-icon name="info" />
+    <mnr-button (pressed)="load()" [disabled]="loading()">Atualizar</mnr-button>
+  </header>
+  <form class="filters" (submit)="$event.preventDefault(); load()" novalidate>
+    <div>
+      <label for="dashboard-preset">Período comercial</label>
+      <select
+        id="dashboard-preset"
+        [value]="preset()"
+        (change)="selectPreset($any($event.target).value)"
+      >
+        <option value="month">Mês atual</option>
+        <option value="30">Últimos 30 dias</option>
+        <option value="90">Últimos 90 dias</option>
+        <option value="custom">Período personalizado</option>
+      </select>
+    </div>
+    <div>
+      <label for="dashboard-start">De</label
+      ><input
+        id="dashboard-start"
+        type="date"
+        [value]="start()"
+        [readOnly]="preset() !== 'custom'"
+        [attr.aria-invalid]="filterError() ? 'true' : null"
+        aria-describedby="dashboard-period-help dashboard-filter-error"
+        (input)="start.set($any($event.target).value); invalidate()"
+      />
+    </div>
+    <div>
+      <label for="dashboard-end">Até</label
+      ><input
+        id="dashboard-end"
+        type="date"
+        [value]="end()"
+        [readOnly]="preset() !== 'custom'"
+        [attr.aria-invalid]="filterError() ? 'true' : null"
+        aria-describedby="dashboard-period-help dashboard-filter-error"
+        (input)="end.set($any($event.target).value); invalidate()"
+      />
+    </div>
+    <div>
+      <label for="dashboard-grouping">Séries por</label
+      ><select
+        id="dashboard-grouping"
+        [value]="grouping()"
+        (change)="grouping.set($any($event.target).value); load()"
+      >
+        <option value="DIARIO">Dia</option>
+        <option value="MENSAL">Mês</option>
+      </select>
+    </div>
+    <div>
+      <label for="dashboard-search">Pesquisar cliente (inclui inativos)</label
+      ><input
+        id="dashboard-search"
+        type="search"
+        maxlength="200"
+        [value]="search()"
+        (input)="search.set($any($event.target).value); findClients()"
+      />
+    </div>
+    <div>
+      <label for="dashboard-client">Cliente · comercial e financeiro</label>
+      <select
+        id="dashboard-client"
+        [value]="client()"
+        aria-describedby="dashboard-client-help"
+        (change)="client.set($any($event.target).value); load()"
+      >
+        <option value="">Todos</option>
+        @if (selectedClientMissing()) {
+        <option [value]="client()" [selected]="true">Cliente selecionado: {{client()}}</option>
+        } @for (c of options(); track c.id) {
+        <option [value]="c.id" [selected]="client() === c.id.toString()">
+          {{c.nome}}{{c.ativo ? '' : ' (inativo)'}}
+        </option>
+        }
+      </select>
+    </div>
+    <mnr-button type="submit" variant="secondary" [disabled]="loading()"
+      >Aplicar filtros</mnr-button
+    >
+    @if (clientMore()) {
+    <mnr-button variant="secondary" [disabled]="clientLoading()" (pressed)="findClients(true)"
+      >Mais clientes</mnr-button
+    >
+    }
+    <p id="dashboard-period-help" class="full">
+      Intervalos inclusivos: hoje e os 29 ou 89 dias anteriores. Máximo de 366 dias. Mês atual: dia
+      1 até hoje, no calendário local.
+    </p>
+    <p id="dashboard-client-help" class="full">
+      O cliente filtra os dados comerciais, a coorte e o Financeiro. Estoque sempre considera todos
+      os produtos, inclusive inativos.
+    </p>
+    <p id="dashboard-filter-error" class="full error" [attr.role]="filterError() ? 'alert' : null">
+      {{filterError()}}
+    </p>
+    @if (clientLoading()) {
+    <p role="status">Consultando clientes…</p>
+    } @if (clientError()) {
+    <p role="alert" class="error">{{clientError()}}</p>
+    <mnr-button variant="secondary" (pressed)="findClients()">Tentar clientes novamente</mnr-button>
+    }
+  </form>
+  @if (loading()) {
+  <mnr-content-state
+    kind="loading"
+    title="Atualizando Dashboard"
+    description="Consultando indicadores oficiais. Aguarde a conclusão deste conjunto de filtros."
+  />
+  } @else if (error()) {
+  <mnr-content-state kind="error" title="Falha ao consultar Dashboard" [description]="error()"
+    ><mnr-button (pressed)="load()">Tentar novamente</mnr-button></mnr-content-state
+  >
+  } @else if (data(); as d) {
+  <div class="reference" role="status" data-dashboard-ready>
     <p>
-      <strong>Uma estrutura em construção.</strong> Os módulos comerciais ainda não estão
-      implementados. Esta tela apresenta a interface, sem dados de vendas, estoque ou clientes.
+      <strong>Período: {{date(d.period.dataInicio)}} a {{date(d.period.dataFim)}}</strong> ·
+      {{d.clientLabel}}
+    </p>
+    <p>
+      Posições financeiras em {{date(d.summary.dataReferencia)}} · resumo atualizado em
+      {{instant(d.summary.consultadoEm)}}.
+    </p>
+    <p>
+      Consultas independentes, cada uma com seu instante de leitura. Atualize após movimentações em
+      outras telas.
     </p>
   </div>
-  <section aria-labelledby="modules-title" class="stack">
+  @if (!d.products.itens.length && !d.clients.itens.length &&
+  d.summary.fluxoFinanceiro.recebimentosBrutosCentavos === 0 &&
+  d.summary.fluxoFinanceiro.estornosRecebimentosCentavos === 0 &&
+  d.summary.fluxoFinanceiro.pagamentosReembolsoCentavos === 0 &&
+  d.summary.fluxoFinanceiro.estornosReembolsoCentavos === 0) {
+  <mnr-content-state
+    kind="empty"
+    title="Sem movimentos no período"
+    description="Nenhum movimento comercial ou financeiro foi encontrado neste filtro. As posições atuais continuam visíveis e podem ter saldo."
+  />
+  }
+  <section class="stack section" aria-labelledby="dashboard-commercial-title">
     <div>
-      <h2 id="modules-title">Explore os módulos</h2>
-      <p>Conheça os espaços reservados para as próximas etapas.</p>
+      <span class="eyebrow">Fluxo do período e coorte</span>
+      <h2 id="dashboard-commercial-title">Desempenho comercial</h2>
+      <p>
+        Faturamento acompanha a data comercial das vendas e correções. O ticket usa a posição atual
+        da coorte de vendas selecionada.
+      </p>
     </div>
-    <div class="module-grid">
-      @for (item of modules; track item.path) {
-      <a class="module-link" [routerLink]="'/' + item.path"
-        ><span class="module-icon"><mnr-icon [name]="item.icon" /></span
-        ><strong>{{ item.title }}</strong><span class="module-caption">Próxima etapa</span
-        ><mnr-icon class="module-arrow" name="arrow"
-      /></a>
+    <div class="metrics commercial">
+      @for (c of commercialCards(); track c.id) {
+      <mnr-card
+        ><p>{{c.label}}</p>
+        <strong class="metric" [attr.data-metric]="c.id">{{c.value}}</strong
+        ><small>{{c.hint}}</small><a [routerLink]="c.link">Consultar vendas</a></mnr-card
+      >
+      }
+    </div>
+    <p class="note">
+      Resultado bruto estimado considera CMV histórico e perdas de devoluções impróprias. Impostos,
+      salários e despesas operacionais não estão completos. Ticket sem vendas elegíveis e margem sem
+      faturamento positivo são “Não aplicável”.
+    </p>
+  </section>
+  <section class="stack section" aria-labelledby="dashboard-financial-title">
+    <div>
+      <span class="eyebrow">Fluxo do período · posição atual</span>
+      <h2 id="dashboard-financial-title">Financeiro</h2>
+      <p>
+        Recebimentos são dinheiro efetivo de clientes. Saldos atuais consideram todo o histórico e
+        não são uma posição no fim do período selecionado.
+      </p>
+    </div>
+    <div class="metrics">
+      @for (c of financialCards(); track c.id) {
+      <mnr-card
+        ><p>{{c.label}}</p>
+        <strong class="metric" [attr.data-metric]="c.id">{{c.value}}</strong
+        ><small>{{c.hint}}</small
+        ><a [routerLink]="c.link"
+          >{{c.id === 'refund' ? 'Consultar reembolsos' : 'Consultar contas a receber'}}</a
+        ></mnr-card
+      >
       }
     </div>
   </section>
-  <section aria-labelledby="components-title" class="stack">
+  <section class="stack section" aria-labelledby="dashboard-series-title">
     <div>
-      <div class="row">
-        <h2 id="components-title">Demonstração dos componentes</h2>
-        <mnr-badge tone="warning">Somente exemplos</mnr-badge>
-      </div>
-      <p>Elementos reutilizáveis e seus estados. As interações abaixo não gravam dados.</p>
+      <span class="eyebrow">Evolução no período</span>
+      <h2 id="dashboard-series-title">Vendas e recebimentos</h2>
+      <p>Métricas de naturezas diferentes. A diferença entre elas não determina inadimplência.</p>
     </div>
-    <div class="demo-grid">
+    <div class="charts">
       <mnr-card
-        ><div class="stack">
-          <h3>Ações e identificadores</h3>
-          <div class="row">
-            <mnr-button (pressed)="demoMessage.set('Exemplo executado. Nenhum dado foi gravado.')"
-              >Testar ação</mnr-button
-            ><mnr-button
-              variant="secondary"
-              (pressed)="demoMessage.set('Demonstração reiniciada.'); example.set('')"
-              >Reiniciar exemplo</mnr-button
-            >
-          </div>
-          <div class="row">
-            <mnr-badge tone="success">Sucesso</mnr-badge><mnr-badge tone="warning">Aviso</mnr-badge
-            ><mnr-badge tone="error">Erro</mnr-badge>
-          </div>
-          <p role="status">{{ demoMessage() }}</p>
-        </div></mnr-card
-      >
+        ><mnr-dashboard-chart
+          title="Faturamento comercial líquido"
+          description="Fluxo comercial na data das vendas e correções."
+          [points]="salesPoints()"
+          [grouping]="d.sales.agrupamento"
+          [consultedAt]="d.sales.consultadoEm"
+      /></mnr-card>
       <mnr-card
-        ><div class="stack">
-          <h3>Campos de formulário</h3>
-          <mnr-field
-            controlId="demo-name"
-            label="Nome de exemplo"
-            placeholder="Digite para experimentar"
-            hint="Campo demonstrativo, sem salvamento."
-            [value]="example()"
-            (valueChanged)="example.set($event)"
-          /><mnr-field
-            controlId="demo-disabled"
-            label="Campo indisponível"
-            value="Disponível em uma próxima etapa"
-            [disabled]="true"
-            hint="Desabilitado nesta demonstração."
-          /></div
-      ></mnr-card>
-    </div>
-    <div class="demo-grid">
-      <mnr-content-state
-        kind="loading"
-        title="Exemplo · Carregamento"
-        description="Aguarde enquanto as informações são carregadas. Estado ilustrativo; não há operação em andamento."
-      />
-      <mnr-content-state
-        kind="empty"
-        title="Exemplo · Conteúdo vazio"
-        description="Nenhum item para exibir. Este é um exemplo visual, sem consulta a cadastros."
-      />
-      <mnr-content-state
-        kind="error"
-        title="Exemplo · Falha de carregamento"
-        description="Não foi possível carregar o conteúdo de exemplo. Não representa uma falha real."
-      />
-      <mnr-card
-        ><div class="stack">
-          <h3>Exemplo · Ação indisponível</h3>
-          <p>O cadastro comercial será implementado em uma próxima etapa.</p>
-          <div><mnr-button [disabled]="true">Cadastrar perfume</mnr-button></div>
-        </div></mnr-card
-      >
+        ><mnr-dashboard-chart
+          title="Recebimentos líquidos"
+          description="Fluxo financeiro na data efetiva dos recebimentos e estornos."
+          [points]="receiptPoints()"
+          [grouping]="d.receipts.agrupamento"
+          [consultedAt]="d.receipts.consultadoEm"
+      /></mnr-card>
     </div>
   </section>
-  <p class="stage-note">MNR Software · Interface local, preparada para evoluir.</p>
+  <div class="rankings">
+    <mnr-card
+      ><section class="stack section" aria-labelledby="dashboard-products-title">
+        <div>
+          <h2 id="dashboard-products-title">Produtos mais vendidos</h2>
+          <p>
+            Fluxo de {{date(d.period.dataInicio)}} a {{date(d.period.dataFim)}} · até 5, por
+            unidades líquidas decrescentes, ID como desempate. Identificação histórica.
+          </p>
+        </div>
+        @if (!d.products.itens.length) {
+        <p>Nenhum produto com movimento neste filtro.</p>
+        } @else {
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Ranking de produtos">
+          <table>
+            <caption>
+              Produtos · fluxo comercial líquido
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Perfume / SKU histórico</th>
+                <th scope="col">Unidades líquidas</th>
+                <th scope="col">Valor líquido</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of d.products.itens; track p.produtoId) {
+              <tr>
+                <th scope="row">{{p.nomeHistorico}}<small>{{p.skuHistorico}}</small></th>
+                <td>{{quantity(p.unidadesLiquidas)}}</td>
+                <td>{{reais(p.comercialLiquidoCentavos)}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        }
+        <small
+          >Consulta: {{instant(d.products.consultadoEm)}}{{d.products.temMais ? ' · Existem outros
+          produtos além destes 5.' : ''}}</small
+        ><a routerLink="/vendas">Consultar vendas</a>
+      </section></mnr-card
+    >
+    <mnr-card
+      ><section class="stack section" aria-labelledby="dashboard-clients-title">
+        <div>
+          <h2 id="dashboard-clients-title">Clientes da coorte</h2>
+          <p>
+            Vendas de {{date(d.period.dataInicio)}} a {{date(d.period.dataFim)}} · valor líquido
+            atual, incluindo correções posteriores. Até 5 por valor decrescente, ID como desempate.
+          </p>
+        </div>
+        @if (!d.clients.itens.length) {
+        <p>Nenhum cliente identificado na coorte. Vendas anônimas não entram neste ranking.</p>
+        } @else {
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Ranking de clientes">
+          <table>
+            <caption>
+              Clientes · valor líquido atual da coorte
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Nome histórico</th>
+                <th scope="col">Vendas</th>
+                <th scope="col">Valor atual</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of d.clients.itens; track c.clienteId) {
+              <tr>
+                <th scope="row">{{c.nomeHistorico}}</th>
+                <td>{{quantity(c.vendas)}}</td>
+                <td>{{reais(c.comercialLiquidoAtualCentavos)}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        }
+        <small
+          >Consulta: {{instant(d.clients.consultadoEm)}}{{d.clients.temMais ? ' · Existem outros
+          clientes além destes 5.' : ''}}</small
+        ><a routerLink="/clientes">Consultar clientes</a>
+      </section></mnr-card
+    >
+  </div>
+  <section class="stack section" aria-labelledby="dashboard-stock-title">
+    <div>
+      <span class="eyebrow">Posição atual · todos os produtos</span>
+      <h2 id="dashboard-stock-title">Estoque</h2>
+      <p>
+        Referência {{date(d.stock.dataReferencia)}} · consulta {{instant(d.stock.consultadoEm)}}.
+        Não é estoque histórico do período e não recebe filtro de cliente.
+      </p>
+    </div>
+    <div class="metrics">
+      @for (c of stockCards(); track c.id) {
+      <mnr-card
+        ><p>{{c.label}}</p>
+        <strong class="metric" [attr.data-metric]="c.id">{{c.value}}</strong
+        ><small>Posição atual · inclui inativos</small
+        ><a routerLink="/estoque">Consultar estoque</a></mnr-card
+      >
+      }
+    </div>
+    <p class="note">
+      Sem estoque: quantidade zero. Abaixo do mínimo: quantidade menor que o mínimo formal
+      cadastrado. Um produto pode pertencer aos dois grupos.
+    </p>
+    <div class="rankings">
+      @for (list of [{title: 'Abaixo do mínimo', result: d.low}, {title: 'Sem estoque', result:
+      d.emptyStock}]; track list.title) {
+      <mnr-card
+        ><h3>{{list.title}}</h3>
+        <p>Até 5 produtos por ID · identificação cadastral atual.</p>
+        @if (!list.result.itens.length) {
+        <p>Nenhum produto nesta situação.</p>
+        }
+        <ul>
+          @for (p of list.result.itens; track p.produtoId) {
+          <li>
+            <a [routerLink]="['/estoque', p.produtoId]">{{p.nomeAtual}} · {{p.skuAtual}}</a
+            ><small
+              >{{p.ativo ? 'Ativo' : 'Inativo'}} · disponível {{quantity(p.quantidade)}} / mínimo
+              {{quantity(p.estoqueMinimo)}}</small
+            >
+          </li>
+          }
+        </ul>
+        <small
+          >Referência {{date(list.result.dataReferencia)}} ·
+          {{instant(list.result.consultadoEm)}}{{list.result.temMais ? ' · Existem outros produtos.'
+          : ''}}</small
+        >
+      </mnr-card>
+      }
+    </div>
+  </section>
+  } @else if (!filterError()) {
+  <p role="status">Ajuste o período e aplique os filtros para consultar.</p>
+  }
 </div>

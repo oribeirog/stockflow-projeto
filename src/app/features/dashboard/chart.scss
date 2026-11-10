@@ -1,0 +1,76 @@
+:host {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+h3 {
+  font-size: var(--text-subtitle);
+}
+figure {
+  margin: 0;
+  min-width: 0;
+}
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+text {
+  fill: var(--text-secondary);
+  font-size: 12px;
+}
+.grid {
+  stroke: var(--border);
+  stroke-dasharray: 3 4;
+}
+.zero {
+  stroke: var(--control-border);
+}
+polyline {
+  fill: none;
+  stroke: var(--focus);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+circle {
+  fill: var(--focus);
+}
+figcaption,
+small {
+  color: var(--text-secondary);
+  font-size: var(--text-small);
+}
+summary {
+  color: var(--focus);
+  cursor: pointer;
+}
+.table-scroll {
+  max-height: 280px;
+  overflow: auto;
+  margin-top: var(--space-3);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+caption {
+  text-align: left;
+  color: var(--text-secondary);
+}
+th,
+td {
+  text-align: left;
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 600px) {
+  text {
+    font-size: 14px;
+  }
+}
