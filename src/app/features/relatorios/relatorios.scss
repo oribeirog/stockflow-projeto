@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.reports {
+  gap: var(--space-6);
+}
+h2 {
+  margin: var(--space-2) 0;
+}
+fieldset {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  background: var(--surface);
+}
+legend {
+  font-weight: 600;
+  padding: 0 var(--space-2);
+}
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.filters > div {
+  min-width: 0;
+}
+.wide {
+  grid-column: 1/-1;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  height: var(--control-height);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-control);
+  padding: var(--space-2);
+  background: var(--background);
+  color: var(--text);
+}
+.hint,
+#export-model-help {
+  font-size: var(--text-small);
+  margin: var(--space-3) 0 var(--space-4);
+}
+.notice {
+  padding: var(--space-4);
+  border-left: 3px solid var(--accent);
+}
+mnr-card {
+  display: grid;
+  gap: var(--space-4);
+}
+#export-result {
+  overflow-wrap: anywhere;
+}
+li {
+  margin: var(--space-2) 0;
+}

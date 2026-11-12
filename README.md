@@ -1,5 +1,34 @@
 # MNR Perfumes
 
+## Etapa 4F.3 — Relatórios e exportações Excel/PDF
+
+Relatórios oferece sete modelos fechados: Gerencial, Vendas, Recebimentos e
+movimentos, Contas a receber, Reembolsos, Estoque e Desempenho de produtos/clientes.
+O formulário permite filtros compatíveis, revisão dos critérios e escolha do
+destino pelo diálogo Windows. Gera XLSX reais formatados e PDF A4 claro, com
+totais oficiais, notas e páginas numeradas, totalmente offline.
+
+Cada arquivo usa um único snapshot somente leitura para todas as páginas e
+conjuntos. A coleta termina antes da geração/gravação. Não há recálculo financeiro
+no Angular ou nos formatos. Limite de 5.000 registros; arquivos existentes são
+preservados. A publicação segura exige destino com hard links, como NTFS.
+
+`npm.cmd run test:exportacoes` valida serviços, IPC, interface e arquivos com
+leitores independentes. Para o leitor Python, configure `MNR_TEST_PYTHON` com
+pypdf/pdfplumber/openpyxl ou use o runtime local de desenvolvimento disponível.
+`node scripts/exportacoes-smoke.mjs --development` testa HTTP;
+`node scripts/exportacoes-smoke.mjs --package` testa o executável após pack.
+`npm.cmd run benchmark:exportacoes` utiliza os checkpoints isolados da 4F.1
+em 50/200/500 vendas. Esses leitores e fixtures não são dependências do aplicativo.
+
+Arquitetura, filtros, segurança, limites, resultados, capturas e checklist estão
+no [relatório da 4F.3](docs/etapa-4F3-relatorios-exportacoes.md). A validação manual
+do proprietário permanece pendente, incluindo a interação com o diálogo nativo:
+a automação Windows não estava disponível nesta execução. O retorno do diálogo
+e o salvamento foram testados automaticamente com destinos controlados.
+As etapas até 4F.2 já foram aprovadas e commitadas pelo proprietário, conforme
+informado. As seções abaixo são históricas. 4F.4, 4G e Etapa 5 não foram implementadas.
+
 ## Etapa 4F.2 — Dashboard visual gerencial
 
 Dashboard Angular com 13 cartões oficiais, séries de vendas e recebimentos,

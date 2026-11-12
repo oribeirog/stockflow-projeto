@@ -1,0 +1,232 @@
+<div class="stack reports">
+  <div>
+    <span class="eyebrow">Arquivos para consultar e compartilhar</span>
+    <h2>Relatórios do seu negócio</h2>
+    <p>Escolha um modelo, revise os critérios e salve um arquivo Excel ou PDF. Funciona offline.</p>
+  </div>
+  @if (contexto()) {
+  <p class="notice">{{contexto()}}</p>
+  }
+  <form (submit)="$event.preventDefault(); preparar()" novalidate>
+    <fieldset [disabled]="service.busy()">
+      <legend>Modelo e filtros</legend>
+      <div class="filters">
+        <div class="wide">
+          <label for="export-model">Relatório</label
+          ><select
+            id="export-model"
+            [value]="modelo()"
+            (change)="trocarModelo($any($event.target).value)"
+          >
+            @for(m of modelos; track m.id){
+            <option [value]="m.id">{{m.nome}}</option>
+            }
+          </select>
+          <p id="export-model-help">{{descricao()}}</p>
+        </div>
+        <div>
+          <label for="export-format">Formato</label
+          ><select
+            id="export-format"
+            [value]="formato()"
+            (change)="formato.set($any($event.target).value); invalidar()"
+          >
+            <option value="xlsx">Excel (.xlsx)</option>
+            <option value="pdf">PDF (.pdf)</option>
+          </select>
+        </div>
+        @if(periodo()) {
+        <div>
+          <label for="export-start">De (inclusivo)</label
+          ><input
+            id="export-start"
+            type="date"
+            [value]="inicio()"
+            (input)="inicio.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        <div>
+          <label for="export-end">Até (inclusivo)</label
+          ><input
+            id="export-end"
+            type="date"
+            [value]="fim()"
+            (input)="fim.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        } @if(clientePermitido()) {
+        <div>
+          <label for="export-client">Cliente ID (opcional)</label
+          ><input
+            id="export-client"
+            type="text"
+            inputmode="numeric"
+            [value]="cliente()"
+            (input)="cliente.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        } @if(produtoPermitido()) {
+        <div>
+          <label for="export-product">Produto ID (opcional)</label
+          ><input
+            id="export-product"
+            type="text"
+            inputmode="numeric"
+            [value]="produto()"
+            (input)="produto.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        } @if(modelo()==='MOVIMENTOS') {
+        <div>
+          <label for="export-method">Forma de pagamento ID (opcional)</label
+          ><input
+            id="export-method"
+            type="text"
+            inputmode="numeric"
+            [value]="forma()"
+            (input)="forma.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        <div>
+          <label for="export-nature">Natureza</label
+          ><select
+            id="export-nature"
+            [value]="natureza()"
+            (change)="natureza.set($any($event.target).value); invalidar()"
+          >
+            <option value="">Todas</option>
+            <option value="RECEBIMENTO">Recebimentos</option>
+            <option value="ESTORNO_RECEBIMENTO">Estornos de recebimentos</option>
+            <option value="PAGAMENTO_REEMBOLSO">Pagamentos de reembolso</option>
+            <option value="ESTORNO_REEMBOLSO">Estornos de reembolso</option>
+          </select>
+        </div>
+        } @if(modelo()==='CONTAS'||modelo()==='REEMBOLSOS') {
+        <div>
+          <label for="export-sale">Venda ID (opcional)</label
+          ><input
+            id="export-sale"
+            type="text"
+            inputmode="numeric"
+            [value]="venda()"
+            (input)="venda.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        } @if(modelo()==='CONTAS') {
+        <div>
+          <label for="export-due-start">Vencimento de (opcional)</label
+          ><input
+            id="export-due-start"
+            type="date"
+            [value]="vencimentoDe()"
+            (input)="vencimentoDe.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        <div>
+          <label for="export-due-end">Vencimento até (opcional)</label
+          ><input
+            id="export-due-end"
+            type="date"
+            [value]="vencimentoAte()"
+            (input)="vencimentoAte.set($any($event.target).value); invalidar()"
+          />
+        </div>
+        } @if(situacoes().length) {
+        <div>
+          <label for="export-status">Situação</label
+          ><select
+            id="export-status"
+            [value]="situacao()"
+            (change)="situacao.set($any($event.target).value); invalidar()"
+          >
+            <option value="">Todas</option>
+            @for(s of situacoes();track s){
+            <option [value]="s">{{s.replaceAll('_',' ')}}</option>
+            }
+          </select>
+        </div>
+        } @if(modelo()==='ESTOQUE') {
+        <div>
+          <label for="export-active">Cadastro</label
+          ><select
+            id="export-active"
+            [value]="ativo()"
+            (change)="ativo.set($any($event.target).value); invalidar()"
+          >
+            <option value="">Ativos e inativos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Inativos</option>
+          </select>
+        </div>
+        } @if(modelo()==='VENDAS'||modelo()==='MOVIMENTOS'||modelo()==='ESTOQUE') {
+        <div>
+          <label for="export-order">Ordenação</label
+          ><select
+            id="export-order"
+            [value]="ordem()"
+            (change)="ordem.set($any($event.target).value); invalidar()"
+          >
+            <option value="">Padrão oficial</option>
+            @if(modelo()==='ESTOQUE'){
+            <option value="ID">ID crescente</option>
+            <option value="QUANTIDADE_DESC">Quantidade decrescente</option>
+            }@else{
+            <option value="DATA_DESC">Data decrescente</option>
+            }
+            <option value="VALOR_DESC">Valor decrescente</option>
+          </select>
+        </div>
+        }
+      </div>
+      <p class="hint">
+        IDs em branco incluem todos. Clientes e produtos inativos continuam consultáveis. Intervalos
+        comerciais: até 366 dias. Máximo de {{limite}} registros por arquivo.
+      </p>
+      <mnr-button type="submit" [disabled]="service.busy()">Revisar critérios</mnr-button>
+    </fieldset>
+  </form>
+  @if(revisao();as r) {
+  <mnr-card
+    ><h3 id="export-review-title" tabindex="-1">Revisar exportação</h3>
+    <p>{{descricao()}}</p>
+    <ul>
+      @for(c of r.criterios;track c){
+      <li>{{c}}</li>
+      }
+    </ul>
+    <p>
+      Formato: {{r.formato.toUpperCase()}}. Todos os registros filtrados serão incluídos em uma
+      visão consistente dos dados. Os saldos continuam atuais.
+    </p>
+    <p>
+      Escolha um nome novo. Arquivos existentes não serão substituídos. O diálogo pode ser cancelado
+      antes da geração.
+    </p>
+    <mnr-button (pressed)="exportar()" [disabled]="service.busy()"
+      >Escolher destino e gerar</mnr-button
+    ></mnr-card
+  >
+  } @if(service.busy()) {<mnr-content-state
+    kind="loading"
+    title="Preparando relatório"
+    description="Conclua a escolha do destino e aguarde a geração. Filtros e nova exportação ficam bloqueados até o resultado. Não há cancelamento após iniciar a geração."
+  />}
+  <div id="export-result" tabindex="-1">
+    @if(erro()) {<mnr-content-state
+      kind="error"
+      title="Não foi possível exportar"
+      [description]="erro()"
+    />} @if(mensagem()) {
+    <p role="status">{{mensagem()}}</p>
+    } @if(resultado();as r) {<mnr-card
+      ><div role="status">
+        <h3>Relatório salvo</h3>
+        <p>{{r.nome}} · {{r.registros}} registros · {{r.bytes}} bytes.</p>
+        <p>
+          O arquivo pode ser aberto posteriormente pelo Windows, mesmo com o aplicativo fechado.
+        </p>
+      </div>
+      <mnr-button variant="secondary" (pressed)="invalidar()">Nova exportação</mnr-button></mnr-card
+    >}
+  </div>
+</div>

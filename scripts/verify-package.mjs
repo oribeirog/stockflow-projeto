@@ -19,4 +19,6 @@ for (const file of renderer) {
 }
 assert(files.includes('/dist/electron/preload/index.cjs'), 'Production preload missing');
 assert(files.includes('/dist/electron/ipc/cadastros.js'), 'Production handlers missing');
+assert(files.includes('/dist/electron/services/exportacoes/worker.js'), 'Export worker missing');
+assert(files.includes('/node_modules/exceljs/excel.js'), 'XLSX library missing');
 console.log('PACKAGE_ISOLATION_OK', renderer.length, 'production renderer bundles');

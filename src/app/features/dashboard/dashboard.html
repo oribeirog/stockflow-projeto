@@ -6,6 +6,11 @@
       <p>Desempenho comercial, recebimentos e posições atuais, com indicadores oficiais.</p>
     </div>
     <mnr-button (pressed)="load()" [disabled]="loading()">Atualizar</mnr-button>
+    <a
+      routerLink="/relatorios"
+      [queryParams]="data() ? {de: data()!.period.dataInicio, ate: data()!.period.dataFim, cliente: client() || null} : {}"
+      >Relatórios e exportações</a
+    >
   </header>
   <form class="filters" (submit)="$event.preventDefault(); load()" novalidate>
     <div>

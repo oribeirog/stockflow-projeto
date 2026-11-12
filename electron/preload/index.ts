@@ -1,4 +1,5 @@
 import { CANAIS_VENDAS } from '../../shared/vendas-ipc';
+import { CANAIS_EXPORTACOES } from '../../shared/exportacoes';
 import { CANAIS_RELATORIOS } from '../../shared/relatorios-ipc';
 import { CANAIS_FINANCEIRO } from '../../shared/financeiro-ipc';
 import { CANAIS_CORRECOES } from '../../shared/correcoes-ipc';
@@ -20,6 +21,10 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  exportacoes: {
+    exportarExcel: (i) => ipcRenderer.invoke(CANAIS_EXPORTACOES.exportarExcel, i),
+    exportarPdf: (i) => ipcRenderer.invoke(CANAIS_EXPORTACOES.exportarPdf, i),
+  },
   relatorios: {
     listarMovimentacaoProdutos: (i) =>
       ipcRenderer.invoke(CANAIS_RELATORIOS.listarMovimentacaoProdutos, i),

@@ -1,4 +1,5 @@
 import { criarHandlersVendas } from './vendas';
+import { registerExportacoes } from './exportacoes';
 import { criarHandlersRelatorios } from './relatorios';
 import { criarHandlersConsultasFinanceiras } from './financeiro';
 import { isTrustedRequest, isTrustedSender } from './trust';
@@ -16,6 +17,7 @@ export function registerIpc(
   allowedUrl: string,
   photos?: FotoService,
 ) {
+  registerExportacoes(window, db, allowedUrl, ipcMain);
   if (photos) registerFotos(window, allowedUrl, photos);
   for (const [channel, handler] of [
     ...criarHandlersCadastros(db, app.getVersion()),

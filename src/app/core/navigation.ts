@@ -59,7 +59,7 @@ export const navigation: readonly {
     path: 'relatorios',
     title: 'Relatórios',
     icon: 'reports',
-    description: 'Espaço reservado para relatórios do negócio.',
+    description: 'Relatórios oficiais e exportações Excel/PDF offline.',
   },
   {
     path: 'configuracoes',
@@ -69,6 +69,12 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  {
+    path: 'relatorios',
+    title: 'Relatórios • MNR Perfumes',
+    loadComponent: () => import('../features/relatorios/relatorios').then((m) => m.Relatorios),
+    canDeactivate: [(c: { canLeave(): boolean }) => c.canLeave()],
+  },
   ...[
     ['financeiro/reembolsos/:id/pagar', 'pagar'],
     ['financeiro/vendas/:vendaId/movimentos/:id/estornar', 'movimento'],
@@ -169,7 +175,7 @@ export const routes: Routes = [
     ],
   })),
   ...navigation
-    .filter((item) => item.path !== 'financeiro')
+    .filter((item) => !['financeiro', 'relatorios'].includes(item.path))
     .map((item) => ({
       path: item.path,
       title: `${item.title} • MNR Perfumes`,

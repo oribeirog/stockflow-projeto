@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 75);
+  assert.equal(registered.size, 77);
   assert.equal(registered.has('financeiro:registrar-recebimento'), true);
   assert.equal(registered.has('correcoes:devolver-venda'), true);
   assert.equal(registered.has('cadastros:sql'), false);
@@ -225,7 +225,14 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
     ]) {
       assert.throws(() => handler(event, cmd({ nome: 'Não autorizado' })), /não autorizada/);
     }
-    if (channel.startsWith('relatorios:')) {
+    if (channel.startsWith('exportacoes:')) {
+      const response = await handler(
+        { sender: window.webContents, senderFrame: frame },
+        {},
+        'extra',
+      );
+      assert.equal(response.error.code, 'VALIDATION');
+    } else if (channel.startsWith('relatorios:')) {
       const response = handler({ sender: window.webContents, senderFrame: frame }, {}, 'extra');
       assert.equal(response.error.code, 'VALIDATION');
       assert.equal(
@@ -278,6 +285,7 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     'compras',
     'correcoes',
     'estoque',
+    'exportacoes',
     'financeiro',
     'fotos',
     'relatorios',

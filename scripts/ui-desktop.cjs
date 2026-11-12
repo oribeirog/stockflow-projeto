@@ -158,10 +158,21 @@ async function verify(window) {
         'compras',
         'vendas',
         'financeiro',
+        'relatorios',
       ].includes(path)
     ) {
       await until(
         `document.querySelector('main').textContent.includes('Disponível em uma próxima etapa')`,
+      );
+    }
+    if (path === 'relatorios') {
+      await until(`document.querySelector('#export-model') !== null`);
+      assert.equal(await evaluate(`document.querySelectorAll('#export-model option').length`), 7);
+      assert.equal(await evaluate(`document.querySelectorAll('#export-format option').length`), 2);
+      assert.equal(
+        await evaluate(`document.querySelector('#export-review-title') === null`),
+        true,
+        'Opening reports must not start generation',
       );
     }
   }

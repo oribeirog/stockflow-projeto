@@ -1,4 +1,5 @@
 import type { VendasApi } from './vendas-ipc';
+import type { ExportacoesApi } from './exportacoes';
 import type { RelatoriosApi } from './relatorios-ipc';
 import type { FinanceiroApi } from './financeiro-ipc';
 import type { CorrecoesApi } from './correcoes-ipc';
@@ -15,6 +16,7 @@ export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: string; message: string } };
 export interface DesktopApi {
+  exportacoes: ExportacoesApi;
   relatorios: RelatoriosApi;
   financeiro: FinanceiroApi;
   correcoes: CorrecoesApi;

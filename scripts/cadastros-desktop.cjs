@@ -15,6 +15,7 @@ const { CANAIS_VENDAS } = require('../dist/shared/vendas-ipc.js');
 const { CANAIS_FINANCEIRO } = require('../dist/shared/financeiro-ipc.js');
 const { CANAIS_CORRECOES } = require('../dist/shared/correcoes-ipc.js');
 const { CANAIS_RELATORIOS } = require('../dist/shared/relatorios-ipc.js');
+const { CANAIS_EXPORTACOES } = require('../dist/shared/exportacoes.js');
 const root = resolve('.cache/cadastros-renderer/browser');
 mkdirSync('.local-data/test', { recursive: true });
 const directory = mkdtempSync(resolve('.local-data/test/cadastros-ipc-'));
@@ -158,6 +159,7 @@ app
         ...Object.values(CANAIS_FINANCEIRO),
         ...Object.values(CANAIS_CORRECOES),
         ...Object.values(CANAIS_RELATORIOS),
+        ...Object.values(CANAIS_EXPORTACOES),
       ])
         ipcMain.removeHandler(channel);
     }
