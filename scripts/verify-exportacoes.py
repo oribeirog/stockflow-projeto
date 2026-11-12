@@ -30,20 +30,27 @@ for item in manifest:
     if path.suffix == '.xlsx':
         with zipfile.ZipFile(path) as archive:
             assert archive.testzip() is None
-            assert not any('vbaProject' in n or 'externalLinks' in n for n in archive.namelist())
+            assert not any('vbaProject' in n or 'externalLinks' in n or n.endswith('connections.xml') for n in archive.namelist())
+            for name in archive.namelist():
+                if name.endswith('.rels'):
+                    assert b'TargetMode="External"' not in archive.read(name), 'External relationship'
             for name in archive.namelist():
                 if name.startswith('xl/worksheets/') and name.endswith('.xml'):
                     assert not re.search(rb'<f(?:\s|>)', archive.read(name)), 'Formula in exported workbook'
         book = load_workbook(path, data_only=False)
+        assert book.properties.creator == 'MNR Perfumes'
+        assert book.properties.title == document['titulo']
         assert book.sheetnames == [s['nome'] for s in document['secoes']] + ['Metodologia']
         for section in document['secoes']:
             sheet = book[section['nome']]
             assert sheet.freeze_panes and sheet.print_title_rows
+            assert all(c.width > 0 for c in sheet.column_dimensions.values())
             header = next(r for r in sheet if r[0].value == section['colunas'][0]['titulo'])
             assert [c.value for c in header[:len(section['colunas'])]] == [c['titulo'] for c in section['colunas']]
             actual = list(sheet.iter_rows(min_row=header[0].row+1, max_row=sheet.max_row))
             if section['linhas']:
                 assert len(actual) == len(section['linhas']), (path, section['nome'], len(actual))
+                assert sheet.auto_filter.ref
             for row, expected in zip(actual, section['linhas']):
                 for cell, raw, column in zip(row, expected, section['colunas']):
                     kind = column['tipo']
@@ -54,7 +61,9 @@ for item in manifest:
                         assert cell.value == 'Não aplicável'
                     elif kind in ('moeda', 'percentual', 'inteiro'):
                         divisor = 100 if kind == 'moeda' else 10000 if kind == 'percentual' else 1
-                        assert int((Decimal(str(cell.value)) * divisor).quantize(Decimal(1))) == raw, (path, cell.coordinate, raw, cell.value)
+                        assert Decimal(str(cell.value)) * divisor == Decimal(raw), (path, cell.coordinate, raw, cell.value)
+                        if kind == 'moeda':
+                            assert 'R$' in cell.number_format and '0.00' in cell.number_format
                     elif kind == 'data' and raw >= '1900-03-01':
                         assert isinstance(cell.value, datetime) and cell.value.strftime('%Y-%m-%d') == raw
                     else:
@@ -66,6 +75,7 @@ for item in manifest:
         assert len(reader.pages) >= 2 and not reader.is_encrypted
         text = '\n'.join(p.extract_text() for p in reader.pages)
         normalized = norm(text)
+        cursor = 0
         for title in ['MNR Perfumes', document['titulo'], document['referencia'], 'Metodologia']:
             assert norm(title) in normalized, (path, title)
         for section in document['secoes']:
@@ -73,6 +83,10 @@ for item in manifest:
             for column in section['colunas']:
                 assert norm(column['titulo']) in normalized, (path, column['titulo'])
             for row in section['linhas']:
+                entire_row = ''.join(norm(formatted(value, column['tipo'])) for value, column in zip(row, section['colunas']))
+                offset = normalized.find(entire_row, cursor)
+                assert offset >= 0, (path, 'Missing, repeated out of order or split PDF row', entire_row)
+                cursor = offset + len(entire_row)
                 for value, column in zip(row, section['colunas']):
                     expected = formatted(value, column['tipo'])
                     assert norm(expected) in normalized, (path, expected)

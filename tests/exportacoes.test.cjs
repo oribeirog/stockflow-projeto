@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { mkdirSync, mkdtempSync, readFileSync, readdirSync } = require('node:fs');
+const { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } = require('node:fs');
 const { resolve, join } = require('node:path');
 const ExcelJS = require('exceljs');
 const Database = require('better-sqlite3');
@@ -170,6 +170,25 @@ test('4F3 single WAL snapshot covers all source pages while a real receipt commi
   assert.equal(
     createReportService(db, clock).listarContasReceber({}).totais.exigivelCentavos,
     20000,
+  );
+  const frozenWorkbook = await workbook(d);
+  const summarySheet = frozenWorkbook.getWorksheet('Resumo');
+  let exportedDebt;
+  summarySheet.eachRow((row) => {
+    if (String(row.getCell(1).value).includes('Saldo exigível atual'))
+      exportedDebt = row.getCell(2).value;
+  });
+  assert.equal(exportedDebt, 300);
+  // Frozen official read for the Electron PDF integration audit; only isolated test data.
+  mkdirSync('.cache', { recursive: true });
+  writeFileSync(
+    '.cache/4f4-snapshot-input.json',
+    JSON.stringify({
+      documento: d,
+      database: db.name,
+      exigivelDurante: 30000,
+      exigivelDepois: 20000,
+    }),
   );
   const sales = coletarDocumento(db, { modelo: 'VENDAS', filtros: range }, clock);
   assert.equal(sales.registros, 206);

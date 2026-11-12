@@ -1,5 +1,30 @@
 # MNR Perfumes
 
+## Etapa 4F.4 — Consolidação gerencial
+
+Consolidação técnica concluída, aguardando validação manual: compara as consultas oficiais, os 13
+cartões e rankings do Dashboard e os sete modelos XLSX/PDF no mesmo estado
+controlado do banco. Inclui o ciclo de venda/devolução/reembolso/estornos,
+histórico, filtros, empates, snapshot concorrente e falhas de publicação.
+Não adiciona funcionalidades comerciais ou gerenciais.
+
+`npm.cmd run test:consolidacao-gerencial` executa o recorte integrado local.
+`node scripts/exportacoes-smoke.mjs --consolidacao-gerencial --development`
+e `--consolidacao-gerencial --package` usam os outros ambientes isolados.
+`node scripts/benchmark-gerencial-ui.mjs` mede atualização do Dashboard em cópias
+isoladas dos checkpoints de 50/200/500 vendas da 4F.1, sem `db.backup`.
+Resultados e limitações no [relatório da 4F.4](docs/etapa-4F4-consolidacao-gerencial.md).
+
+As etapas 4F.1–4F.3 foram validadas manualmente e commitadas pelo proprietário,
+conforme informado na autorização da 4F.4. As seções anteriores abaixo registram
+o estado de cada entrega na sua data; suas pendências históricas não substituem
+essa aprovação. A 4F.4 aguarda nova validação manual do proprietário.
+
+Permanecem futuras: **4G**, devolução/cancelamento de compras e estorno de ajustes;
+**Etapa 5**, backup/restauração pela interface, instalador, distribuição e máquina
+limpa, Windows 10/11, ensaios offline físicos e documentação de instalação/recuperação.
+Essas funcionalidades não foram implementadas nesta consolidação.
+
 ## Etapa 4F.3 — Relatórios e exportações Excel/PDF
 
 Relatórios oferece sete modelos fechados: Gerencial, Vendas, Recebimentos e

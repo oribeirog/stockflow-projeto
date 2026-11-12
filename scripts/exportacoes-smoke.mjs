@@ -14,6 +14,7 @@ import assert from 'node:assert/strict';
 import electron from 'electron';
 import { environment } from './env.mjs';
 import { connect, pause } from './exportacoes-cdp.mjs';
+import { auditCheckpoint, auditFilteredExports } from './consolidacao-gerencial-scenario.mjs';
 const require = createRequire(import.meta.url);
 const { openDatabase } = require('../dist/electron/infrastructure/database');
 const { cycle, command, day, clock } = require('../tests/helpers/consolidacao-fixture.cjs');
@@ -23,7 +24,8 @@ const { snapshot } = require('../tests/helpers/financeiro-consulta-fixture.cjs')
 const { coletarDocumento } = require('../dist/electron/services/exportacoes/documento');
 const { MODELOS_RELATORIO } = require('../dist/shared/exportacoes');
 const packaged = process.argv.includes('--package'),
-  development = process.argv.includes('--development');
+  development = process.argv.includes('--development'),
+  consolidation = process.argv.includes('--consolidacao-gerencial');
 assert(!(packaged && development));
 mkdirSync('.local-data/test', { recursive: true });
 mkdirSync('.cache/ui', { recursive: true });
@@ -31,13 +33,14 @@ const root = mkdtempSync(resolve('.local-data/test/ui-exportacoes-'));
 const directory = packaged ? join(root, 'MNR Software/MNR Perfumes/data') : join(root, 'data');
 mkdirSync(directory, { recursive: true });
 // Exports are outside application data/profile and installation directories.
-const outputs = mkdtempSync(resolve('.local-data/test/exports-4f3-'));
+const outputs = mkdtempSync(resolve(`.local-data/test/exports-${consolidation ? '4f4' : '4f3'}-`));
 const db = await openDatabase(directory, 'test'),
   s = cycle(db);
 const fin = createFinancialService(db, 'test', clock),
   cor = createCorrectionService(db, 'test', clock);
 s.buy(100, 100);
 const sale = s.sell();
+if (consolidation) s.buy(5, 10000); // Current average now differs from the original historical cost.
 fin.registrarRecebimento(
   command({
     vendaId: sale.id,
@@ -59,7 +62,11 @@ s.cat.savePerson(
   command({ id: s.clienteId, nome: '+Cliente histórico atual inativo', ativo: false }),
 );
 const range = { dataInicio: '2026-11-01', dataFim: '2026-11-30' },
-  manifest = [];
+  manifest = [],
+  audits = [];
+const originalItems = JSON.stringify(
+  db.prepare('SELECT * FROM itens_documento WHERE documento_id=? ORDER BY id').all(sale.id),
+);
 let server,
   serial = 0;
 try {
@@ -140,6 +147,16 @@ try {
       await until('!!window.mnrApi?.exportacoes&&!!document.querySelector("nav")');
       assert.equal(await e('typeof require'), 'undefined');
       assert.equal(await e('typeof process'), 'undefined');
+      const captureScreenshot = async (label) => {
+        console.log('EXPORT_SCREENSHOT_START', label);
+        await renderer.call('Page.bringToFront');
+        await e('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+        const shot = await renderer.call('Page.captureScreenshot', {
+          captureBeyondViewport: false,
+        });
+        console.log('EXPORT_SCREENSHOT_OK', label);
+        return shot;
+      };
       const before = snapshot(db);
       const generate = async (modelo, format, label, filterOverride) => {
         const filtros =
@@ -164,7 +181,78 @@ try {
         assert.equal(result.data.registros, documento.registros);
         return result;
       };
+      const audit = async (label, expected, filter = { ...range, clienteId: s.clienteId }) => {
+        const initial = snapshot(db);
+        db.pragma('query_only=ON');
+        try {
+          audits.push(
+            await auditCheckpoint({
+              e,
+              until,
+              generate,
+              manifest,
+              label,
+              filter,
+              expected,
+              saleId: sale.id,
+              capture: async (label) => {
+                await e(
+                  `document.getElementById('${label === 'rankings-empate' ? 'dashboard-products-title' : 'dashboard-commercial-title'}').scrollIntoView({block:'start'})`,
+                );
+                const shot = await captureScreenshot(`gerencial-${label}`);
+                writeFileSync(
+                  `.cache/ui/gerencial-${packaged ? 'package' : development ? 'http' : 'local'}-${label}.png`,
+                  Buffer.from(shot.data, 'base64'),
+                );
+              },
+            }),
+          );
+          assert.equal(snapshot(db), initial, 'Queries/exports wrote at ' + label);
+          assert.equal(
+            JSON.stringify(
+              db
+                .prepare('SELECT * FROM itens_documento WHERE documento_id=? ORDER BY id')
+                .all(sale.id),
+            ),
+            originalItems,
+            'Original historical items changed',
+          );
+        } finally {
+          db.pragma('query_only=OFF');
+        }
+      };
       if (!reopen) {
+        if (consolidation) {
+          const frozen = JSON.parse(readFileSync('.cache/4f4-snapshot-input.json', 'utf8'));
+          assert(
+            frozen.database.startsWith(resolve('.local-data/test') + require('node:path').sep),
+          );
+          const Database = require('better-sqlite3');
+          const isolated = new Database(frozen.database, { readonly: true, fileMustExist: true });
+          const originalSnapshot = snapshot(isolated);
+          const service = require('../dist/electron/services/relatorios').createReportService(
+            isolated,
+          );
+          assert.equal(
+            service.listarContasReceber({}).totais.exigivelCentavos,
+            frozen.exigivelDepois,
+          );
+          for (const format of ['xlsx', 'pdf']) {
+            const path = join(outputs, `${++serial}-4f4-snapshot.${format}`);
+            await m(
+              `(async()=>{const base=__mnrElectron.app.getAppPath()+'/dist/electron/services/exportacoes/';const doc=${JSON.stringify(frozen.documento)};const bytes=await process.mainModule.require(base+${JSON.stringify(format === 'xlsx' ? 'xlsx.js' : 'pdf.js')}).${format === 'xlsx' ? 'gerarExcel' : 'gerarPdf'}(doc);await process.mainModule.require(base+'arquivos.js').salvarArquivo(${JSON.stringify(path)},${JSON.stringify(format)},bytes,[__mnrElectron.app.getPath('userData')]);})()`,
+            );
+            manifest.push({ path, documento: frozen.documento });
+          }
+          assert.equal(snapshot(isolated), originalSnapshot);
+          isolated.close();
+          audits.push({
+            label: 'snapshot-concorrente',
+            during: frozen.exigivelDurante,
+            after: frozen.exigivelDepois,
+            files: manifest.slice(-2).map((f) => f.path),
+          });
+        }
         if (process.argv.includes('--native-dialog')) {
           await m(
             `globalThis.__mnrDialogMock=__mnrElectron.dialog.showSaveDialog;__mnrElectron.dialog.showSaveDialog=__mnrOriginalSave;`,
@@ -192,8 +280,11 @@ try {
           await m(`__mnrElectron.dialog.showSaveDialog=__mnrDialogMock`);
           console.log('NATIVE_DIALOG_CANCEL_AND_SAVE_OK');
         }
-        for (const modelo of MODELOS_RELATORIO)
-          for (const f of ['xlsx', 'pdf']) await generate(modelo.id, f, 'catalogo');
+        if (consolidation)
+          await audit('catalogo', { commercial: 30000, debt: 5000, pending: 0, paid: 0 });
+        else
+          for (const modelo of MODELOS_RELATORIO)
+            for (const f of ['xlsx', 'pdf']) await generate(modelo.id, f, 'catalogo');
         for (const stage of ['devolucao', 'pagamento', 'estorno-pagamento', 'estorno-devolucao']) {
           if (stage === 'devolucao') {
             globalThis.returned = cor.devolverVenda(
@@ -224,14 +315,62 @@ try {
             cor.estornarDevolucao(
               command({ documentoId: returned.documentoId, dataEfetiva: '2026-11-05' }),
             );
-          for (const modelo of ['GERENCIAL', 'REEMBOLSOS'])
-            for (const f of ['xlsx', 'pdf']) await generate(modelo, f, stage);
+          if (consolidation) {
+            const expected =
+              stage === 'estorno-devolucao'
+                ? { commercial: 30000, debt: 5000, pending: 0, paid: 0 }
+                : {
+                    commercial: 10000,
+                    debt: 0,
+                    pending: stage === 'pagamento' ? 5000 : 15000,
+                    paid: stage === 'pagamento' ? 10000 : 0,
+                  };
+            await audit(stage, expected);
+            if (stage === 'devolucao') {
+              await audit('fluxo-negativo', undefined, {
+                dataInicio: '2026-11-02',
+                dataFim: '2026-11-02',
+                clienteId: s.clienteId,
+              });
+              await audit('coorte-corrigida-depois', undefined, {
+                dataInicio: day,
+                dataFim: day,
+                clienteId: s.clienteId,
+              });
+            }
+          } else
+            for (const modelo of ['GERENCIAL', 'REEMBOLSOS'])
+              for (const f of ['xlsx', 'pdf']) await generate(modelo, f, stage);
           if (stage === 'devolucao')
             for (const f of ['xlsx', 'pdf'])
               await generate('GERENCIAL', f, 'negativo', {
                 dataInicio: '2026-11-02',
                 dataFim: '2026-11-02',
               });
+        }
+        if (consolidation) {
+          const { seedRankingTies } = require('../tests/helpers/gerencial-fixture.cjs');
+          const tiedSales = seedRankingTies(s);
+          await audit('rankings-empate', undefined, range);
+          cor.cancelarVenda(
+            command({ documentoId: tiedSales.at(-1).id, dataEfetiva: '2026-11-06' }),
+          );
+          await audit('cancelamento', undefined, range);
+          await audit('periodo-vazio', undefined, {
+            dataInicio: '2025-12-31',
+            dataFim: '2026-01-01',
+          });
+          const filteredBefore = snapshot(db);
+          audits.push(
+            await auditFilteredExports({
+              e,
+              generate,
+              manifest,
+              range,
+              ids: { clienteId: s.clienteId, productId: s.productId, pix: s.pix },
+            }),
+          );
+          assert.equal(snapshot(db), filteredBefore);
         }
         const readBefore = snapshot(db);
         const canceled = await e(
@@ -295,7 +434,7 @@ try {
             await e(
               `document.getElementById('export-review-title').scrollIntoView({block:'start'})`,
             );
-            const capture = await renderer.call('Page.captureScreenshot');
+            const capture = await captureScreenshot('export-review');
             writeFileSync(
               `.cache/ui/exportacoes-${packaged ? 'package' : development ? 'http' : 'local'}-revisao.png`,
               Buffer.from(capture.data, 'base64'),
@@ -369,7 +508,7 @@ try {
                 'document.documentElement.scrollWidth<=innerWidth&&document.querySelector("main").scrollWidth<=document.querySelector("main").clientWidth+1',
               ),
             );
-            const shot = await renderer.call('Page.captureScreenshot');
+            const shot = await captureScreenshot(`export-${width}-${zoom}`);
             writeFileSync(
               `.cache/ui/exportacoes-${packaged ? 'package' : development ? 'http' : 'local'}-${width}-${zoom}.png`,
               Buffer.from(shot.data, 'base64'),
@@ -423,7 +562,8 @@ try {
         assert.equal(await e('document.getElementById("export-start")'), null);
         assert.equal(snapshot(db), readBefore);
       } else {
-        for (const f of ['xlsx', 'pdf']) await generate('GERENCIAL', f, 'reopen');
+        if (consolidation) await audit('reopen', undefined, range);
+        else for (const f of ['xlsx', 'pdf']) await generate('GERENCIAL', f, 'reopen');
         assert.equal(snapshot(db), before);
       }
       console.log(
@@ -453,8 +593,18 @@ try {
     'Independent file readers failed; set MNR_TEST_PYTHON with pypdf/pdfplumber/openpyxl installed.',
   );
   writeFileSync(
-    `.cache/4f3-${packaged ? 'package' : development ? 'http' : 'local'}-exports.json`,
-    JSON.stringify({ root, outputs, manifest: manifestPath, files: manifest.length }, null, 2),
+    `.cache/${consolidation ? '4f4' : '4f3'}-${packaged ? 'package' : development ? 'http' : 'local'}-exports.json`,
+    JSON.stringify(
+      {
+        root,
+        outputs,
+        manifest: manifestPath,
+        files: manifest.length,
+        ...(consolidation ? { audits } : {}),
+      },
+      null,
+      2,
+    ),
   );
   console.log('EXPORTACOES_FILES_SURVIVE_CLOSE_OK', manifest.length, outputs);
 } finally {
