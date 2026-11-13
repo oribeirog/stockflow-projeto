@@ -8,6 +8,10 @@ const { createReportService } = require('../dist/electron/services/relatorios');
 const { createCorrectionService } = require('../dist/electron/services/correcoes');
 const { createFinancialService } = require('../dist/electron/services/financeiro');
 async function main() {
+  const stockIntegration = process.argv.includes('--consolidacao-estoque');
+  const resultPath = stockIntegration
+    ? '.cache/benchmark-4g3-consultas.json'
+    : '.cache/benchmark-relatorios.json';
   mkdirSync('.local-data/test', { recursive: true });
   mkdirSync('.cache', { recursive: true });
   const previous = process.argv.includes('--checkpoints')
@@ -17,7 +21,11 @@ async function main() {
     ? previous.directory
     : mkdtempSync(resolve('.local-data/test/relatorios-benchmark-'));
   let db = previous ? null : await openDatabase(directory, 'benchmark');
-  let s = previous ? null : cycle(db),
+  let s = previous
+      ? null
+      : stockIntegration
+        ? require('../tests/helpers/consolidacao-estoque-fixture.cjs').stockCycle(db)
+        : cycle(db),
     r = previous ? null : createReportService(db, clock);
   const cor = previous ? null : createCorrectionService(db, 'test', clock),
     fin = previous ? null : createFinancialService(db, 'test', clock);
@@ -35,7 +43,22 @@ async function main() {
   const range = { dataInicio: '2026-10-01', dataFim: '2026-12-31' };
   let count = 0;
   try {
-    if (!previous) s.buy(2000, 100);
+    if (!previous) {
+      if (stockIntegration) {
+        for (const [, run] of s.steps) run();
+        s.cat.saveProduct(command({ ...s.productData, id: s.productId, ativo: true }));
+        s.cat.savePerson(
+          'FORNECEDOR',
+          command({ id: s.fornecedorId, nome: 'Fornecedor benchmark', ativo: true }),
+        );
+        s.cat.savePerson(
+          'CLIENTE',
+          command({ id: s.clienteId, nome: 'Cliente benchmark', ativo: true }),
+        );
+        count = 1;
+      }
+      s.buy(2000, 100);
+    }
     for (const volume of [50, 200, 500]) {
       const source = previous?.samples.find((x) => x.vendas === volume);
       if (previous) {
@@ -49,9 +72,10 @@ async function main() {
         };
       }
       const start = performance.now();
-      if (!previous)
+      while (!previous && count < volume) {
+        const batchEnd = stockIntegration ? Math.min(count + 10, volume) : volume;
         db.transaction(() => {
-          while (count < volume) {
+          while (count < batchEnd) {
             const sale = s.sell(count % 3 === 0 ? 'cash' : count % 3 === 1 ? 'credit' : 'entry');
             if (count % 6 === 0)
               cor.devolverVenda(
@@ -72,6 +96,13 @@ async function main() {
             count++;
           }
         })();
+        if (stockIntegration) {
+          // Let Node finalize setup resources between bounded fixture batches.
+          // Fixture creation is excluded from the measured query/write timings.
+          global.gc?.();
+          await new Promise(setImmediate);
+        }
+      }
       const sample = {
         vendas: volume,
         generationMs: previous ? source.generationMs : performance.now() - start,
@@ -80,6 +111,41 @@ async function main() {
         queries: {},
         memoryBefore: process.memoryUsage(),
       };
+      if (stockIntegration) {
+        const dados = s.returnData(s.state.first, 1),
+          times = [];
+        let intent;
+        db.pragma('query_only=ON');
+        try {
+          for (let n = 0; n < 21; n++) {
+            const start = performance.now();
+            intent = s.reviewBuy(dados);
+            if (n) times.push(performance.now() - start);
+          }
+        } finally {
+          db.pragma('query_only=OFF');
+        }
+        times.sort((a, b) => a - b);
+        const start = performance.now();
+        s.buyCorrections.devolver(intent);
+        sample.devolucaoCompra = {
+          revisaoMedianaMs: times[10],
+          revisaoP95Ms: times[18],
+          confirmacaoMs: performance.now() - start,
+        };
+        const adjustment = s.stock.registrarEntrada(
+          s.stockCommand({ produtoId: s.manual.id, quantidade: 1, custoTotalCentavos: 1 }),
+        );
+        const reviewStart = performance.now(),
+          reversal = s.reviewStock(adjustment),
+          reviewMs = performance.now() - reviewStart;
+        const writeStart = performance.now();
+        s.reversals.estornar(reversal);
+        sample.estornoAjuste = {
+          revisaoMs: reviewMs,
+          confirmacaoMs: performance.now() - writeStart,
+        };
+      }
       assert.equal(
         db
           .prepare(
@@ -153,7 +219,7 @@ async function main() {
         db = null;
       }
     }
-    writeFileSync('.cache/benchmark-relatorios.json', JSON.stringify(report, null, 2));
+    writeFileSync(resultPath, JSON.stringify(report, null, 2));
   } finally {
     if (db?.open) db.close();
   }

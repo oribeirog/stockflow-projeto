@@ -149,10 +149,12 @@ try {
       assert.equal(await e('typeof process'), 'undefined');
       const captureScreenshot = async (label) => {
         console.log('EXPORT_SCREENSHOT_START', label);
+        await renderer.call('Emulation.setFocusEmulationEnabled', { enabled: true });
         await renderer.call('Page.bringToFront');
         await e('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
         const shot = await renderer.call('Page.captureScreenshot', {
           captureBeyondViewport: false,
+          fromSurface: false,
         });
         console.log('EXPORT_SCREENSHOT_OK', label);
         return shot;

@@ -23,12 +23,22 @@ app.on('window-all-closed', () => {});
 app
   .whenReady()
   .then(async () => {
-    const checkpoints = JSON.parse(readFileSync('.cache/benchmark-relatorios.json', 'utf8'));
+    const stockIntegration = process.argv.includes('--consolidacao-estoque');
+    const checkpoints = JSON.parse(
+      readFileSync(
+        stockIntegration
+          ? '.cache/benchmark-4g3-consultas.json'
+          : '.cache/benchmark-relatorios.json',
+        'utf8',
+      ),
+    );
     const results = {
       createdAt: new Date().toISOString(),
       os: release(),
       runtime: process.versions,
-      source: 'Read-only validated 4F1 checkpoints, no fixture generation in timings',
+      source: stockIntegration
+        ? 'Read-only 4G3 mixed-operation checkpoints; fixture generation excluded'
+        : 'Read-only validated 4F1 checkpoints, no fixture generation in timings',
       samples: [],
       outputs: root,
     };
@@ -131,7 +141,12 @@ app
     });
     assert.equal(checked.status, 0);
     results.manifest = manifestPath;
-    writeFileSync('.cache/benchmark-exportacoes.json', JSON.stringify(results, null, 2));
+    writeFileSync(
+      stockIntegration
+        ? '.cache/benchmark-4g3-exportacoes.json'
+        : '.cache/benchmark-exportacoes.json',
+      JSON.stringify(results, null, 2),
+    );
     console.log('EXPORT_BENCHMARK_OK', results.samples.length);
     app.quit();
   })

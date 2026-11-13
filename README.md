@@ -1,8 +1,31 @@
 # MNR Perfumes
 
+## Etapa 4G.3 — Consolidação integral de compras e estoque
+
+Consolidação técnica concluída, aguardando validação manual do proprietário: cadeia integrada de compras a custos
+diferentes, devoluções de compras, vendas, correções, reembolsos, ajustes e
+estornos. As comparações usam serviços oficiais, ledger, versões, Dashboard e
+os sete modelos Excel/PDF em estados controlados, incluindo concorrência entre
+módulos, rollback integral, snapshot paginado e reabertura.
+
+`npm.cmd run test:consolidacao-estoque` executa os testes cruzados e o smoke
+Electron local. `node scripts/consolidacao-estoque-smoke.mjs --development`
+e `--package` exercitam HTTP e executável isolado/offline emulado.
+`npm.cmd run benchmark:consolidacao-estoque` mede bases isoladas de 50, 200 e
+500 vendas com correções, reaproveitando a metodologia anterior sem `db.backup`.
+Consulte o [relatório técnico da 4G.3](docs/etapa-4G3-consolidacao-estoque.md)
+para resultados, evidências e checklist manual.
+
+Sem novas operações comerciais, migrações, dependências ou alterações do
+custeio. As regras formais da 4G.1/4G.2 continuam em vigor. A consolidação
+não significa preparação para distribuição: **Etapa 5** continua pendente,
+incluindo backup/restauração pela interface, instalador Windows, máquina limpa,
+homologação Windows 10/11 e ensaios offline físicos. Sem commit/push automático.
+
 ## Etapa 4G.2 — Estornos de ajustes manuais de estoque
 
-Implementação técnica concluída, aguardando validação manual do proprietário. Pelo histórico
+Implementação técnica concluída e validada manualmente pelo proprietário, conforme
+informado na autorização da 4G.3. Pelo histórico
 de Estoque, **Consultar ajuste / estorno** apresenta o original, elegibilidade,
 saldo atual, revisão oficial, confirmação e movimento inverso vinculado.
 Abrange entradas/saídas manuais, perdas e diferenças de contagens físicas.
@@ -20,7 +43,8 @@ usam HTTP e executável isolado/offline emulado, com reabertura e comparação d
 Estoque, indicadores, Dashboard, XLSX e PDF por leitores independentes.
 Consulte o [relatório técnico e checklist da 4G.2](docs/etapa-4G2-estornos-estoque.md).
 
-Sem novas migrações ou dependências. 4G.3 e Etapa 5 permanecem futuras.
+Sem novas migrações ou dependências. A consolidação 4G.3 está descrita acima;
+Etapa 5 permanece futura.
 
 ## Etapa 4G.1 — Correções de compras
 
@@ -42,9 +66,8 @@ As regras de compras não introduzem contas a pagar ou mudanças de migração/c
 HTTP e executável isolado com rede offline emulada, incluindo reabertura.
 Detalhes, limitações e checklist no [relatório da 4G.1](docs/etapa-4G1-correcoes-compras.md).
 
-Etapas anteriores até 4G.1 foram validadas manualmente e commitadas pelo
-proprietário, conforme a autorização da 4G.2. Permanecem futuras:
-**4G.3**, consolidação de compras/estoque;
+Etapas anteriores até 4G.2 foram validadas manualmente e commitadas pelo
+proprietário, conforme a autorização da 4G.3. Permanece futura:
 **Etapa 5**, backup/restauração pela interface, instalador, distribuição, máquina
 limpa, Windows 10/11 e ensaios offline físicos. Não implementadas nesta etapa.
 
@@ -69,7 +92,7 @@ o estado de cada entrega na sua data; suas pendências históricas não substitu
 essa aprovação. A validação da 4F.4 foi informada na autorização da 4G.1.
 
 Na data da consolidação permanecia futura a **4G**; 4G.1 e 4G.2 estão descritas acima.
-Continuam pendentes a consolidação 4G.3 e a
+O estado atual da consolidação 4G.3 está descrito acima. Continua pendente a
 **Etapa 5**, backup/restauração pela interface, instalador, distribuição e máquina
 limpa, Windows 10/11, ensaios offline físicos e documentação de instalação/recuperação.
 Essas funcionalidades não foram implementadas nesta consolidação.

@@ -11,7 +11,7 @@ writeFileSync(
     main: '../../scripts/benchmark-exportacoes-main.cjs',
   }),
 );
-const child = spawn(electron, ['.cache/export-benchmark-app'], {
+const child = spawn(electron, ['.cache/export-benchmark-app', ...process.argv.slice(2)], {
   env: environment(),
   stdio: 'inherit',
 });

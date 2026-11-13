@@ -11,7 +11,13 @@ import { connect, pause } from './exportacoes-cdp.mjs';
 const require = createRequire(import.meta.url);
 const Database = require('better-sqlite3');
 const { snapshot } = require('../tests/helpers/financeiro-consulta-fixture.cjs');
-const checkpoints = JSON.parse(readFileSync('.cache/benchmark-relatorios.json', 'utf8'));
+const stockIntegration = process.argv.includes('--consolidacao-estoque');
+const checkpoints = JSON.parse(
+  readFileSync(
+    stockIntegration ? '.cache/benchmark-4g3-consultas.json' : '.cache/benchmark-relatorios.json',
+    'utf8',
+  ),
+);
 const result = {
   createdAt: new Date().toISOString(),
   os: release(),
@@ -114,5 +120,8 @@ for (const volume of [50, 200, 500]) {
     db.close();
   }
 }
-writeFileSync('.cache/benchmark-gerencial-ui.json', JSON.stringify(result, null, 2));
+writeFileSync(
+  stockIntegration ? '.cache/benchmark-4g3-dashboard.json' : '.cache/benchmark-gerencial-ui.json',
+  JSON.stringify(result, null, 2),
+);
 console.log('GERENCIAL_UI_BENCHMARK_OK');

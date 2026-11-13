@@ -36,7 +36,9 @@
     "benchmark:exportacoes": "node scripts/benchmark-exportacoes.mjs",
     "test:consolidacao-gerencial": "npm run build && node --test tests/consolidacao-gerencial.test.cjs tests/exportacoes.test.cjs tests/exportacoes-ipc.test.cjs && node scripts/exportacoes-smoke.mjs --consolidacao-gerencial",
     "test:correcoes-compras": "npm run build && node --test tests/correcoes-compras.test.cjs && node scripts/correcoes-compras-smoke.mjs",
-    "test:estornos-estoque": "npm run build && node --test tests/estornos-estoque.test.cjs && node scripts/estornos-estoque-smoke.mjs"
+    "test:estornos-estoque": "npm run build && node --test tests/estornos-estoque.test.cjs && node scripts/estornos-estoque-smoke.mjs",
+    "test:consolidacao-estoque": "npm run build && node --test tests/consolidacao-estoque.test.cjs && node scripts/consolidacao-estoque-smoke.mjs",
+    "benchmark:consolidacao-estoque": "node --expose-gc scripts/benchmark-relatorios.cjs --consolidacao-estoque && node scripts/benchmark-exportacoes.mjs --consolidacao-estoque && node scripts/benchmark-gerencial-ui.mjs --consolidacao-estoque"
   },
   "dependencies": {
     "@angular/common": "22.2.4",
