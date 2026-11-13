@@ -8,6 +8,7 @@ import type { FotosApi } from './fotos';
 import type { EstoqueApi } from './estoque-ipc';
 import type { ComprasApi } from './compras-ipc';
 import type { CorrecoesComprasApi } from './correcoes-compras-ipc';
+import type { EstornosEstoqueApi } from './estornos-estoque-ipc';
 export const STATUS_CHANNEL = 'system:get-status';
 export interface SystemStatus {
   database: 'ready';
@@ -17,6 +18,7 @@ export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: string; message: string } };
 export interface DesktopApi {
+  estornosEstoque: EstornosEstoqueApi;
   correcoesCompras: CorrecoesComprasApi;
   exportacoes: ExportacoesApi;
   relatorios: RelatoriosApi;

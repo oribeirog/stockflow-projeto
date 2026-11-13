@@ -69,6 +69,13 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  {
+    path: 'estoque/:id/ajustes/:movimentoId',
+    title: 'Estorno de Ajuste • MNR Perfumes',
+    data: { estoqueEditor: true },
+    loadComponent: () => import('../features/estoque/estorno').then((m) => m.EstornoEstoque),
+    canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
+  },
   ...['devolver', 'cancelar'].map((action) => ({
     path: `compras/:id/${action}`,
     title: 'Correções de Compras • MNR Perfumes',

@@ -697,7 +697,70 @@ export function createCorrectionService(
       },
     );
   }
+  function normalizarEstornoAjuste(raw: unknown, now: Date) {
+    const v = record(raw, ['movimentoId', 'dataEfetiva']);
+    return {
+      movimentoId: identifier(v['movimentoId']),
+      dataEfetiva: effectiveDate(v['dataEfetiva'], now),
+    };
+  }
+  function prepararEstornoAjuste(data: { movimentoId: number; dataEfetiva: string }) {
+    const m = one<Movimento & { data_efetiva: string; operacao_id: string }>(
+      db,
+      'SELECT * FROM movimentacoes_estoque WHERE id=?',
+      data.movimentoId,
+    );
+    if (!m) throw new ComercialError('NOT_FOUND', 'Ajuste não encontrado.');
+    const operation = one<{ tipo: string }>(
+      db,
+      'SELECT tipo FROM operacoes WHERE id=?',
+      m.operacao_id,
+    );
+    if (
+      !['AJUSTE_ENTRADA', 'AJUSTE_SAIDA', 'PERDA'].includes(m.natureza) ||
+      !operation ||
+      ![`ESTOQUE_${m.natureza}`, 'ESTOQUE_CONTAGEM'].includes(operation.tipo)
+    )
+      throw new ComercialError('INVALID_STATE', 'Movimento não é ajuste manual.');
+    if (
+      one(
+        db,
+        "SELECT 1 FROM movimentacoes_estoque WHERE movimentacao_origem_id=? AND natureza IN ('REVERSAO_ENTRADA','REVERSAO_SAIDA')",
+        m.id,
+      )
+    )
+      throw new ComercialError('INVALID_STATE', 'Ajuste já estornado.');
+    // Released V4 trigger independently requires the original to be the last movement.
+    if (
+      one(db, 'SELECT 1 FROM movimentacoes_estoque WHERE produto_id=? AND id>?', m.produto_id, m.id)
+    )
+      throw new ComercialError('INVALID_STATE', 'Há movimentação posterior do mesmo produto.');
+    if (data.dataEfetiva < m.data_efetiva) reject('Estorno anterior ao ajuste.');
+    const saldo = one<{ quantidade: number; valor_total_centavos: number; versao: number }>(
+      db,
+      'SELECT * FROM saldos_estoque WHERE produto_id=?',
+      m.produto_id,
+    );
+    if (!saldo) throw new ComercialError('INTEGRITY', 'Saldo ausente.');
+    const q = BigInt(saldo.quantidade) - BigInt(m.quantidade_delta),
+      v = BigInt(saldo.valor_total_centavos) - BigInt(m.valor_delta_centavos);
+    if (q < 0n) throw new ComercialError('INSUFFICIENT_STOCK', 'Estoque insuficiente.');
+    if (q > 1_000_000_000n || v < 0n || v > 9_000_000_000_000n || (q === 0n && v !== 0n))
+      reject('Reversão incompatível com o saldo monetário.');
+    return {
+      m,
+      quantidadeDelta: -m.quantidade_delta,
+      valorDeltaCentavos: -m.valor_delta_centavos,
+      quantidadeAntes: saldo.quantidade,
+      valorAntesCentavos: saldo.valor_total_centavos,
+      versao: saldo.versao,
+      quantidadeApos: Number(q),
+      valorAposCentavos: Number(v),
+    };
+  }
   return {
+    prepararEstornoAjuste,
+    normalizarEstornoAjuste: (raw: unknown) => normalizarEstornoAjuste(raw, clock()),
     normalizarVenda: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
     prepararCompra,
     normalizarCompra: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
@@ -771,39 +834,9 @@ export function createCorrectionService(
         clock,
         'CORRECAO_ESTORNAR_AJUSTE',
         input,
-        (raw, now) => {
-          const v = record(raw, ['movimentoId', 'dataEfetiva']);
-          return {
-            movimentoId: identifier(v['movimentoId']),
-            dataEfetiva: effectiveDate(v['dataEfetiva'], now),
-          };
-        },
+        normalizarEstornoAjuste,
         (data, op, reason, now) => {
-          const m = one<Movimento & { data_efetiva: string }>(
-            db,
-            'SELECT * FROM movimentacoes_estoque WHERE id=?',
-            data.movimentoId,
-          );
-          if (
-            !m ||
-            !['AJUSTE_ENTRADA', 'AJUSTE_SAIDA', 'PERDA'].includes(m.natureza) ||
-            one(
-              db,
-              'SELECT 1 FROM movimentacoes_estoque WHERE produto_id=? AND id>?',
-              m.produto_id,
-              m.id,
-            ) ||
-            one(
-              db,
-              "SELECT 1 FROM movimentacoes_estoque WHERE movimentacao_origem_id=? AND natureza IN ('REVERSAO_ENTRADA','REVERSAO_SAIDA')",
-              m.id,
-            )
-          )
-            throw new ComercialError(
-              'INVALID_STATE',
-              'Ajuste tem dependências ou já foi estornado.',
-            );
-          if (data.dataEfetiva < m.data_efetiva) reject('Estorno anterior ao ajuste.');
+          const { m } = prepararEstornoAjuste(data);
           return aplicarMovimentoNaTransacao(db, {
             produtoId: m.produto_id,
             natureza: m.quantidade_delta > 0 ? 'REVERSAO_SAIDA' : 'REVERSAO_ENTRADA',

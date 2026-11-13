@@ -1,8 +1,30 @@
 # MNR Perfumes
 
+## Etapa 4G.2 — Estornos de ajustes manuais de estoque
+
+Implementação técnica concluída, aguardando validação manual do proprietário. Pelo histórico
+de Estoque, **Consultar ajuste / estorno** apresenta o original, elegibilidade,
+saldo atual, revisão oficial, confirmação e movimento inverso vinculado.
+Abrange entradas/saídas manuais, perdas e diferenças de contagens físicas.
+
+A reversão integral usa quantidade e valor históricos exatos, sem recalcular
+compras/vendas ou criar dinheiro. **A regra da 3D e o trigger SQLite existente
+bloqueiam movimentos posteriores do mesmo produto.** Não há estorno parcial,
+estorno de estorno ou contorno dessa proteção. Contagens sem diferença não têm
+movimento a estornar. O nome do produto é cadastral atual, explicitamente
+distinguido dos valores históricos do ajuste.
+
+`npm.cmd run test:estornos-estoque` executa o recorte de serviços/IPC e o fluxo
+real local. `node scripts/estornos-estoque-smoke.mjs --development` e `--package`
+usam HTTP e executável isolado/offline emulado, com reabertura e comparação de
+Estoque, indicadores, Dashboard, XLSX e PDF por leitores independentes.
+Consulte o [relatório técnico e checklist da 4G.2](docs/etapa-4G2-estornos-estoque.md).
+
+Sem novas migrações ou dependências. 4G.3 e Etapa 5 permanecem futuras.
+
 ## Etapa 4G.1 — Correções de compras
 
-Implementação técnica concluída, aguardando validação manual do proprietário. Pelo detalhe da compra,
+Implementação técnica concluída e validada manualmente pelo proprietário. Pelo detalhe da compra,
 **Correções e movimentos vinculados** oferece devoluções parciais/sucessivas,
 preenchimento de todas as quantidades disponíveis e cancelamento integral elegível.
 O fluxo usa revisão oficial somente leitura, confirmação explícita, idempotência,
@@ -13,16 +35,16 @@ históricos da mercadoria. **O modelo da 3D exige reembolso integral já recebid
 fornecedor**, sem frete/despesas; não controla créditos ou valores pendentes.
 Cancelamento reverte custo original e pagamentos conforme as regras existentes,
 exigindo ausência de correção efetiva e de movimentos posteriores dos produtos.
-Não há contas a pagar, estorno de ajustes ou mudanças nas migrações/algoritmos.
+As regras de compras não introduzem contas a pagar ou mudanças de migração/custeio.
 
 `npm.cmd run test:correcoes-compras` executa serviços/IPC e o fluxo real local.
 `node scripts/correcoes-compras-smoke.mjs --development` e `--package` exercitam
 HTTP e executável isolado com rede offline emulada, incluindo reabertura.
 Detalhes, limitações e checklist no [relatório da 4G.1](docs/etapa-4G1-correcoes-compras.md).
 
-Etapas anteriores até 4F.4 foram validadas manualmente e commitadas pelo
-proprietário, conforme a autorização desta entrega. Permanecem futuras:
-**4G.2**, estorno de ajustes manuais; **4G.3**, consolidação de compras/estoque;
+Etapas anteriores até 4G.1 foram validadas manualmente e commitadas pelo
+proprietário, conforme a autorização da 4G.2. Permanecem futuras:
+**4G.3**, consolidação de compras/estoque;
 **Etapa 5**, backup/restauração pela interface, instalador, distribuição, máquina
 limpa, Windows 10/11 e ensaios offline físicos. Não implementadas nesta etapa.
 
@@ -46,8 +68,8 @@ conforme informado na autorização da 4F.4. As seções anteriores abaixo regis
 o estado de cada entrega na sua data; suas pendências históricas não substituem
 essa aprovação. A validação da 4F.4 foi informada na autorização da 4G.1.
 
-Na data da consolidação permanecia futura a **4G**; a 4G.1 está descrita acima.
-Continuam pendentes estorno de ajustes/consolidação e a
+Na data da consolidação permanecia futura a **4G**; 4G.1 e 4G.2 estão descritas acima.
+Continuam pendentes a consolidação 4G.3 e a
 **Etapa 5**, backup/restauração pela interface, instalador, distribuição e máquina
 limpa, Windows 10/11, ensaios offline físicos e documentação de instalação/recuperação.
 Essas funcionalidades não foram implementadas nesta consolidação.

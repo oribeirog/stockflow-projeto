@@ -169,6 +169,12 @@
               >{{m.contagem?'Originado de contagem física':'Operação registrada'}} ·
               {{m.operacaoId}}</small
             >
+            @if(m.ajusteManual) {<a [routerLink]="['/estoque',produto()!.produtoId,'ajustes',m.id]"
+              >Consultar ajuste / estorno</a
+            >} @if(m.ajusteOrigemId) {<a
+              [routerLink]="['/estoque',produto()!.produtoId,'ajustes',m.ajusteOrigemId]"
+              >Consultar ajuste original #{{m.ajusteOrigemId}}</a
+            >}
           </td>
           <td data-label="Movimentado">
             {{m.quantidadeDelta>0?'+':''}}{{m.quantidadeDelta}} · {{reais(m.valorDeltaCentavos)}}

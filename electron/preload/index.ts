@@ -10,6 +10,7 @@ import { CANAIS_FOTOS } from '../../shared/fotos';
 import { CANAIS_ESTOQUE } from '../../shared/estoque-ipc';
 import { CANAIS_COMPRAS } from '../../shared/compras-ipc';
 import { CANAIS_CORRECOES_COMPRAS } from '../../shared/correcoes-compras-ipc';
+import { CANAIS_ESTORNOS_ESTOQUE } from '../../shared/estornos-estoque-ipc';
 function cadastro<T, E>(channels: {
   listar: string;
   obter: string;
@@ -22,6 +23,11 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  estornosEstoque: {
+    obterAjuste: (i) => ipcRenderer.invoke(CANAIS_ESTORNOS_ESTOQUE.obterAjuste, i),
+    revisarEstorno: (i) => ipcRenderer.invoke(CANAIS_ESTORNOS_ESTOQUE.revisarEstorno, i),
+    estornar: (i) => ipcRenderer.invoke(CANAIS_ESTORNOS_ESTOQUE.estornar, i),
+  },
   correcoesCompras: {
     obterContexto: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.obterContexto, i),
     listarDocumentos: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.listarDocumentos, i),

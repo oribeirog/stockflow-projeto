@@ -32,6 +32,8 @@ export interface ConsultaMovimentacoes {
 }
 export interface MovimentoConsulta extends MovimentacaoEstoque {
   contagem: boolean;
+  ajusteManual: boolean;
+  ajusteOrigemId: number | null;
 }
 export interface PaginaMovimentacoes {
   itens: MovimentoConsulta[];

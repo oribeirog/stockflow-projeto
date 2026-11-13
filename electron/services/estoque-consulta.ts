@@ -80,15 +80,19 @@ export function createStockQueryService(db: Database.Database, version: string) 
       const limit = f['limite'] === undefined ? 25 : integer(f['limite'], 'limite', 1, 200);
       return db.transaction(() => {
         const rows = stock.listarMovimentacoes(id, { aposId: after, limite: limit });
-        const itens = rows.map((row) => ({
-          ...row,
-          contagem:
-            (
-              db.prepare('SELECT tipo FROM operacoes WHERE id=?').get(row.operacaoId) as {
-                tipo: string;
-              }
-            ).tipo === 'ESTOQUE_CONTAGEM',
-        }));
+        const itens = rows.map((row) => {
+          const { tipo } = db
+            .prepare('SELECT tipo FROM operacoes WHERE id=?')
+            .get(row.operacaoId) as { tipo: string };
+          return {
+            ajusteManual:
+              ['AJUSTE_ENTRADA', 'AJUSTE_SAIDA', 'PERDA'].includes(row.natureza) &&
+              ['ESTOQUE_CONTAGEM', `ESTOQUE_${row.natureza}`].includes(tipo),
+            ajusteOrigemId: tipo === 'CORRECAO_ESTORNAR_AJUSTE' ? row.movimentacaoOrigemId : null,
+            ...row,
+            contagem: tipo === 'ESTOQUE_CONTAGEM',
+          };
+        });
         const last = rows.at(-1)?.id ?? after;
         const temMais = !!db
           .prepare('SELECT 1 FROM movimentacoes_estoque WHERE produto_id=? AND id>? LIMIT 1')

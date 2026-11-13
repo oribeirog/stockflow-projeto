@@ -1,0 +1,133 @@
+<section class="stack" aria-label="Estorno de ajuste manual">
+  <h2>Ajuste de estoque e estorno</h2>
+  <a [routerLink]="['/estoque',produtoId]">Estoque e histórico completo</a> @if(loading()){
+  <p role="status">Consultando ajuste…</p>
+  } @if(busy()){
+  <p role="status">Processando. Aguarde o resultado…</p>
+  } @if(readError()){
+  <p role="alert">{{readError()}}</p>
+  } @if(message()){
+  <p id="estorno-feedback" tabindex="-1" role="status">{{message()}}</p>
+  }
+  <mnr-button variant="secondary" [disabled]="locked" (pressed)="load()"
+    >Consultar novamente preservando campos</mnr-button
+  >
+  @if(uncertain()){<mnr-button [disabled]="busy()" (pressed)="retry()"
+    >Repetir a mesma intenção</mnr-button
+  >} @if(contexto();as c){
+  <h3>{{c.produto.nome}} / {{c.produto.sku}} · {{c.produto.ativo?'Ativo':'Inativo'}}</h3>
+  <p>
+    Identificação cadastral atual. Ajustes manuais não guardam snapshot do nome. Quantidades,
+    valores, datas e motivos abaixo são os registros originais.
+  </p>
+  <article class="stack official" aria-label="Ajuste original">
+    <h3>Ajuste original #{{c.original.id}}</h3>
+    <p>
+      {{c.original.natureza}} · {{c.original.contagem?'Originado de contagem física':'Operação
+      manual'}}
+    </p>
+    <p>
+      Movimentado: {{c.original.quantidadeDelta}} unidades /
+      {{reais(c.original.valorDeltaCentavos)}}
+    </p>
+    <p>
+      Saldo após o original: {{c.original.quantidadeApos}} / {{reais(c.original.valorAposCentavos)}}
+    </p>
+    <p>Data efetiva: {{c.original.dataEfetiva}} · Registro: {{c.original.registradoEm}}</p>
+    <p>Motivo original: {{c.original.motivo}}</p>
+  </article>
+  <p>
+    Saldo atual: {{c.produto.quantidade}} / {{reais(c.produto.valorTotalCentavos)}} · Versão
+    {{c.produto.versao}} · Média de exibição {{c.produto.custoMedioDecimal ?? 'Sem saldo'}} (não é
+    base de cálculo).
+  </p>
+  @if(c.impedimento){
+  <p role="status">{{c.impedimento}}</p>
+  } @if(c.estorno;as m){
+  <article class="stack official" aria-label="Estorno registrado">
+    <h3>Estornado pelo movimento #{{m.id}}</h3>
+    <p>Vínculo com o original #{{m.origemId}} · {{m.natureza}}</p>
+    <p>
+      Movimentado: {{m.quantidadeDelta}} / {{reais(m.valorDeltaCentavos)}} · Saldo após:
+      {{m.quantidadeApos}} / {{reais(m.valorAposCentavos)}}
+    </p>
+    <p>{{m.dataEfetiva}} · Registro: {{m.registradoEm}} · Motivo: {{m.motivo}}</p>
+  </article>
+  }
+  <p>
+    A reversão integral devolve ou retira exatamente o valor histórico do ajuste. Não usa a média
+    arredondada exibida, não recalcula vendas e não cria dinheiro. A proteção existente impede
+    movimentos posteriores do mesmo produto; contagens sem diferença não geram movimento a estornar.
+  </p>
+  @if(c.elegivel && !result()){
+  <fieldset class="stack" [disabled]="locked || stale() || !!readError()">
+    <legend>Solicitar estorno integral</legend>
+    <mnr-field
+      controlId="estorno-motivo"
+      label="Motivo obrigatório do estorno"
+      [required]="true"
+      [multiline]="true"
+      [value]="motivo()"
+      [error]="errors()['estorno-motivo'] || ''"
+      (valueChanged)="motivo.set($event);changed()"
+    />
+    <mnr-field
+      controlId="estorno-data"
+      label="Data efetiva (AAAA-MM-DD)"
+      [required]="true"
+      [value]="data()"
+      [error]="errors()['estorno-data'] || ''"
+      (valueChanged)="data.set($event);changed()"
+    />
+    <mnr-button id="estorno-revisar" (pressed)="review()">Revisar estorno</mnr-button>
+  </fieldset>
+  } @if(c.posteriores.length){
+  <section class="stack" aria-label="Movimentos posteriores">
+    <h3>Movimentos posteriores do produto</h3>
+    @for(m of c.posteriores;track m.id){
+    <p>
+      #{{m.id}} · {{m.natureza}} · {{m.quantidadeDelta}} / {{reais(m.valorDeltaCentavos)}} ·
+      {{m.dataEfetiva}}
+    </p>
+    }@if(c.temMaisPosteriores){
+    <p>Exibidos os primeiros 20. Consulte o histórico completo pelo link acima.</p>
+    }
+  </section>
+  } } @if(reviewed();as r){
+  <section
+    id="estorno-revisao"
+    tabindex="-1"
+    class="stack official"
+    aria-label="Revisão oficial do estorno"
+  >
+    <h3>Revisão oficial · ajuste #{{r.dados.movimentoId}}</h3>
+    <p>Data: {{r.dados.dataEfetiva}} · Motivo: {{r.motivo}}</p>
+    <p>
+      Movimento inverso previsto: {{r.quantidadeDelta}} unidades / {{reais(r.valorDeltaCentavos)}}
+    </p>
+    <p>
+      Saldo atual: {{r.quantidadeAntes}} / {{reais(r.valorAntesCentavos)}} → Previsto:
+      {{r.quantidadeApos}} / {{reais(r.valorAposCentavos)}}
+    </p>
+    <p>A revisão não grava nem reserva estoque. Alterações exigem nova revisão.</p>
+    <mnr-button id="estorno-confirmar" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar estorno revisado</mnr-button
+    >
+  </section>
+  } @if(result();as r){
+  <section aria-label="Estorno concluído" class="stack">
+    <h3>Estorno confirmado #{{r.movimentacaoId}}</h3>
+    <p>
+      Saldo retornado pela operação: {{r.saldo.quantidade}} / {{reais(r.saldo.valorTotalCentavos)}}
+    </p>
+    <a [routerLink]="['/estoque',produtoId]">Consultar histórico e movimento inverso</a>
+  </section>
+  }
+</section>
+@if(dialog()){<mnr-confirm
+  [title]="dialog()==='leave'?'Sair do estorno':'Confirmar estorno de ajuste'"
+  [description]="description()"
+  [focusReview]="true"
+  (confirmed)="confirm()"
+  (cancelled)="cancel()"
+/>}
