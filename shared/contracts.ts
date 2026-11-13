@@ -7,6 +7,7 @@ import type { CadastrosApi } from './cadastros-ipc';
 import type { FotosApi } from './fotos';
 import type { EstoqueApi } from './estoque-ipc';
 import type { ComprasApi } from './compras-ipc';
+import type { CorrecoesComprasApi } from './correcoes-compras-ipc';
 export const STATUS_CHANNEL = 'system:get-status';
 export interface SystemStatus {
   database: 'ready';
@@ -16,6 +17,7 @@ export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: string; message: string } };
 export interface DesktopApi {
+  correcoesCompras: CorrecoesComprasApi;
   exportacoes: ExportacoesApi;
   relatorios: RelatoriosApi;
   financeiro: FinanceiroApi;

@@ -41,7 +41,7 @@ export const navigation: readonly {
     path: 'compras',
     title: 'Compras',
     icon: 'purchases',
-    description: 'Espaço reservado para o acompanhamento de compras.',
+    description: 'Compras, devoluções a fornecedores e cancelamentos elegíveis.',
   },
   {
     path: 'clientes',
@@ -69,6 +69,19 @@ export const navigation: readonly {
   },
 ];
 export const routes: Routes = [
+  ...['devolver', 'cancelar'].map((action) => ({
+    path: `compras/:id/${action}`,
+    title: 'Correções de Compras • MNR Perfumes',
+    data: { compraEditor: true, cancelamento: action === 'cancelar' },
+    loadComponent: () => import('../features/compras/correcao').then((m) => m.CorrecaoCompra),
+    canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
+  })),
+  {
+    path: 'compras/:id/correcoes',
+    title: 'Histórico de Compras • MNR Perfumes',
+    data: { compraEditor: true },
+    loadComponent: () => import('../features/compras/correcoes').then((m) => m.CompraCorrecoes),
+  },
   {
     path: 'relatorios',
     title: 'Relatórios • MNR Perfumes',

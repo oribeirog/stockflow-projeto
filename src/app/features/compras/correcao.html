@@ -1,0 +1,206 @@
+<section class="stack" aria-label="Correção de compra">
+  <div class="row">
+    <h2>{{cancelamento ? 'Cancelar compra integralmente' : 'Devolver ao fornecedor'}}</h2>
+    <a [routerLink]="['/compras',id,'correcoes']">Compra e histórico</a>
+  </div>
+  @if(loading()) {
+  <p role="status">Consultando compra…</p>
+  } @if(readError()) {
+  <p role="alert">{{readError()}}</p>
+  } @if(message()) {
+  <p id="correcao-feedback" tabindex="-1" role="status">{{message()}}</p>
+  } @if(uncertain()) {<mnr-button [disabled]="busy()" (pressed)="retry()"
+    >Repetir a mesma intenção</mnr-button
+  >} @if(stale() || readError()) {<mnr-button [disabled]="locked" (pressed)="load()"
+    >Consultar novamente preservando campos</mnr-button
+  >} @if(contexto(); as c) {
+  <p>
+    {{c.compra.numero}} · {{c.compra.contraparteNome || 'Fornecedor não informado'}} ·
+    {{c.compra.dataComercial}} · {{c.compra.estado}}
+  </p>
+  @if(cancelamento && !c.cancelavel) {
+  <p role="alert">{{c.impedimentoCancelamento}}</p>
+  }
+  <p>
+    O restante documental e o estoque físico são limites de quantidade. A revisão oficial revalida
+    custo, estado e dependências; não reserva estoque.
+  </p>
+  @if(!result()) {
+  <fieldset class="stack" [disabled]="locked || !eligible || stale() || !!readError()">
+    <legend>Preenchimento da correção</legend>
+    <div class="row">
+      <mnr-field
+        controlId="correcao-data"
+        label="Data efetiva (AAAA-MM-DD)"
+        [value]="data()"
+        [error]="errors()['correcao-data'] || ''"
+        (valueChanged)="data.set($event);changed()"
+      /><mnr-field
+        controlId="correcao-motivo"
+        label="Motivo obrigatório"
+        [value]="motivo()"
+        [error]="errors()['correcao-motivo'] || ''"
+        (valueChanged)="motivo.set($event);changed()"
+      />
+    </div>
+    @if(!cancelamento) {<mnr-button variant="secondary" (pressed)="integral()"
+      >Preencher todas as quantidades disponíveis</mnr-button
+    >}
+    <div class="table-wrap" role="region" aria-label="Itens históricos" tabindex="0">
+      <table>
+        <thead>
+          <tr>
+            @if(!cancelamento){
+            <th>Devolver</th>
+            }
+            <th>Produto histórico / SKU</th>
+            <th>Adquirido</th>
+            <th>Já corrigido</th>
+            <th>Restante</th>
+            <th>Estoque físico</th>
+            <th>Disponível para revisão</th>
+            <th>Mercadoria original</th>
+            <th>Custo original total</th>
+            @if(!cancelamento){
+            <th>Quantidade</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for(i of c.itens;track i.id){
+          <tr>
+            @if(!cancelamento){
+            <td>
+              <input
+                type="checkbox"
+                [attr.aria-label]="'Devolver '+i.descricao"
+                [checked]="selecao()[i.id]?.selected || false"
+                [disabled]="!i.quantidadeDisponivel && !selecao()[i.id]?.selected"
+                (change)="item(i.id,'selected',$any($event.target).checked)"
+              />
+            </td>
+            }
+            <td>{{i.descricao}} / {{i.sku}}</td>
+            <td>{{i.quantidadeOriginal}}</td>
+            <td>{{i.quantidadeDevolvida}}</td>
+            <td>{{i.quantidadeRestante}}</td>
+            <td>{{i.quantidadeEstoque}}</td>
+            <td>{{i.quantidadeDisponivel}}</td>
+            <td>{{reais(i.valorMercadoriaCentavos)}}</td>
+            <td>{{reais(i.custoHistoricoCentavos)}}</td>
+            @if(!cancelamento){
+            <td>
+              <mnr-field
+                [controlId]="'correcao-q-'+i.id"
+                label="Quantidade devolvida"
+                [value]="selecao()[i.id]?.quantidade || ''"
+                [error]="errors()['correcao-q-'+i.id] || ''"
+                (valueChanged)="item(i.id,'quantidade',$event)"
+              />
+            </td>
+            }
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p id="correcao-selecao" tabindex="-1" [attr.aria-invalid]="!!errors()['correcao-selecao']">
+      {{errors()['correcao-selecao']}}
+    </p>
+    @if(!cancelamento){
+    <p>
+      O modelo exige reembolso integral já recebido do fornecedor, referente à mercadoria devolvida,
+      sem frete e despesas. Não registra valores pendentes ou créditos. Se ainda não recebeu, não
+      confirme esta operação.
+    </p>
+    <mnr-field
+      controlId="correcao-forma-busca"
+      label="Pesquisar forma de recebimento ativa"
+      [value]="formSearch()"
+      (valueChanged)="formSearch.set($event);options()"
+    />
+    <label
+      >Adicionar forma do reembolso recebido<select
+        id="correcao-forma"
+        (change)="addPayment($any($event.target).value);$any($event.target).value='' "
+      >
+        <option value="">Selecione</option>
+        @for(f of formOptions();track f.id){
+        <option [value]="f.id">{{f.nome}}</option>
+        }
+      </select></label
+    >
+    @if(formMore()){<mnr-button variant="secondary" (pressed)="options(true)"
+      >Mais formas</mnr-button
+    >} @for(p of payments();track p.id;let n=$index){
+    <div class="row">
+      <p>{{p.nome}}</p>
+      <mnr-field
+        [controlId]="'correcao-pagamento-'+n"
+        label="Valor efetivamente recebido (R$)"
+        [value]="p.valor"
+        [error]="errors()['correcao-pagamento-'+n] || ''"
+        (valueChanged)="payment(n,$event)"
+      /><mnr-button variant="secondary" (pressed)="removePayment(n)"
+        >Remover forma #{{p.id}}</mnr-button
+      >
+    </div>
+    } }
+    <mnr-button id="correcao-revisar" [disabled]="busy()" (pressed)="review()"
+      >Revisar efeitos oficiais</mnr-button
+    >
+  </fieldset>
+  } } @if(reviewed();as r){
+  <section class="stack official" id="correcao-revisao" tabindex="-1" aria-label="Revisão oficial">
+    <h3>Revisão oficial · {{r.compra.numero}}</h3>
+    <p>Data: {{r.dados.dataEfetiva}} · Motivo: {{r.motivo}}</p>
+    <p>
+      Mercadoria: {{reais(r.valorCentavos)}} · Total do documento corretivo:
+      {{reais(r.totalDocumentoCentavos)}}
+    </p>
+    @for(a of r.avisos;track a){
+    <p>{{a}}</p>
+    } @for(i of r.itens;track i.itemId){
+    <article>
+      <h4>{{i.descricao}} / {{i.sku}}</h4>
+      <p>
+        Saída: {{i.quantidade}} · Mercadoria: {{reais(i.valorCentavos)}} · Custo retirado:
+        {{reais(i.custoCentavos)}} · Ajuste de resultado: {{reais(i.ajusteCentavos)}}
+      </p>
+      <p>
+        Estoque: {{i.quantidadeAntes}} / {{reais(i.valorAntesCentavos)}} → {{i.quantidadeApos}} /
+        {{reais(i.valorAposCentavos)}}
+      </p>
+    </article>
+    }
+    <h4>Movimentos financeiros previstos</h4>
+    @for(f of r.financeiro;track $index){
+    <p>{{f.natureza}} · {{f.sentido}} · {{f.formaHistorica}} · {{reais(f.valorCentavos)}}</p>
+    }@empty{
+    <p>Sem movimento financeiro.</p>
+    }
+    <mnr-button id="correcao-confirmar" [disabled]="locked" (pressed)="prepareConfirm()"
+      >Confirmar correção revisada</mnr-button
+    >
+  </section>
+  } @if(result();as r){
+  <section class="stack" aria-label="Correção concluída">
+    <h3>Correção confirmada</h3>
+    <p>Documento corretivo #{{r.documentoId}} · compra #{{r.origemId}}</p>
+    <a [routerLink]="['/compras',id,'correcoes']" [queryParams]="{documentoId:r.documentoId}"
+      >Consultar documento e movimentos vinculados</a
+    >@if(eligible && !readError()){<mnr-button [disabled]="locked" (pressed)="another()"
+      >Nova devolução</mnr-button
+    >}
+  </section>
+  } @if(busy()){
+  <p role="status">Processando. Aguarde o resultado…</p>
+  }
+</section>
+@if(dialog()){<mnr-confirm
+  [title]="dialog()==='leave'?'Sair da correção':'Confirmar correção de compra'"
+  [description]="description()"
+  [focusReview]="true"
+  (confirmed)="confirm()"
+  (cancelled)="cancel()"
+/>}

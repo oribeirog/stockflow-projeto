@@ -1,8 +1,34 @@
 # MNR Perfumes
 
+## Etapa 4G.1 — Correções de compras
+
+Implementação técnica concluída, aguardando validação manual do proprietário. Pelo detalhe da compra,
+**Correções e movimentos vinculados** oferece devoluções parciais/sucessivas,
+preenchimento de todas as quantidades disponíveis e cancelamento integral elegível.
+O fluxo usa revisão oficial somente leitura, confirmação explícita, idempotência,
+histórico e consulta dos movimentos de estoque/financeiros vinculados.
+
+Devoluções retiram estoque pelo custo médio atual oficial e preservam valores
+históricos da mercadoria. **O modelo da 3D exige reembolso integral já recebido do
+fornecedor**, sem frete/despesas; não controla créditos ou valores pendentes.
+Cancelamento reverte custo original e pagamentos conforme as regras existentes,
+exigindo ausência de correção efetiva e de movimentos posteriores dos produtos.
+Não há contas a pagar, estorno de ajustes ou mudanças nas migrações/algoritmos.
+
+`npm.cmd run test:correcoes-compras` executa serviços/IPC e o fluxo real local.
+`node scripts/correcoes-compras-smoke.mjs --development` e `--package` exercitam
+HTTP e executável isolado com rede offline emulada, incluindo reabertura.
+Detalhes, limitações e checklist no [relatório da 4G.1](docs/etapa-4G1-correcoes-compras.md).
+
+Etapas anteriores até 4F.4 foram validadas manualmente e commitadas pelo
+proprietário, conforme a autorização desta entrega. Permanecem futuras:
+**4G.2**, estorno de ajustes manuais; **4G.3**, consolidação de compras/estoque;
+**Etapa 5**, backup/restauração pela interface, instalador, distribuição, máquina
+limpa, Windows 10/11 e ensaios offline físicos. Não implementadas nesta etapa.
+
 ## Etapa 4F.4 — Consolidação gerencial
 
-Consolidação técnica concluída, aguardando validação manual: compara as consultas oficiais, os 13
+Consolidação técnica concluída e posteriormente validada pelo proprietário: compara as consultas oficiais, os 13
 cartões e rankings do Dashboard e os sete modelos XLSX/PDF no mesmo estado
 controlado do banco. Inclui o ciclo de venda/devolução/reembolso/estornos,
 histórico, filtros, empates, snapshot concorrente e falhas de publicação.
@@ -18,9 +44,10 @@ Resultados e limitações no [relatório da 4F.4](docs/etapa-4F4-consolidacao-ge
 As etapas 4F.1–4F.3 foram validadas manualmente e commitadas pelo proprietário,
 conforme informado na autorização da 4F.4. As seções anteriores abaixo registram
 o estado de cada entrega na sua data; suas pendências históricas não substituem
-essa aprovação. A 4F.4 aguarda nova validação manual do proprietário.
+essa aprovação. A validação da 4F.4 foi informada na autorização da 4G.1.
 
-Permanecem futuras: **4G**, devolução/cancelamento de compras e estorno de ajustes;
+Na data da consolidação permanecia futura a **4G**; a 4G.1 está descrita acima.
+Continuam pendentes estorno de ajustes/consolidação e a
 **Etapa 5**, backup/restauração pela interface, instalador, distribuição e máquina
 limpa, Windows 10/11, ensaios offline físicos e documentação de instalação/recuperação.
 Essas funcionalidades não foram implementadas nesta consolidação.

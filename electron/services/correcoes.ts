@@ -4,6 +4,7 @@ import { identifier, integer, record } from './catalog-validation';
 import { effectiveDate } from './estoque-validation';
 import { somar } from '../domain/comercial';
 import { reversaoAcumulada } from '../domain/correcoes';
+import { custoSaida } from '../domain/custeio';
 import { aplicarMovimentoNaTransacao } from './estoque';
 import {
   comandoFinanceiro,
@@ -17,6 +18,7 @@ import {
   estornarMovimento,
   parcelasFinanceiras,
   resumoFinanceiro,
+  validarFormaAtiva,
   type MovimentoFinanceiro,
 } from './financeiro';
 import type { PagamentoFinanceiro } from '../../shared/financeiro';
@@ -434,6 +436,91 @@ export function createCorrectionService(
       financeiro: prepararAbatimento(d, valorCentavos, data.dataEfetiva),
     };
   }
+  // Read-only preparation shared by the purchase review and the original 3D command.
+  // Cost arithmetic remains owned by custoSaida/reversaoAcumulada.
+  function prepararCompra(data: Dados, cancel: boolean) {
+    const d = documento(data.documentoId);
+    if (d.tipo !== 'COMPRA' || d.estado !== 'CONFIRMADO')
+      throw new ComercialError('INVALID_STATE', 'Compra não confirmada.');
+    if (data.dataEfetiva < d.data_comercial) reject('Correção anterior à origem.');
+    if (cancel) {
+      if (
+        one(
+          db,
+          "SELECT id FROM documentos WHERE documento_origem_id=? AND estado='CONFIRMADO'",
+          d.id,
+        )
+      )
+        throw new ComercialError('INVALID_STATE', 'Documento tem devolução anterior.');
+      noLater(d);
+    }
+    const originals = itens(d.id);
+    const chosen = cancel
+      ? originals.map((i) => ({ itemId: i.id, quantidade: i.quantidade, quantidadePerda: 0 }))
+      : data.itens!;
+    const rows = chosen.map((selection) => {
+      const source = originals.find((i) => i.id === selection.itemId);
+      if (!source) return reject('Item de outra origem.');
+      if (selection.quantidadePerda) reject('Condição física inválida.');
+      const previous = total(
+        db,
+        "SELECT i.quantidade valor FROM itens_documento i JOIN documentos d ON d.id=i.documento_id WHERE i.item_origem_id=? AND d.estado='CONFIRMADO'",
+        source.id,
+      );
+      if (previous + selection.quantidade > source.quantidade)
+        reject('Quantidade devolvida excedente.');
+      const b = one<{ quantidade: number; valor_total_centavos: number }>(
+        db,
+        'SELECT * FROM saldos_estoque WHERE produto_id=?',
+        source.produto_id,
+      );
+      if (!b) throw new ComercialError('INTEGRITY', 'Saldo ausente.');
+      if (selection.quantidade > b.quantidade)
+        throw new ComercialError('INSUFFICIENT_STOCK', 'Estoque insuficiente.');
+      const custoCentavos = cancel
+        ? source.valor_custo_estoque_centavos
+        : Number(
+            custoSaida(
+              BigInt(b.valor_total_centavos),
+              BigInt(b.quantidade),
+              BigInt(selection.quantidade),
+            ),
+          );
+      const quantidadeApos = b.quantidade - selection.quantidade;
+      const valorAposCentavos = b.valor_total_centavos - custoCentavos;
+      if (valorAposCentavos < 0 || (quantidadeApos === 0 && valorAposCentavos !== 0))
+        reject('Limite de estoque excedido.');
+      const valorCentavos = cancel
+        ? source.valor_liquido_centavos
+        : reversaoAcumulada(
+            source.valor_liquido_centavos,
+            source.quantidade,
+            previous,
+            selection.quantidade,
+          );
+      return {
+        itemId: source.id,
+        produtoId: source.produto_id,
+        descricao: source.descricao_historica,
+        sku: source.sku_historico,
+        quantidade: selection.quantidade,
+        valorCentavos,
+        custoCentavos,
+        ajusteCentavos: cancel ? 0 : valorCentavos - custoCentavos,
+        quantidadeAntes: b.quantidade,
+        valorAntesCentavos: b.valor_total_centavos,
+        quantidadeApos,
+        valorAposCentavos,
+      };
+    });
+    const valorCentavos = somar(rows.map((i) => i.valorCentavos));
+    if (!cancel) {
+      if (somar(data.pagamentos.map((p) => p.valorCentavos)) !== valorCentavos)
+        reject('Reembolso do fornecedor deve ser integral e imediato.');
+      for (const p of data.pagamentos) validarFormaAtiva(db, p.formaPagamentoId);
+    }
+    return { d, rows, valorCentavos };
+  }
   function prepararEstornoDevolucao(data: Pick<Dados, 'documentoId' | 'dataEfetiva'>) {
     const d = documento(data.documentoId);
     if (!['DEV_VENDA', 'DEV_COMPRA'].includes(d.tipo) || d.estado !== 'CONFIRMADO')
@@ -477,6 +564,7 @@ export function createCorrectionService(
       input,
       (raw, now) => normalize(raw, now, !cancel),
       (data, op, reason, now) => {
+        if (buy) prepararCompra(data, cancel);
         const salePlan = !buy ? prepararVenda(data, cancel) : undefined;
         const d = documento(data.documentoId);
         if (d.tipo !== (buy ? 'COMPRA' : 'VENDA') || d.estado !== 'CONFIRMADO')
@@ -611,6 +699,8 @@ export function createCorrectionService(
   }
   return {
     normalizarVenda: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
+    prepararCompra,
+    normalizarCompra: (raw: unknown, cancel: boolean) => normalize(raw, clock(), !cancel),
     prepararVenda,
     prepararEstornoDevolucao,
     devolverVenda: (input: unknown) => correction(input, false, false),

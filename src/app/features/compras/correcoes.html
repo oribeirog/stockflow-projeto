@@ -1,0 +1,88 @@
+<section class="stack" aria-label="Histórico de correções da compra">
+  <h2>Correções da compra</h2>
+  <a [routerLink]="['/compras',id]">Compra original</a> @if(busy()){
+  <p role="status">Consultando…</p>
+  } @if(error()){
+  <p role="alert">{{error()}}</p>
+  <mnr-button [disabled]="busy()" (pressed)="load()">Consultar novamente</mnr-button>}
+  @if(contexto();as c){
+  <p>
+    {{c.compra.numero}} · {{c.compra.contraparteNome || 'Fornecedor não informado'}} ·
+    {{c.compra.dataComercial}} · {{c.compra.estado}}
+  </p>
+  @if(c.compra.estado==='CONFIRMADO'){
+  <a [routerLink]="['/compras',id,'devolver']">Revisar devolução ao fornecedor</a>
+  @if(c.cancelavel){<a [routerLink]="['/compras',id,'cancelar']">Revisar cancelamento integral</a>}
+  } @if(c.impedimentoCancelamento){
+  <p>Cancelamento indisponível: {{c.impedimentoCancelamento}}</p>
+  }
+  <p>
+    Não há créditos ou valores pendentes de fornecedores. A devolução exige reembolso integral
+    efetivamente recebido.
+  </p>
+  <h3>Pagamentos originais preservados</h3>
+  @for(p of c.compra.pagamentos;track p.id){
+  <p>#{{p.id}} · {{p.nomeHistorico}} · {{reais(p.valorCentavos)}} · {{p.dataEfetiva}}</p>
+  }@empty{
+  <p>Sem pagamentos.</p>
+  } }
+  <h3>Documentos vinculados</h3>
+  @for(d of docs();track d.id){
+  <article>
+    <h4>{{d.numero}} · {{d.tipo}} · {{d.estado}}</h4>
+    <p>
+      {{d.dataEfetiva}} · registro {{d.registradoEm}} · {{reais(d.totalCentavos)}} · {{d.motivo}}
+    </p>
+    <mnr-button variant="secondary" [disabled]="busy()" (pressed)="open(d.id)"
+      >Consultar documento #{{d.id}}</mnr-button
+    >
+  </article>
+  }@empty{
+  <p>Nenhuma correção encontrada.</p>
+  } @if(more()){<mnr-button variant="secondary" [disabled]="busy()" (pressed)="list(true)"
+    >Mais documentos</mnr-button
+  >} @if(detail();as d){
+  <section
+    class="stack official"
+    id="compra-correcao-documento"
+    tabindex="-1"
+    aria-label="Documento corretivo"
+  >
+    <h3>{{d.numero}} · {{d.tipo}} · {{d.estado}}</h3>
+    <p>
+      Original: {{d.compraNumero}} · {{d.fornecedor}} · Data efetiva: {{d.dataEfetiva}} · Registro:
+      {{d.registradoEm}}
+    </p>
+    <p>Motivo: {{d.motivo}} · Total: {{reais(d.totalCentavos)}}</p>
+    @for(i of d.itens;track i.id){
+    <p>
+      {{i.descricao}} / {{i.sku}} · Quantidade {{i.quantidade}} · Mercadoria
+      {{reais(i.valorCentavos)}} · Custo {{reais(i.custoCentavos)}} · Ajuste de resultado
+      {{reais(i.ajusteCentavos)}}
+    </p>
+    }
+    <h4>Movimentos de estoque vinculados</h4>
+    @for(m of d.movimentosEstoque;track m.id){
+    <article>
+      <p>
+        #{{m.id}} · {{m.natureza}} · Quantidade {{m.quantidadeDelta}} · Valor
+        {{reais(m.valorDeltaCentavos)}} · Saldo após {{m.quantidadeApos}} /
+        {{reais(m.valorAposCentavos)}}
+      </p>
+      <p>Origem #{{m.origemId}} · {{m.dataEfetiva}} · {{m.registradoEm}} · {{m.motivo}}</p>
+      <a [routerLink]="['/estoque',m.produtoId]">Histórico do produto #{{m.produtoId}}</a>
+    </article>
+    }
+    <h4>Movimentos financeiros vinculados</h4>
+    @for(m of d.movimentosFinanceiros;track m.id){
+    <p>
+      #{{m.id}} · {{m.natureza}} · {{m.sentido}} · {{m.formaHistorica}} · {{reais(m.valorCentavos)}}
+      · {{m.dataEfetiva}} · {{m.registradoEm}} @if(m.estornaMovimentoId){ · Estorna
+      #{{m.estornaMovimentoId}}}
+    </p>
+    }@empty{
+    <p>Sem movimentos financeiros.</p>
+    }
+  </section>
+  }
+</section>

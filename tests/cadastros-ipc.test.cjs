@@ -213,7 +213,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
   const frame = { url: 'mnr://app/index.html#/clientes' };
   const window = { webContents: { mainFrame: frame } };
   sandbox.exports.registerIpc(window, db, 'mnr://app/index.html');
-  assert.equal(registered.size, 77);
+  assert.equal(registered.size, 84);
   assert.equal(registered.has('financeiro:registrar-recebimento'), true);
   assert.equal(registered.has('correcoes:devolver-venda'), true);
   assert.equal(registered.has('cadastros:sql'), false);
@@ -244,6 +244,7 @@ test('registered handlers reject untrusted events before touching SQLite; unknow
       channel.startsWith('compras:') ||
       channel.startsWith('financeiro:') ||
       channel.startsWith('correcoes:') ||
+      channel.startsWith('correcoes-compras:') ||
       channel.startsWith('vendas:')
     )
       assert.equal(
@@ -284,6 +285,7 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     'cadastros',
     'compras',
     'correcoes',
+    'correcoesCompras',
     'estoque',
     'exportacoes',
     'financeiro',
@@ -293,6 +295,16 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     'vendas',
   ]);
   assert.deepEqual(Object.keys(exposed.cadastros).sort(), Object.keys(CANAIS_CADASTROS).sort());
+  const { CANAIS_CORRECOES_COMPRAS } = require('../dist/shared/correcoes-compras-ipc');
+  assert.deepEqual(
+    Object.keys(exposed.correcoesCompras).sort(),
+    Object.keys(CANAIS_CORRECOES_COMPRAS).sort(),
+  );
+  for (const [method, channel] of Object.entries(CANAIS_CORRECOES_COMPRAS)) {
+    await exposed.correcoesCompras[method]({});
+    assert.equal(calls.at(-1).channel, channel);
+    assert.equal(calls.at(-1).args.length, 1);
+  }
   for (const [name, channels] of Object.entries(CANAIS_CADASTROS)) {
     assert.deepEqual(Object.keys(exposed.cadastros[name]).sort(), ['listar', 'obter', 'salvar']);
     for (const [operation, channel] of Object.entries(channels)) {

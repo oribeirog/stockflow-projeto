@@ -6,6 +6,7 @@ import { isTrustedRequest, isTrustedSender } from './trust';
 import { criarHandlersCadastros } from './cadastros';
 import { criarHandlersEstoque } from './estoque';
 import { criarHandlersCompras } from './compras';
+import { criarHandlersCorrecoesCompras } from './correcoes-compras';
 import { app, ipcMain, type BrowserWindow } from 'electron';
 import type Database from 'better-sqlite3';
 import { STATUS_CHANNEL, type Result, type SystemStatus } from '../../shared/contracts';
@@ -23,6 +24,7 @@ export function registerIpc(
     ...criarHandlersCadastros(db, app.getVersion()),
     ...criarHandlersEstoque(db, app.getVersion()),
     ...criarHandlersCompras(db, app.getVersion()),
+    ...criarHandlersCorrecoesCompras(db, app.getVersion()),
     ...criarHandlersVendas(db, app.getVersion()),
     ...criarHandlersRelatorios(db),
     ...criarHandlersConsultasFinanceiras(db, undefined, app.getVersion()),

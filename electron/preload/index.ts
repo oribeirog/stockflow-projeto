@@ -9,6 +9,7 @@ import { CANAIS_CADASTROS, type ApiCadastro } from '../../shared/cadastros-ipc';
 import { CANAIS_FOTOS } from '../../shared/fotos';
 import { CANAIS_ESTOQUE } from '../../shared/estoque-ipc';
 import { CANAIS_COMPRAS } from '../../shared/compras-ipc';
+import { CANAIS_CORRECOES_COMPRAS } from '../../shared/correcoes-compras-ipc';
 function cadastro<T, E>(channels: {
   listar: string;
   obter: string;
@@ -21,6 +22,15 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  correcoesCompras: {
+    obterContexto: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.obterContexto, i),
+    listarDocumentos: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.listarDocumentos, i),
+    obterDocumento: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.obterDocumento, i),
+    revisarDevolucao: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.revisarDevolucao, i),
+    revisarCancelamento: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.revisarCancelamento, i),
+    devolver: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.devolver, i),
+    cancelar: (i) => ipcRenderer.invoke(CANAIS_CORRECOES_COMPRAS.cancelar, i),
+  },
   exportacoes: {
     exportarExcel: (i) => ipcRenderer.invoke(CANAIS_EXPORTACOES.exportarExcel, i),
     exportarPdf: (i) => ipcRenderer.invoke(CANAIS_EXPORTACOES.exportarPdf, i),

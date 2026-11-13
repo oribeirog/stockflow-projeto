@@ -3,7 +3,10 @@
     <mnr-button variant="secondary" (pressed)="back()">Voltar às compras</mnr-button>@if (doc(); as
     d) {
     <h2>{{d.numero}} · {{d.estado}} · versão {{d.versao}}</h2>
-    } @else {
+    @if(d.estado==='CONFIRMADO' || d.estado==='ESTORNADO') {<a
+      [routerLink]="['/compras',d.id,'correcoes']"
+      >Correções e movimentos vinculados</a
+    >} } @else {
     <h2>Nova compra</h2>
     }
   </div>
