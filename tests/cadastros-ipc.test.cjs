@@ -283,6 +283,7 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     },
   });
   assert.deepEqual(Object.keys(exposed).sort(), [
+    'backup',
     'cadastros',
     'compras',
     'correcoes',
@@ -296,6 +297,15 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     'system',
     'vendas',
   ]);
+  const { CANAIS_BACKUP } = require('../dist/shared/backup');
+  assert.deepEqual(Object.keys(exposed.backup).sort(), Object.keys(CANAIS_BACKUP).sort());
+  for (const [method, channel] of Object.entries(CANAIS_BACKUP)) {
+    const withInput = ['descartar', 'restaurar'].includes(method);
+    if (withInput) await exposed.backup[method]({});
+    else await exposed.backup[method]();
+    assert.equal(calls.at(-1).channel, channel);
+    assert.equal(calls.at(-1).args.length, withInput ? 1 : 0);
+  }
   assert.deepEqual(Object.keys(exposed.cadastros).sort(), Object.keys(CANAIS_CADASTROS).sort());
   const { CANAIS_ESTORNOS_ESTOQUE } = require('../dist/shared/estornos-estoque-ipc');
   assert.deepEqual(

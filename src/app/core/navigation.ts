@@ -70,6 +70,12 @@ export const navigation: readonly {
 ];
 export const routes: Routes = [
   {
+    path: 'configuracoes/backup',
+    title: 'Backup e Restauração • MNR Perfumes',
+    loadComponent: () => import('../features/settings/backup').then((m) => m.BackupPage),
+    canDeactivate: [(c: { canLeave(): boolean }) => c.canLeave()],
+  },
+  {
     path: 'estoque/:id/ajustes/:movimentoId',
     title: 'Estorno de Ajuste • MNR Perfumes',
     data: { estoqueEditor: true },

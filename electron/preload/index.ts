@@ -11,6 +11,7 @@ import { CANAIS_ESTOQUE } from '../../shared/estoque-ipc';
 import { CANAIS_COMPRAS } from '../../shared/compras-ipc';
 import { CANAIS_CORRECOES_COMPRAS } from '../../shared/correcoes-compras-ipc';
 import { CANAIS_ESTORNOS_ESTOQUE } from '../../shared/estornos-estoque-ipc';
+import { CANAIS_BACKUP } from '../../shared/backup';
 function cadastro<T, E>(channels: {
   listar: string;
   obter: string;
@@ -23,6 +24,14 @@ function cadastro<T, E>(channels: {
   };
 }
 const api: DesktopApi = {
+  backup: {
+    estado: () => ipcRenderer.invoke(CANAIS_BACKUP.estado),
+    criar: () => ipcRenderer.invoke(CANAIS_BACKUP.criar),
+    selecionar: () => ipcRenderer.invoke(CANAIS_BACKUP.selecionar),
+    descartar: (i) => ipcRenderer.invoke(CANAIS_BACKUP.descartar, i),
+    restaurar: (i) => ipcRenderer.invoke(CANAIS_BACKUP.restaurar, i),
+    abrirProtecoes: () => ipcRenderer.invoke(CANAIS_BACKUP.abrirProtecoes),
+  },
   estornosEstoque: {
     obterAjuste: (i) => ipcRenderer.invoke(CANAIS_ESTORNOS_ESTOQUE.obterAjuste, i),
     revisarEstorno: (i) => ipcRenderer.invoke(CANAIS_ESTORNOS_ESTOQUE.revisarEstorno, i),

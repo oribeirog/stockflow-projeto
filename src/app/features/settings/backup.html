@@ -1,0 +1,148 @@
+<section class="stack" aria-labelledby="backup-title" [attr.aria-busy]="busy() || restarting()">
+  <div>
+    <h2 id="backup-title">Backup e Restauração</h2>
+    <p>
+      Proteja o banco completo, o histórico e as fotografias atuais dos produtos. Tudo funciona
+      localmente.
+    </p>
+  </div>
+  <p class="notice">
+    O arquivo não é criptografado e contém dados comerciais e pessoais. Guarde cópias em mídia ou
+    pasta protegida fora deste computador. Backup não substitui uma política de armazenamento
+    externo seguro.
+  </p>
+  @if (status()?.resultado; as result) {
+  <mnr-card
+    ><h3 id="backup-last-result">
+      {{result.situacao === 'restaurado' ? 'Última restauração concluída e validada' : 'Conjunto
+      anterior recuperado com segurança'}}
+    </h3>
+    <p>{{date(result.criadoEm)}} · proteção: <span class="filename">{{result.protecao}}</span></p>
+    <p>
+      Abertura, histórico e fotografias foram verificados antes da liberação das operações.
+    </p></mnr-card
+  >
+  } @if (status()?.aviso; as warning) {
+  <p role="status">{{warning}}</p>
+  } @if (message()) {
+  <p
+    id="backup-message"
+    tabindex="-1"
+    [class.error]="failed()"
+    [attr.role]="failed() ? 'alert':'status'"
+  >
+    {{message()}}
+  </p>
+  } @if (busy() || status()?.ocupado || restarting()) {
+  <p role="status" class="notice" id="backup-processing">
+    {{status()?.fase || 'Preparando a proteção dos dados…'}} @if(status()?.bloqueado){ As operações
+    do aplicativo estão temporariamente pausadas. }
+  </p>
+  }
+  <mnr-card
+    ><h3>Criar backup completo</h3>
+    <p>
+      Inclui o SQLite consistente e cada fotografia e miniatura vinculada. Não inclui caches,
+      instalação, outros backups ou relatórios exportados.
+    </p>
+    <p>
+      Escolha um nome novo: arquivos existentes não serão sobrescritos. Use uma pasta segura,
+      pendrive ou disco externo com espaço suficiente.
+    </p>
+    <mnr-button
+      id="backup-create"
+      [disabled]="!available || busy() || restarting() || !!status()?.ocupado"
+      (pressed)="create()"
+      >Criar backup</mnr-button
+    ></mnr-card
+  >
+  <mnr-card
+    ><h3>Restaurar um backup</h3>
+    <p>
+      Primeiro selecione e confira o arquivo. A seleção e a revisão não substituem os dados atuais.
+      Aceita arquivos .mnrbackup de formato 1 e schema 5.
+    </p>
+    <mnr-button
+      id="backup-select"
+      variant="secondary"
+      [disabled]="!available || busy() || restarting() || !!status()?.ocupado"
+      (pressed)="inspect()"
+      >Selecionar backup para revisão</mnr-button
+    ></mnr-card
+  >
+  @if (review(); as r) {
+  <mnr-card
+    ><h3 id="backup-review-title" tabindex="-1">Revisar restauração</h3>
+    <dl class="summary">
+      <div>
+        <dt>Data do backup</dt>
+        <dd>{{date(r.criadoEm)}}</dd>
+      </div>
+      <div>
+        <dt>Compatibilidade</dt>
+        <dd>Formato {{r.formato}} · schema {{r.schema}} · aplicativo {{r.versaoAplicativo}}</dd>
+      </div>
+      <div>
+        <dt>Produtos / clientes / fornecedores</dt>
+        <dd>{{r.produtos}} / {{r.clientes}} / {{r.fornecedores}}</dd>
+      </div>
+      <div>
+        <dt>Vendas / compras confirmadas, incluindo estornadas</dt>
+        <dd>{{r.vendas}} / {{r.compras}}</dd>
+      </div>
+      <div>
+        <dt>Fotografias vinculadas</dt>
+        <dd>{{r.fotografias}}</dd>
+      </div>
+      <div>
+        <dt>Tamanho do conjunto</dt>
+        <dd>{{size(r.bytes)}}</dd>
+      </div>
+    </dl>
+    <p class="notice">{{warning}}</p>
+    <p>
+      Antes de ativar este conjunto, o aplicativo criará e validará uma proteção independente dos
+      dados atuais. A operação exige reinicialização.
+    </p>
+    <fieldset [disabled]="!available || busy() || restarting()">
+      <label class="ack"
+        ><input
+          id="backup-ack"
+          type="checkbox"
+          [checked]="acknowledged()"
+          (change)="acknowledged.set($any($event.target).checked)"
+        />
+        Li o aviso e quero substituir os dados pelo estado deste backup.</label
+      >
+      <div class="row">
+        <mnr-button variant="secondary" (pressed)="discard()">Descartar revisão</mnr-button
+        ><mnr-button id="backup-restore" [disabled]="!acknowledged()" (pressed)="ask()"
+          >Restaurar este backup</mnr-button
+        >
+      </div>
+    </fieldset>
+  </mnr-card>
+  }
+  <mnr-card
+    ><h3>Proteções pré-restauração</h3>
+    <p>
+      {{status()?.protecoes ?? 0}} cópia(s) de proteção. O aplicativo preserva as três proteções
+      recentes e o conjunto legado inicial; não elimina a última cópia recuperável. Arquivos
+      desconhecidos são preservados para verificação.
+    </p>
+    <mnr-button
+      variant="secondary"
+      [disabled]="!available || busy() || restarting()"
+      (pressed)="openProtections()"
+      >Abrir pasta de proteção</mnr-button
+    ></mnr-card
+  >
+  <a href="#/configuracoes">Voltar às configurações</a>
+</section>
+@if(confirming()){<mnr-confirm
+  title="Confirmar substituição e reiniciar"
+  [focusReview]="true"
+  [description]="warning + '\n\nO estado atual será protegido antes da troca. Aguarde a reabertura validada; não desligue o computador durante a operação.'"
+  (cancelled)="cancelConfirmation()"
+  (confirmed)="restore()"
+/>}

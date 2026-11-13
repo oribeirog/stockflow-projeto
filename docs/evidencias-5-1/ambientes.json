@@ -1,0 +1,896 @@
+[
+  {
+    "mode": "local",
+    "archive": "MNR Teste + @.mnrbackup",
+    "bytes": 501273,
+    "createMs": 1243.4343000000001,
+    "reopenMs": 4623.417299999999,
+    "processes": {
+      "oldPid": 26776,
+      "newPid": 22620
+    },
+    "exports": 16,
+    "measurements": [
+      {
+        "task": "capture",
+        "ms": 240.97080000000005,
+        "rss": 127762432,
+        "captureMs": 21.99890000000005,
+        "photoMs": 24.701000000000022
+      },
+      {
+        "task": "package",
+        "ms": 172.7885000000001,
+        "rss": 128737280
+      },
+      {
+        "task": "inspect",
+        "ms": 178.34439999999995,
+        "rss": 131788800
+      },
+      {
+        "task": "inspect",
+        "ms": 175.57350000000042,
+        "rss": 131989504
+      }
+    ],
+    "matrix": [
+      {
+        "indicador": "revenue",
+        "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "sales",
+        "fonte": "fluxoComercial.vendasConfirmadas",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "result",
+        "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+        "oficial": 21000,
+        "tipo": "moeda",
+        "dashboard": "R$ 210,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        }
+      },
+      {
+        "indicador": "margin",
+        "fonte": "fluxoComercial.margemBrutaPontosBase",
+        "oficial": 7000,
+        "tipo": "percentual",
+        "dashboard": "70,00%",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        }
+      },
+      {
+        "indicador": "ticket",
+        "fonte": "coorteVendas.ticketMedioCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Coorte atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "receipts",
+        "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+        "oficial": 25000,
+        "tipo": "moeda",
+        "dashboard": "R$ 250,00",
+        "temporal": "Fluxo financeiro",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        }
+      },
+      {
+        "indicador": "debt",
+        "fonte": "posicaoAtual.contas.exigivelCentavos",
+        "oficial": 5000,
+        "tipo": "moeda",
+        "dashboard": "R$ 50,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        }
+      },
+      {
+        "indicador": "overdue",
+        "fonte": "posicaoAtual.contas.vencidoCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "refund",
+        "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "stock-value",
+        "fonte": "estoque.posicaoAtual.valorCentavos",
+        "oficial": 40000,
+        "tipo": "moeda",
+        "dashboard": "R$ 400,00",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        }
+      },
+      {
+        "indicador": "stock-units",
+        "fonte": "estoque.posicaoAtual.unidades",
+        "oficial": 23,
+        "tipo": "inteiro",
+        "dashboard": "23",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        }
+      },
+      {
+        "indicador": "stock-empty",
+        "fonte": "estoque.posicaoAtual.semEstoque",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "stock-low",
+        "fonte": "estoque.posicaoAtual.abaixoMinimo",
+        "oficial": 3,
+        "tipo": "inteiro",
+        "dashboard": "3",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        }
+      }
+    ]
+  },
+  {
+    "mode": "http",
+    "archive": "MNR Teste + @.mnrbackup",
+    "bytes": 501273,
+    "createMs": 1300.0581999999995,
+    "reopenMs": 4672.742400000001,
+    "processes": {
+      "oldPid": 25232,
+      "newPid": 18256
+    },
+    "exports": 16,
+    "measurements": [
+      {
+        "task": "capture",
+        "ms": 223.87200000000007,
+        "rss": 120233984,
+        "captureMs": 22.574800000000096,
+        "photoMs": 22.6721
+      },
+      {
+        "task": "package",
+        "ms": 178.9882,
+        "rss": 121577472
+      },
+      {
+        "task": "inspect",
+        "ms": 186.17479999999978,
+        "rss": 125005824
+      },
+      {
+        "task": "inspect",
+        "ms": 185.0516000000007,
+        "rss": 126033920
+      }
+    ],
+    "matrix": [
+      {
+        "indicador": "revenue",
+        "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "sales",
+        "fonte": "fluxoComercial.vendasConfirmadas",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "result",
+        "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+        "oficial": 21000,
+        "tipo": "moeda",
+        "dashboard": "R$ 210,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        }
+      },
+      {
+        "indicador": "margin",
+        "fonte": "fluxoComercial.margemBrutaPontosBase",
+        "oficial": 7000,
+        "tipo": "percentual",
+        "dashboard": "70,00%",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        }
+      },
+      {
+        "indicador": "ticket",
+        "fonte": "coorteVendas.ticketMedioCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Coorte atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "receipts",
+        "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+        "oficial": 25000,
+        "tipo": "moeda",
+        "dashboard": "R$ 250,00",
+        "temporal": "Fluxo financeiro",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        }
+      },
+      {
+        "indicador": "debt",
+        "fonte": "posicaoAtual.contas.exigivelCentavos",
+        "oficial": 5000,
+        "tipo": "moeda",
+        "dashboard": "R$ 50,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        }
+      },
+      {
+        "indicador": "overdue",
+        "fonte": "posicaoAtual.contas.vencidoCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "refund",
+        "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "stock-value",
+        "fonte": "estoque.posicaoAtual.valorCentavos",
+        "oficial": 40000,
+        "tipo": "moeda",
+        "dashboard": "R$ 400,00",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        }
+      },
+      {
+        "indicador": "stock-units",
+        "fonte": "estoque.posicaoAtual.unidades",
+        "oficial": 23,
+        "tipo": "inteiro",
+        "dashboard": "23",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        }
+      },
+      {
+        "indicador": "stock-empty",
+        "fonte": "estoque.posicaoAtual.semEstoque",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "stock-low",
+        "fonte": "estoque.posicaoAtual.abaixoMinimo",
+        "oficial": 3,
+        "tipo": "inteiro",
+        "dashboard": "3",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        }
+      }
+    ]
+  },
+  {
+    "mode": "package",
+    "archive": "MNR Teste + @.mnrbackup",
+    "bytes": 501273,
+    "createMs": 3628.6317999999997,
+    "reopenMs": 4828.865300000001,
+    "processes": {
+      "oldPid": 12996,
+      "newPid": 27420
+    },
+    "exports": 16,
+    "measurements": [
+      {
+        "task": "capture",
+        "ms": 199.1241,
+        "rss": 151035904,
+        "captureMs": 21.305899999999383,
+        "photoMs": 21.395900000000438
+      },
+      {
+        "task": "package",
+        "ms": 210.26960000000054,
+        "rss": 151265280
+      },
+      {
+        "task": "inspect",
+        "ms": 167.81940000000031,
+        "rss": 154251264
+      },
+      {
+        "task": "inspect",
+        "ms": 166.6184000000012,
+        "rss": 153817088
+      }
+    ],
+    "matrix": [
+      {
+        "indicador": "revenue",
+        "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "sales",
+        "fonte": "fluxoComercial.vendasConfirmadas",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Vendas confirmadas (fluxo)",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "result",
+        "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+        "oficial": 21000,
+        "tipo": "moeda",
+        "dashboard": "R$ 210,00",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+          "valor": 21000
+        }
+      },
+      {
+        "indicador": "margin",
+        "fonte": "fluxoComercial.margemBrutaPontosBase",
+        "oficial": 7000,
+        "tipo": "percentual",
+        "dashboard": "70,00%",
+        "temporal": "Fluxo comercial",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Comercial · Margem bruta estimada (fluxo)",
+          "valor": 7000
+        }
+      },
+      {
+        "indicador": "ticket",
+        "fonte": "coorteVendas.ticketMedioCentavos",
+        "oficial": 30000,
+        "tipo": "moeda",
+        "dashboard": "R$ 300,00",
+        "temporal": "Coorte atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Coorte · Ticket médio da coorte",
+          "valor": 30000
+        }
+      },
+      {
+        "indicador": "receipts",
+        "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+        "oficial": 25000,
+        "tipo": "moeda",
+        "dashboard": "R$ 250,00",
+        "temporal": "Fluxo financeiro",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Financeiro · Recebimentos líquidos",
+          "valor": 25000
+        }
+      },
+      {
+        "indicador": "debt",
+        "fonte": "posicaoAtual.contas.exigivelCentavos",
+        "oficial": 5000,
+        "tipo": "moeda",
+        "dashboard": "R$ 50,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo exigível atual",
+          "valor": 5000
+        }
+      },
+      {
+        "indicador": "overdue",
+        "fonte": "posicaoAtual.contas.vencidoCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Contas atuais · Saldo atualmente vencido",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "refund",
+        "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+        "oficial": 0,
+        "tipo": "moeda",
+        "dashboard": "R$ 0,00",
+        "temporal": "Posição atual",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Reembolsos atuais · Reembolso pendente atual",
+          "valor": 0
+        }
+      },
+      {
+        "indicador": "stock-value",
+        "fonte": "estoque.posicaoAtual.valorCentavos",
+        "oficial": 40000,
+        "tipo": "moeda",
+        "dashboard": "R$ 400,00",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Valor atual do estoque",
+          "valor": 40000
+        }
+      },
+      {
+        "indicador": "stock-units",
+        "fonte": "estoque.posicaoAtual.unidades",
+        "oficial": 23,
+        "tipo": "inteiro",
+        "dashboard": "23",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Unidades disponíveis atuais",
+          "valor": 23
+        }
+      },
+      {
+        "indicador": "stock-empty",
+        "fonte": "estoque.posicaoAtual.semEstoque",
+        "oficial": 1,
+        "tipo": "inteiro",
+        "dashboard": "1",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos sem estoque",
+          "valor": 1
+        }
+      },
+      {
+        "indicador": "stock-low",
+        "fonte": "estoque.posicaoAtual.abaixoMinimo",
+        "oficial": 3,
+        "tipo": "inteiro",
+        "dashboard": "3",
+        "temporal": "Posição atual global",
+        "xlsx": {
+          "arquivo": "1-4f4-restaurado-GERENCIAL.xlsx",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        },
+        "pdf": {
+          "arquivo": "2-4f4-restaurado-GERENCIAL.pdf",
+          "aba": "Resumo",
+          "indicador": "Estoque atual · Produtos abaixo do mínimo",
+          "valor": 3
+        }
+      }
+    ]
+  }
+]

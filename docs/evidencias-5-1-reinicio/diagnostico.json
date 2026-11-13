@@ -1,0 +1,68 @@
+{
+  "preservedFiles": 41,
+  "changedOriginalFiles": 0,
+  "originalState": {
+    "createdAt": "2026-11-13T12:38:43.794Z",
+    "active": "5d0cb258-4225-495d-9c54-3787b65f25ec",
+    "planId": "5d0cb258-4225-495d-9c54-3787b65f25ec",
+    "old": "c56dca84-991a-4268-99dc-7642d8610bb0",
+    "pending": false,
+    "done": {
+      "status": "restaurado",
+      "criadoEm": "2026-11-13T12:18:44.142Z",
+      "protecao": "5d0cb258-4225-495d-9c54-3787b65f25ec.mnrbackup"
+    },
+    "last": {
+      "status": "restaurado",
+      "criadoEm": "2026-11-13T12:18:44.142Z",
+      "protecao": "5d0cb258-4225-495d-9c54-3787b65f25ec.mnrbackup"
+    },
+    "manifestHashMatchesPlan": true,
+    "databaseBytesMatchBackupManifest": false,
+    "photoHashesMatchBackup": true,
+    "validationPassed": true,
+    "counts": {
+      "produtos": 6,
+      "clientes": 2,
+      "fornecedores": 2,
+      "vendas": 13,
+      "compras": 10,
+      "fotografias": 3
+    }
+  },
+  "before": [
+    {
+      "event": "bootstrap",
+      "pid": 9560,
+      "dev": "1"
+    },
+    {
+      "event": "bootstrap",
+      "pid": 23228,
+      "dev": "1"
+    },
+    {
+      "event": "original-exception",
+      "pid": 23228,
+      "name": "Error",
+      "message": "ERR_CONNECTION_REFUSED (-102) loading 'http://127.0.0.1:4200/'",
+      "code": "ERR_CONNECTION_REFUSED",
+      "stack": "Error: ERR_CONNECTION_REFUSED (-102) loading 'http://127.0.0.1:4200/'\n    at rejectAndCleanup (node:electron/js2c/browser_init:2:96575)\n    at WebContents.finishListener (node:electron/js2c/browser_init:2:96737)\n    at WebContents.emit (node:events:514:28)"
+    },
+    {
+      "event": "dialog",
+      "pid": 23228,
+      "title": "MNR Perfumes — abertura segura",
+      "message": "Não foi possível concluir a operação com segurança. Os dados e proteções existentes foram preservados. Consulte o estado e tente novamente."
+    }
+  ],
+  "after": {
+    "createdAt": "2026-11-13T12:37:04.202Z",
+    "phase": "interface",
+    "pid": 22180,
+    "name": "Error",
+    "code": "ERR_CONNECTION_REFUSED",
+    "message": "ERR_CONNECTION_REFUSED (-102) loading 'http://127.0.0.1:4200/'",
+    "stack": "Error: ERR_CONNECTION_REFUSED (-102) loading 'http://127.0.0.1:4200/'\n    at rejectAndCleanup (node:electron/js2c/browser_init:2:96575)\n    at WebContents.finishListener (node:electron/js2c/browser_init:2:96737)\n    at WebContents.emit (node:events:514:28)"
+  }
+}

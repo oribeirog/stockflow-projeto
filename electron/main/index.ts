@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol, net, session } from 'electron';
+import { app, BrowserWindow, protocol, net, session, dialog, shell } from 'electron';
 import { join, resolve, relative, isAbsolute } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { preparePaths } from '../infrastructure/paths';
@@ -6,18 +6,29 @@ import { openDatabase } from '../infrastructure/database';
 import { registerIpc } from '../ipc';
 import { createFotoService } from '../services/fotos';
 import { normalizeFoto } from '../services/foto-codec';
+import { recoverAndOpen, recoveryPaths, cleanupRecoveryStaging } from '../services/backup/control';
+import { BackupController } from '../services/backup/controller';
+import { backupMessage } from '../services/backup/io';
+import { relaunchApplication, recordStartupError, type StartupPhase } from './lifecycle';
 protocol.registerSchemesAsPrivileged([
   { scheme: 'mnr', privileges: { standard: true, secure: true, supportFetchAPI: true } },
 ]);
 const paths = preparePaths();
 let db: Awaited<ReturnType<typeof openDatabase>> | undefined;
+let maintenance: BackupController | undefined;
+let startupPhase: StartupPhase = 'recovery';
 const smoke = process.env['MNR_SMOKE'] === '1';
 if (!app.requestSingleInstanceLock()) app.quit();
 else
   void app
     .whenReady()
     .then(async () => {
-      db = await openDatabase(paths.data, app.getVersion(), undefined, paths.images);
+      const opened = await recoverAndOpen(paths.root, app.getVersion());
+      db = opened.db;
+      paths.data = opened.data;
+      paths.images = opened.images;
+      startupPhase = 'photos';
+      const cleanupWarning = await cleanupRecoveryStaging(paths.root);
       const photos = createFotoService(db, paths.images, app.getVersion(), normalizeFoto);
       const imageHealth = await photos.reconcile();
       if (imageHealth.missing || imageHealth.preserved)
@@ -68,8 +79,67 @@ else
         if (target.split('#')[0] !== url) event.preventDefault();
       });
       window.once('ready-to-show', () => window.show());
-      registerIpc(window, db, url, photos);
-      await window.loadURL(url);
+      maintenance = new BackupController({
+        root: paths.root,
+        db,
+        photos,
+        version: app.getVersion(),
+        warning: opened.warning ?? cleanupWarning,
+        protectedRoots: [
+          paths.root,
+          ...(app.isPackaged
+            ? [app.getAppPath(), resolve(process.execPath, '..')]
+            : [
+                'electron',
+                'src',
+                'shared',
+                'dist',
+                'node_modules',
+                '.git',
+                'scripts',
+                '.cache',
+              ].map((p) => resolve(p))),
+        ],
+        chooseBackup: async (name) => {
+          const r = await dialog.showSaveDialog(window, {
+            title: 'Criar backup completo MNR Perfumes',
+            defaultPath: name,
+            filters: [{ name: 'Backup MNR Perfumes', extensions: ['mnrbackup'] }],
+            properties: ['showOverwriteConfirmation', 'dontAddToRecent'],
+          });
+          return r.canceled ? undefined : r.filePath;
+        },
+        chooseRestore: async () => {
+          const r = await dialog.showOpenDialog(window, {
+            title: 'Selecionar backup para revisar',
+            filters: [{ name: 'Backup MNR Perfumes', extensions: ['mnrbackup'] }],
+            properties: ['openFile', 'dontAddToRecent'],
+          });
+          return r.canceled ? undefined : r.filePaths[0];
+        },
+        restart: () => {
+          setTimeout(() => {
+            relaunchApplication(app);
+          }, 300);
+        },
+        openProtections: async () => {
+          const error = await shell.openPath(recoveryPaths(paths.root).base);
+          if (error) throw Error('Pasta indisponível');
+        },
+      });
+      window.on('close', (event) => {
+        if (maintenance?.occupied && !maintenance.restarting) {
+          event.preventDefault();
+          void dialog.showMessageBox(window, {
+            type: 'info',
+            message: 'Aguarde a conclusão da proteção dos dados antes de fechar o aplicativo.',
+          });
+        }
+      });
+      registerIpc(window, db, url, photos, maintenance);
+      startupPhase = 'interface';
+      await window.loadURL(opened.recovery ? url + '#/configuracoes/backup' : url);
+      startupPhase = 'ready';
       if (smoke) {
         if (!dev) {
           await window.webContents.debugger.attach('1.3');
@@ -189,9 +259,30 @@ else
         app.quit();
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(async (error) => {
+      await recordStartupError(error, startupPhase, paths.root, paths.logs);
+      if (db?.open) db.close();
+      const message = backupMessage(error);
+      console.error('Inicialização bloqueada:', message.code);
+      dialog.showErrorBox(
+        startupPhase === 'interface'
+          ? 'MNR Perfumes — interface indisponível'
+          : 'MNR Perfumes — abertura segura',
+        startupPhase === 'interface'
+          ? 'O banco foi aberto, mas a interface não pôde ser carregada. ' +
+              (!app.isPackaged && process.env['MNR_DEV'] === '1'
+                ? 'Abra novamente com npm.cmd run dev e mantenha o terminal aberto. '
+                : 'Feche e abra o aplicativo novamente. ') +
+              'Os conjuntos de dados foram preservados. Detalhes no log de inicialização.'
+          : message.message,
+      );
       app.exit(1);
     });
 app.on('window-all-closed', () => app.quit());
-app.on('before-quit', () => db?.close());
+app.on('before-quit', (event) => {
+  if (maintenance?.occupied && !maintenance.restarting) {
+    event.preventDefault();
+    return;
+  }
+  if (db?.open) db.close();
+});

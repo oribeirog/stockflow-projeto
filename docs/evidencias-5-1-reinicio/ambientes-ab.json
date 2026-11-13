@@ -1,0 +1,82 @@
+[
+  {
+    "mode": "local",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "721c0008-1921-416d-a964-4f3b3a91ff86",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 17888,
+      "newPid": 12944
+    },
+    "createMs": 1405.6147,
+    "reopenMs": 5209.144700000001,
+    "bytes": 501273,
+    "exports": 16
+  },
+  {
+    "mode": "dev-supervisor",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "f1b60b5e-7e13-4052-a79e-f1b37106322f",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 26528,
+      "newPid": 23600
+    },
+    "createMs": 1493.5154000000002,
+    "reopenMs": 4472.614300000001,
+    "bytes": 501273,
+    "exports": 16
+  },
+  {
+    "mode": "http",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "23e423d5-b945-4ed6-9929-83b007f9faa4",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 4160,
+      "newPid": 6296
+    },
+    "createMs": 1227.1355000000003,
+    "reopenMs": 4524.041900000002,
+    "bytes": 501273,
+    "exports": 16
+  },
+  {
+    "mode": "package",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "1f185437-7fd0-4e7d-a4fd-d08bd6dc19e3",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 14724,
+      "newPid": 9100
+    },
+    "createMs": 3670.8505000000005,
+    "reopenMs": 4384.476200000001,
+    "bytes": 501273,
+    "exports": 16
+  }
+]

@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+p,
+dd,
+h3,
+.filename {
+  overflow-wrap: anywhere;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.ack {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-block: 16px;
+}
+.ack input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+.notice {
+  padding: 16px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+.error {
+  color: var(--danger);
+}
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+}
+dt {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+dd {
+  margin: 4px 0 0;
+}

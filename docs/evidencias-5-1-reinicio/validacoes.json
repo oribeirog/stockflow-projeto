@@ -1,0 +1,160 @@
+{
+  "createdAt": "2026-11-13T13:38:05.784Z",
+  "tests": 214,
+  "specificGroups": 19,
+  "checks": [
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run typecheck",
+      "name": "typecheck",
+      "end": "2026-11-13T09:38:11.2420937-03:00",
+      "start": "2026-11-13T09:38:04.8020544-03:00",
+      "log": ".cache/5-1-followup-final-typecheck.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run lint",
+      "name": "lint",
+      "end": "2026-11-13T09:38:21.2358141-03:00",
+      "start": "2026-11-13T09:38:11.3130959-03:00",
+      "log": ".cache/5-1-followup-final-lint.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run format:check",
+      "name": "format",
+      "end": "2026-11-13T09:38:31.7901146-03:00",
+      "start": "2026-11-13T09:38:21.2378158-03:00",
+      "log": ".cache/5-1-followup-final-format.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run build",
+      "name": "build",
+      "end": "2026-11-13T09:38:44.8626643-03:00",
+      "start": "2026-11-13T09:38:31.7921150-03:00",
+      "log": ".cache/5-1-followup-final-build.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd test",
+      "name": "general",
+      "end": "2026-11-13T09:41:10.0771828-03:00",
+      "start": "2026-11-13T09:38:44.8646628-03:00",
+      "log": ".cache/5-1-followup-final-general.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:ui",
+      "name": "ui",
+      "end": "2026-11-13T10:25:18.9795881-03:00",
+      "start": "2026-11-13T10:21:42.8684805-03:00",
+      "log": ".cache/5-1-followup-final-ui.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:backup-restauracao",
+      "name": "backup",
+      "end": "2026-11-13T10:29:10.4993339-03:00",
+      "start": "2026-11-13T10:25:19.0205901-03:00",
+      "log": ".cache/5-1-followup-final-backup.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs --development",
+      "name": "http",
+      "end": "2026-11-13T10:29:57.7132880-03:00",
+      "start": "2026-11-13T10:29:10.5013359-03:00",
+      "log": ".cache/5-1-followup-final-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run pack",
+      "name": "pack",
+      "end": "2026-11-13T10:31:12.5072768-03:00",
+      "start": "2026-11-13T10:29:57.7152915-03:00",
+      "log": ".cache/5-1-followup-final-pack.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/verify-package.mjs",
+      "name": "package-verify",
+      "end": "2026-11-13T10:31:12.7692765-03:00",
+      "start": "2026-11-13T10:31:12.5112762-03:00",
+      "log": ".cache/5-1-followup-final-package-verify.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs --package",
+      "name": "package",
+      "end": "2026-11-13T10:32:06.2363399-03:00",
+      "start": "2026-11-13T10:31:12.7722737-03:00",
+      "log": ".cache/5-1-followup-final-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/smoke.mjs --development",
+      "name": "desktop-http",
+      "end": "2026-11-13T10:32:19.6623130-03:00",
+      "start": "2026-11-13T10:32:06.2383408-03:00",
+      "log": ".cache/5-1-followup-final-desktop-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/smoke.mjs release/win-unpacked/MNR Perfumes.exe",
+      "name": "desktop-package",
+      "end": "2026-11-13T10:32:22.2203241-03:00",
+      "start": "2026-11-13T10:32:19.6643131-03:00",
+      "log": ".cache/5-1-followup-final-desktop-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd test",
+      "name": "general",
+      "end": "2026-11-13T10:34:31.9188142-03:00",
+      "start": "2026-11-13T10:32:23.8982017-03:00",
+      "log": ".cache/5-1-followup-confirm-general.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run typecheck",
+      "name": "typecheck",
+      "end": "2026-11-13T10:34:38.0816665-03:00",
+      "start": "2026-11-13T10:34:31.9478125-03:00",
+      "log": ".cache/5-1-followup-confirm-typecheck.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run lint",
+      "name": "lint",
+      "end": "2026-11-13T10:34:45.2846987-03:00",
+      "start": "2026-11-13T10:34:38.0836664-03:00",
+      "log": ".cache/5-1-followup-confirm-lint.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run format:check",
+      "name": "format",
+      "end": "2026-11-13T10:34:54.5518583-03:00",
+      "start": "2026-11-13T10:34:45.2866992-03:00",
+      "log": ".cache/5-1-followup-confirm-format.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run build",
+      "name": "build",
+      "end": "2026-11-13T10:35:04.8073711-03:00",
+      "start": "2026-11-13T10:34:54.5538591-03:00",
+      "log": ".cache/5-1-followup-confirm-build.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/verify-package.mjs",
+      "name": "verify-package",
+      "end": "2026-11-13T10:35:04.9703721-03:00",
+      "start": "2026-11-13T10:35:04.8093749-03:00",
+      "log": ".cache/5-1-followup-confirm-verify-package.log"
+    }
+  ],
+  "packageFilesMatchingFinalBuild": 142
+}

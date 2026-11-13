@@ -1,0 +1,412 @@
+{
+  "createdAt": "2026-11-13T08:13:22.485Z",
+  "tests": 211,
+  "backupGroups": 16,
+  "commands": [
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run typecheck",
+      "name": "typecheck",
+      "end": "2026-11-13T04:34:33.1229785-03:00",
+      "start": "2026-11-13T04:34:25.4717739-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-typecheck.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run lint",
+      "name": "lint",
+      "end": "2026-11-13T04:34:40.8484002-03:00",
+      "start": "2026-11-13T04:34:33.2179806-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-lint.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run format:check",
+      "name": "format",
+      "end": "2026-11-13T04:34:51.6902293-03:00",
+      "start": "2026-11-13T04:34:40.8514012-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-format.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run build",
+      "name": "build",
+      "end": "2026-11-13T04:35:05.4899860-03:00",
+      "start": "2026-11-13T04:34:51.6932327-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-build.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd test",
+      "name": "test",
+      "end": "2026-11-13T04:37:41.9302412-03:00",
+      "start": "2026-11-13T04:35:05.4929874-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-test.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:ui",
+      "name": "ui",
+      "end": "2026-11-13T04:41:09.9448421-03:00",
+      "start": "2026-11-13T04:37:41.9322416-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-ui.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:vendas",
+      "name": "vendas",
+      "end": "2026-11-13T04:41:33.6570964-03:00",
+      "start": "2026-11-13T04:41:09.9468431-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-vendas.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:financeiro",
+      "name": "financeiro",
+      "end": "2026-11-13T04:42:51.1550355-03:00",
+      "start": "2026-11-13T04:41:33.6620967-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-financeiro.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:correcoes",
+      "name": "correcoes",
+      "end": "2026-11-13T04:43:23.9589679-03:00",
+      "start": "2026-11-13T04:42:51.1590363-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-correcoes.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:reembolsos",
+      "name": "reembolsos",
+      "end": "2026-11-13T04:44:02.3298187-03:00",
+      "start": "2026-11-13T04:43:23.9619681-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-reembolsos.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:correcoes-compras",
+      "name": "compras",
+      "end": "2026-11-13T04:44:28.2188901-03:00",
+      "start": "2026-11-13T04:44:02.3318190-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-compras.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:consolidacao",
+      "name": "consolidacao",
+      "end": "2026-11-13T04:45:09.6413213-03:00",
+      "start": "2026-11-13T04:44:28.2208895-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-consolidacao.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:relatorios",
+      "name": "relatorios",
+      "end": "2026-11-13T04:45:26.2198183-03:00",
+      "start": "2026-11-13T04:45:09.6433228-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-relatorios.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:dashboard",
+      "name": "dashboard",
+      "end": "2026-11-13T04:45:48.4259438-03:00",
+      "start": "2026-11-13T04:45:26.2218181-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-dashboard.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:exportacoes",
+      "name": "exportacoes",
+      "end": "2026-11-13T04:47:09.0032704-03:00",
+      "start": "2026-11-13T04:45:48.4279424-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-exportacoes.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:consolidacao-gerencial",
+      "name": "gerencial",
+      "end": "2026-11-13T04:50:38.6584886-03:00",
+      "start": "2026-11-13T04:47:09.0052721-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-gerencial.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:estornos-estoque",
+      "name": "estornos",
+      "end": "2026-11-13T04:51:09.3539214-03:00",
+      "start": "2026-11-13T04:50:38.6614931-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estornos.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:consolidacao-estoque",
+      "name": "estoque-integrado",
+      "end": "2026-11-13T04:53:59.5584901-03:00",
+      "start": "2026-11-13T04:51:09.3559214-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estoque-integrado.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/consolidacao-estoque-smoke.mjs --development",
+      "name": "estoque-integrado-http",
+      "end": "2026-11-13T04:56:53.9579143-03:00",
+      "start": "2026-11-13T04:53:59.5604883-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estoque-integrado-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/estornos-estoque-smoke.mjs --development",
+      "name": "estornos-http",
+      "end": "2026-11-13T04:57:19.8549827-03:00",
+      "start": "2026-11-13T04:56:53.9599139-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estornos-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run test:backup-restauracao",
+      "name": "backup",
+      "end": "2026-11-13T04:59:45.7566660-03:00",
+      "start": "2026-11-13T04:57:19.8569841-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-backup.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs --development",
+      "name": "backup-http",
+      "end": "2026-11-13T05:00:33.5602591-03:00",
+      "start": "2026-11-13T04:59:45.7586663-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-backup-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run pack",
+      "name": "pack",
+      "end": "2026-11-13T05:01:49.6246616-03:00",
+      "start": "2026-11-13T05:00:33.5632616-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-pack.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs --package",
+      "name": "backup-package",
+      "end": "2026-11-13T05:02:33.8819749-03:00",
+      "start": "2026-11-13T05:01:49.6266636-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-backup-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/verify-package.mjs",
+      "name": "verify-package",
+      "end": "2026-11-13T05:02:34.0479731-03:00",
+      "start": "2026-11-13T05:02:33.8839761-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-verify-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/consolidacao-estoque-smoke.mjs --package",
+      "name": "estoque-integrado-package",
+      "end": "2026-11-13T05:04:19.6197891-03:00",
+      "start": "2026-11-13T05:02:34.0509764-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estoque-integrado-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/estornos-estoque-smoke.mjs --package",
+      "name": "estornos-package",
+      "end": "2026-11-13T05:04:34.6314191-03:00",
+      "start": "2026-11-13T05:04:19.6217894-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-estornos-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/correcoes-compras-smoke.mjs --development",
+      "name": "compras-http",
+      "end": "2026-11-13T05:04:54.3285977-03:00",
+      "start": "2026-11-13T05:04:34.6334211-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-compras-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/correcoes-compras-smoke.mjs --package",
+      "name": "compras-package",
+      "end": "2026-11-13T05:05:05.1172167-03:00",
+      "start": "2026-11-13T05:04:54.3305988-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-compras-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/dashboard-smoke.mjs --development",
+      "name": "dashboard-http",
+      "end": "2026-11-13T05:05:24.4013486-03:00",
+      "start": "2026-11-13T05:05:05.1192194-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-dashboard-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/dashboard-smoke.mjs --package",
+      "name": "dashboard-package",
+      "end": "2026-11-13T05:05:32.7218794-03:00",
+      "start": "2026-11-13T05:05:24.4043521-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-dashboard-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/relatorios-smoke.mjs --development",
+      "name": "relatorios-http",
+      "end": "2026-11-13T05:05:42.7457333-03:00",
+      "start": "2026-11-13T05:05:32.7258775-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-relatorios-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/relatorios-smoke.mjs --package",
+      "name": "relatorios-package",
+      "end": "2026-11-13T05:05:44.6764973-03:00",
+      "start": "2026-11-13T05:05:42.7494842-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-relatorios-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/exportacoes-smoke.mjs --development",
+      "name": "exportacoes-http",
+      "end": "2026-11-13T05:06:38.2939843-03:00",
+      "start": "2026-11-13T05:05:44.6794991-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-exportacoes-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/exportacoes-smoke.mjs --package",
+      "name": "exportacoes-package",
+      "end": "2026-11-13T05:07:10.2412314-03:00",
+      "start": "2026-11-13T05:06:38.2959861-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-exportacoes-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/smoke.mjs --development",
+      "name": "desktop-http",
+      "end": "2026-11-13T05:07:25.1011028-03:00",
+      "start": "2026-11-13T05:07:10.2432308-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-desktop-http.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/smoke.mjs release/win-unpacked/MNR Perfumes.exe",
+      "name": "desktop-package",
+      "end": "2026-11-13T05:07:27.5069048-03:00",
+      "start": "2026-11-13T05:07:25.1031023-03:00",
+      "batch": "Bateria",
+      "log": ".cache/5-1-final-desktop-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd test",
+      "name": "test",
+      "end": "2026-11-13T05:09:50.4131165-03:00",
+      "start": "2026-11-13T05:07:27.6219093-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-test.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run typecheck",
+      "name": "typecheck",
+      "end": "2026-11-13T05:09:58.1505006-03:00",
+      "start": "2026-11-13T05:09:50.4371149-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-typecheck.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run lint",
+      "name": "lint",
+      "end": "2026-11-13T05:10:06.2423261-03:00",
+      "start": "2026-11-13T05:09:58.1545028-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-lint.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run format:check",
+      "name": "format",
+      "end": "2026-11-13T05:10:15.8189183-03:00",
+      "start": "2026-11-13T05:10:06.2443264-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-format.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm.cmd run build",
+      "name": "build",
+      "end": "2026-11-13T05:10:29.8492671-03:00",
+      "start": "2026-11-13T05:10:15.8209180-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-build.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/verify-package.mjs",
+      "name": "verify-package",
+      "end": "2026-11-13T05:10:30.1130363-03:00",
+      "start": "2026-11-13T05:10:29.8522623-03:00",
+      "batch": "Reconfirmação",
+      "log": ".cache/5-1-post-verify-package.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs",
+      "name": "backup-capture-local",
+      "end": "2026-11-13T05:11:28.4908342-03:00",
+      "start": "2026-11-13T05:10:47.7897755-03:00",
+      "batch": "Capturas repetidas",
+      "log": ".cache/5-1-capture-final-local.log"
+    },
+    {
+      "exitCode": 0,
+      "command": "node scripts/backup-restauracao-smoke.mjs --development",
+      "name": "backup-capture-http",
+      "end": "2026-11-13T05:12:16.3927681-03:00",
+      "start": "2026-11-13T05:11:28.5598332-03:00",
+      "batch": "Capturas repetidas",
+      "log": ".cache/5-1-capture-final-http.log"
+    }
+  ]
+}

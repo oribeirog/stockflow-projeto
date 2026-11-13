@@ -26,7 +26,12 @@ export function readSelectedFoto(path: string): Buffer {
     closeSync(fd);
   }
 }
-export function registerFotos(window: BrowserWindow, allowedUrl: string, photos: FotoService) {
+export function registerFotos(
+  window: BrowserWindow,
+  allowedUrl: string,
+  photos: FotoService,
+  registrar: Pick<typeof ipcMain, 'handle'> = ipcMain,
+) {
   let selecting = false;
   const operations = {
     selecionar: async () => {
@@ -51,7 +56,7 @@ export function registerFotos(window: BrowserWindow, allowedUrl: string, photos:
     remover: (command: unknown) => photos.remove(command, window.webContents.id),
   };
   for (const name of Object.keys(CANAIS_FOTOS) as (keyof typeof CANAIS_FOTOS)[]) {
-    ipcMain.handle(CANAIS_FOTOS[name], async (event, ...args: unknown[]) => {
+    registrar.handle(CANAIS_FOTOS[name], async (event, ...args: unknown[]) => {
       if (!isTrustedSender(event, window, allowedUrl))
         throw new Error('Operação IPC não autorizada.');
       try {

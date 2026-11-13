@@ -38,7 +38,9 @@
     "test:correcoes-compras": "npm run build && node --test tests/correcoes-compras.test.cjs && node scripts/correcoes-compras-smoke.mjs",
     "test:estornos-estoque": "npm run build && node --test tests/estornos-estoque.test.cjs && node scripts/estornos-estoque-smoke.mjs",
     "test:consolidacao-estoque": "npm run build && node --test tests/consolidacao-estoque.test.cjs && node scripts/consolidacao-estoque-smoke.mjs",
-    "benchmark:consolidacao-estoque": "node --expose-gc scripts/benchmark-relatorios.cjs --consolidacao-estoque && node scripts/benchmark-exportacoes.mjs --consolidacao-estoque && node scripts/benchmark-gerencial-ui.mjs --consolidacao-estoque"
+    "benchmark:consolidacao-estoque": "node --expose-gc scripts/benchmark-relatorios.cjs --consolidacao-estoque && node scripts/benchmark-exportacoes.mjs --consolidacao-estoque && node scripts/benchmark-gerencial-ui.mjs --consolidacao-estoque",
+    "test:backup-restauracao": "npm run build && node --test tests/backup-restauracao.test.cjs tests/startup-lifecycle.test.cjs && node scripts/backup-restauracao-smoke.mjs && node scripts/backup-restauracao-smoke.mjs --supervised-development",
+    "benchmark:backup-restauracao": "node scripts/benchmark-backup-restauracao.mjs"
   },
   "dependencies": {
     "@angular/common": "22.2.4",
@@ -49,7 +51,9 @@
     "better-sqlite3": "13.0.3",
     "exceljs": "4.4.0",
     "rxjs": "7.8.2",
-    "tslib": "2.8.1"
+    "tslib": "2.8.1",
+    "yauzl": "3.4.0",
+    "yazl": "3.3.1"
   },
   "overrides": {
     "exceljs": {
@@ -62,6 +66,8 @@
     "@angular/compiler-cli": "22.2.4",
     "@types/better-sqlite3": "7.6.13",
     "@types/node": "24.10.0",
+    "@types/yauzl": "3.4.0",
+    "@types/yazl": "3.3.1",
     "angular-eslint": "22.6.0",
     "electron": "43.8.6",
     "electron-builder": "26.18.1",

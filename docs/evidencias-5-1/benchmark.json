@@ -1,0 +1,191 @@
+{
+  "createdAt": "2026-11-13T07:42:35.736Z",
+  "os": "10.0.19045",
+  "cpu": "Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz",
+  "runtime": {
+    "node": "24.22.1",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.9",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.2",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "148",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "0.0.0",
+    "simdjson": "4.6.11",
+    "simdutf": "7.7.0",
+    "sqlite": "3.53.4",
+    "tz": "2026e",
+    "undici": "7.30.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "15.0.245.31-electron.0",
+    "zlib": "1.3.2.1-motley",
+    "zstd": "1.6.0",
+    "electron": "43.8.6",
+    "chrome": "150.0.7871.250"
+  },
+  "samples": [
+    {
+      "vendas": 50,
+      "fotos": 2,
+      "photoBytes": 1503770,
+      "largestPhotoBytes": 747571,
+      "dbBytes": 983040,
+      "archiveBytes": 2488991,
+      "backupMs": 1724.0029,
+      "inspectionMs": 699.9074999999998,
+      "preparationMs": 2853.9619,
+      "reopenMs": 1531.2961000000005,
+      "peakProcessRss": 165310464,
+      "workerSteps": [
+        {
+          "task": "capture",
+          "ms": 416.4715,
+          "processRss": 143872000,
+          "captureMs": 37.341499999999996,
+          "photoMs": 67.86079999999993
+        },
+        {
+          "task": "package",
+          "ms": 302.6325999999999,
+          "processRss": 144863232
+        },
+        {
+          "task": "inspect",
+          "ms": 299.42769999999973,
+          "processRss": 149446656
+        },
+        {
+          "task": "validate",
+          "ms": 198.08590000000004,
+          "processRss": 151011328
+        },
+        {
+          "task": "capture",
+          "ms": 406.6091000000001,
+          "processRss": 151515136,
+          "captureMs": 28.931099999999788,
+          "photoMs": 72.04139999999961
+        },
+        {
+          "task": "package",
+          "ms": 398.49379999999974,
+          "processRss": 151789568
+        }
+      ],
+      "spaceEstimateBytes": 12444955
+    },
+    {
+      "vendas": 200,
+      "fotos": 10,
+      "photoBytes": 7516760,
+      "largestPhotoBytes": 747346,
+      "dbBytes": 2555904,
+      "archiveBytes": 10080814,
+      "backupMs": 2843.5434999999998,
+      "inspectionMs": 1210.8953000000001,
+      "preparationMs": 5613.649500000001,
+      "reopenMs": 2800.8806000000004,
+      "peakProcessRss": 205234176,
+      "workerSteps": [
+        {
+          "task": "capture",
+          "ms": 1114.5303999999996,
+          "processRss": 167882752,
+          "captureMs": 49.795600000001286,
+          "photoMs": 280.2417999999998
+        },
+        {
+          "task": "package",
+          "ms": 671.6980000000003,
+          "processRss": 169025536
+        },
+        {
+          "task": "inspect",
+          "ms": 788.4082999999991,
+          "processRss": 170139648
+        },
+        {
+          "task": "validate",
+          "ms": 443.5673000000006,
+          "processRss": 166522880
+        },
+        {
+          "task": "capture",
+          "ms": 1037.7407000000003,
+          "processRss": 168431616,
+          "captureMs": 41.227600000000166,
+          "photoMs": 284.6191999999992
+        },
+        {
+          "task": "package",
+          "ms": 1013.9289000000008,
+          "processRss": 168230912
+        }
+      ],
+      "spaceEstimateBytes": 50404070
+    },
+    {
+      "vendas": 500,
+      "fotos": 30,
+      "photoBytes": 89700420,
+      "largestPhotoBytes": 2987841,
+      "dbBytes": 5668864,
+      "archiveBytes": 95392384,
+      "backupMs": 14942.9178,
+      "inspectionMs": 8816.621100000004,
+      "preparationMs": 22570.0798,
+      "reopenMs": 9087.038199999995,
+      "peakProcessRss": 278351872,
+      "workerSteps": [
+        {
+          "task": "capture",
+          "ms": 7087.788499999999,
+          "processRss": 189984768,
+          "captureMs": 254.70300000000134,
+          "photoMs": 4201.036999999997
+        },
+        {
+          "task": "package",
+          "ms": 5613.8942000000025,
+          "processRss": 169115648
+        },
+        {
+          "task": "inspect",
+          "ms": 8430.968099999998,
+          "processRss": 172097536
+        },
+        {
+          "task": "validate",
+          "ms": 1835.405200000001,
+          "processRss": 173862912
+        },
+        {
+          "task": "capture",
+          "ms": 4651.4493,
+          "processRss": 206090240,
+          "captureMs": 216.92919999999867,
+          "photoMs": 1735.8569999999963
+        },
+        {
+          "task": "package",
+          "ms": 6731.306100000002,
+          "processRss": 195534848
+        }
+      ],
+      "spaceEstimateBytes": 476961920
+    }
+  ],
+  "source": "Validated read-only 4G3 fixtures created with official services; fixture/photo preparation excluded from timings"
+}

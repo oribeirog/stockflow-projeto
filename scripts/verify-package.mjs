@@ -21,4 +21,7 @@ assert(files.includes('/dist/electron/preload/index.cjs'), 'Production preload m
 assert(files.includes('/dist/electron/ipc/cadastros.js'), 'Production handlers missing');
 assert(files.includes('/dist/electron/services/exportacoes/worker.js'), 'Export worker missing');
 assert(files.includes('/node_modules/exceljs/excel.js'), 'XLSX library missing');
+assert(files.includes('/dist/electron/services/backup/worker.js'), 'Backup worker missing');
+assert(files.includes('/node_modules/yauzl/index.js'), 'Backup ZIP reader missing');
+assert(files.includes('/node_modules/yazl/index.js'), 'Backup ZIP writer missing');
 console.log('PACKAGE_ISOLATION_OK', renderer.length, 'production renderer bundles');

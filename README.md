@@ -1,8 +1,63 @@
 # MNR Perfumes
 
+## Etapa 5.1 — Backup e restauração segura
+
+Correção da validação manual: o reinício de desenvolvimento agora é coordenado
+pelo supervisor, mantendo Angular disponível durante a restauração. Mantenha o
+terminal de `npm.cmd run dev` aberto. Falhas de inicialização registram a fase e
+a exceção em `logs/startup-error-*.json`; falha de interface é distinguida de falha
+de recuperação. Consulte o [relatório complementar](docs/complemento-5-1-reinicio-restauracao.md)
+para causa, testes A/B e repetição manual em perfil isolado.
+
+Em **Configurações → Backup e Restauração**, **Criar backup** abre o seletor
+nativo do Windows. Escolha uma pasta segura e aguarde a confirmação com nome,
+data/hora e tamanho. O arquivo `.mnrbackup` inclui o banco completo e as
+fotografias vinculadas, com manifesto e hashes. A captura coordena operações
+e imagens; arquivos existentes não são sobrescritos. Cancelar o seletor não
+gera um backup.
+
+**Guarde cópias fora do computador, em armazenamento protegido.** O formato não
+é criptografado e contém informações pessoais/comerciais. Hashes verificam
+integridade, não autenticidade. Backups locais não substituem uma política de
+armazenamento seguro externo.
+
+Para restaurar, use **Selecionar backup**, confira data, versão e contagens,
+marque o aviso e confirme no diálogo. **A restauração substitui os dados atuais
+pelo estado salvo; operações posteriores poderão deixar de aparecer.** Seleção
+e inspeção não alteram os dados ativos. Esta versão aceita somente formato 1 /
+schema 5; arquivos corrompidos, incompletos ou incompatíveis são recusados.
+
+Antes de ativar o conjunto restaurado, o aplicativo cria e valida uma proteção
+independente dos dados atuais. Depois reinicia e verifica banco e fotografias
+antes de mostrar sucesso. Se houver interrupção, a próxima abertura conclui a
+ativação ou recupera o conjunto anterior; operações normais ficam bloqueadas
+quando não houver um conjunto validado. **Não apague bancos, WAL, imagens ou
+journals para tentar corrigir um erro de recuperação.** Preserve a raiz e procure
+suporte se a abertura for recusada.
+
+**Abrir pasta de proteção** abre a pasta administrada `recovery`, normalmente em
+`%LOCALAPPDATA%/MNR Software/MNR Perfumes/recovery`. As cópias pré-restauração
+ficam em `protection` e podem ser selecionadas pelo mesmo fluxo. São mantidas as
+três proteções concluídas mais recentes e os conjuntos necessários; o legado
+inicial e arquivos não reconhecidos são preservados. Aviso de retenção exige
+inspeção antes de novas restaurações, sem excluir arquivos desconhecidos.
+
+`npm.cmd run test:backup-restauracao` executa o recorte e o smoke local.
+`node scripts/backup-restauracao-smoke.mjs --development` e `--package` usam
+HTTP e executável isolado. `npm.cmd run benchmark:backup-restauracao` mede
+50/200/500 vendas com fotografias de teste. Consulte o
+[relatório técnico da 5.1](docs/etapa-5-1-backup-restauracao.md) para protocolo,
+limites, resultados reais e checklist manual. A etapa aguarda validação manual
+do proprietário. **5.2 (instalador) e 5.3 (homologação final) permanecem pendentes.**
+
+As seções de etapas anteriores abaixo registram seus escopos e pendências na
+data de cada entrega. Referências históricas à Etapa 5 inteira como futura não
+substituem o estado da 5.1 descrito acima.
+
 ## Etapa 4G.3 — Consolidação integral de compras e estoque
 
-Consolidação técnica concluída, aguardando validação manual do proprietário: cadeia integrada de compras a custos
+Consolidação técnica concluída e validada manualmente pelo proprietário, conforme
+informado na autorização da 5.1: cadeia integrada de compras a custos
 diferentes, devoluções de compras, vendas, correções, reembolsos, ajustes e
 estornos. As comparações usam serviços oficiais, ledger, versões, Dashboard e
 os sete modelos Excel/PDF em estados controlados, incluindo concorrência entre
@@ -18,9 +73,9 @@ para resultados, evidências e checklist manual.
 
 Sem novas operações comerciais, migrações, dependências ou alterações do
 custeio. As regras formais da 4G.1/4G.2 continuam em vigor. A consolidação
-não significa preparação para distribuição: **Etapa 5** continua pendente,
-incluindo backup/restauração pela interface, instalador Windows, máquina limpa,
-homologação Windows 10/11 e ensaios offline físicos. Sem commit/push automático.
+não significa preparação para distribuição. Backup/restauração da **5.1** está
+descrito acima; instalador Windows, máquina limpa, homologação Windows 10/11 e
+ensaios offline físicos continuam pendentes. Sem commit/push automático.
 
 ## Etapa 4G.2 — Estornos de ajustes manuais de estoque
 
@@ -43,8 +98,8 @@ usam HTTP e executável isolado/offline emulado, com reabertura e comparação d
 Estoque, indicadores, Dashboard, XLSX e PDF por leitores independentes.
 Consulte o [relatório técnico e checklist da 4G.2](docs/etapa-4G2-estornos-estoque.md).
 
-Sem novas migrações ou dependências. A consolidação 4G.3 está descrita acima;
-Etapa 5 permanece futura.
+Sem novas migrações ou dependências naquela etapa. A consolidação 4G.3 e a
+funcionalidade 5.1 estão descritas acima; 5.2/5.3 permanecem futuras.
 
 ## Etapa 4G.1 — Correções de compras
 
@@ -67,9 +122,9 @@ HTTP e executável isolado com rede offline emulada, incluindo reabertura.
 Detalhes, limitações e checklist no [relatório da 4G.1](docs/etapa-4G1-correcoes-compras.md).
 
 Etapas anteriores até 4G.2 foram validadas manualmente e commitadas pelo
-proprietário, conforme a autorização da 4G.3. Permanece futura:
-**Etapa 5**, backup/restauração pela interface, instalador, distribuição, máquina
-limpa, Windows 10/11 e ensaios offline físicos. Não implementadas nesta etapa.
+proprietário, conforme a autorização da 4G.3. Backup/restauração da **5.1** está
+descrito acima. Instalador, distribuição, máquina limpa, homologação Windows
+10/11 e ensaios offline físicos continuam pendentes da 5.2/5.3.
 
 ## Etapa 4F.4 — Consolidação gerencial
 
@@ -93,9 +148,9 @@ essa aprovação. A validação da 4F.4 foi informada na autorização da 4G.1.
 
 Na data da consolidação permanecia futura a **4G**; 4G.1 e 4G.2 estão descritas acima.
 O estado atual da consolidação 4G.3 está descrito acima. Continua pendente a
-**Etapa 5**, backup/restauração pela interface, instalador, distribuição e máquina
-limpa, Windows 10/11, ensaios offline físicos e documentação de instalação/recuperação.
-Essas funcionalidades não foram implementadas nesta consolidação.
+**5.2/5.3**, instalador, distribuição/máquina limpa, homologação Windows 10/11 e
+ensaios offline físicos. Backup/restauração foi entregue depois, na 5.1 acima;
+não fazia parte daquela consolidação.
 
 ## Etapa 4F.3 — Relatórios e exportações Excel/PDF
 
@@ -347,8 +402,9 @@ mensagens de sucesso parcial protegem as gravações de cadastro e fotografia.
 Schema v5 acrescenta somente a infraestrutura aprovada de fotografias. Imagens
 normalizadas e miniaturas ficam fora da instalação; o renderer recebe bytes por
 API limitada, sem paths ou acesso genérico ao filesystem. Backup completo com
-manifesto e restauração isolada foram preparados; sua interface fica para etapa
-posterior. `test:ui` agora utiliza banco, imagens e Chromium exclusivos por execução.
+manifesto e restauração isolada foram preparados naquela etapa; a interface e
+protocolo seguro completos estão na 5.1 acima. `test:ui` utiliza banco, imagens
+e Chromium exclusivos por execução.
 
 Fluxos, segurança, arquivos, testes e limitações no
 [relatório da Etapa 4B](docs/etapa-4B-cadastro-perfumes.md). As seções anteriores
