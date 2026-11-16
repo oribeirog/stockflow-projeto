@@ -42,7 +42,7 @@ function prepararVinculos(db) {
       sku: 'FIXTURE-4C',
       marcaId: marca.id,
       categoriaId: categoria.id,
-      volumeMicrolitros: 1000,
+      unidadeComercial: 'UN',
       precoVendaCentavos: 200,
       estoqueMinimo: 0,
     }),

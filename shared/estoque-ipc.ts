@@ -1,4 +1,4 @@
-import type { ConsultaCadastro } from './catalogos';
+import type { ConsultaCadastro, UnidadeComercial } from './catalogos';
 import type {
   CodigoErroEstoque,
   ComandoEstoque,
@@ -14,6 +14,8 @@ export interface ConsultaEstoque extends ConsultaCadastro {
 export interface ProdutoEstoque extends SaldoEstoque {
   nome: string;
   sku: string;
+  codigoBarras: string | null;
+  unidadeComercial: UnidadeComercial;
   ativo: boolean;
   estoqueMinimo: number;
   baixo: boolean;

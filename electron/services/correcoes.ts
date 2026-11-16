@@ -46,6 +46,7 @@ interface Item {
   sequencia: number;
   produto_id: number;
   sku_historico: string;
+  unidade_historica: string;
   descricao_historica: string;
   quantidade: number;
   valor_unitario_centavos: number;
@@ -237,7 +238,7 @@ export function createCorrectionService(
     return Number(
       db
         .prepare(
-          `INSERT INTO itens_documento(documento_id,sequencia,produto_id,sku_historico,descricao_historica,quantidade,valor_unitario_centavos,valor_bruto_centavos,desconto_item_centavos,desconto_global_rateado_centavos,frete_rateado_centavos,despesas_rateadas_centavos,valor_liquido_centavos,valor_custo_estoque_centavos,motivo,item_origem_id,quantidade_perda) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          `INSERT INTO itens_documento(documento_id,sequencia,produto_id,sku_historico,descricao_historica,quantidade,valor_unitario_centavos,valor_bruto_centavos,desconto_item_centavos,desconto_global_rateado_centavos,frete_rateado_centavos,despesas_rateadas_centavos,valor_liquido_centavos,valor_custo_estoque_centavos,motivo,item_origem_id,quantidade_perda,unidade_historica) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         )
         .run(
           documentId,
@@ -257,6 +258,7 @@ export function createCorrectionService(
           reason,
           source.id,
           loss,
+          source.unidade_historica,
         ).lastInsertRowid,
     );
   }

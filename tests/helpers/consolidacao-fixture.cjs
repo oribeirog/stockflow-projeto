@@ -7,7 +7,7 @@ const { createFinancialQueryService } = require('../../dist/electron/services/fi
 const command = (dados) => ({ operacaoId: randomUUID(), motivo: 'Consolidação isolada', dados });
 const day = '2026-11-01';
 const clock = () => new Date('2026-11-06T15:00:00Z');
-function cycle(db) {
+function cycle(db, productOverrides = {}) {
   const cat = createCatalogService(db, 'test', clock);
   const marca = cat.saveReference('MARCA', command({ nome: 'Marca ciclo' }));
   const categoria = cat.saveReference('CATEGORIA', command({ nome: 'Categoria ciclo' }));
@@ -20,9 +20,10 @@ function cycle(db) {
     sku: 'CICLO',
     marcaId: marca.id,
     categoriaId: categoria.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 10000,
     estoqueMinimo: 0,
+    ...productOverrides,
   };
   const productId = cat.saveProduct(command(productData)).id;
   const com = createCommercialService(db, 'test', clock);

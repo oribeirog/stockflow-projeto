@@ -172,7 +172,7 @@ test('aggregate stock value remains exact above Number.MAX_SAFE_INTEGER without 
   assert(BigInt(result.valorTotalFiltradoCentavos) > BigInt(Number.MAX_SAFE_INTEGER));
   assert.equal(result.itens.length, 1);
   assert.equal(result.temMais, true);
-  assert.equal(f.db.pragma('user_version', { simple: true }), 5);
+  assert.equal(f.db.pragma('user_version', { simple: true }), 6);
 });
 test('preload exposes only seven stock operations and invokes fixed channels', async () => {
   const vm = require('node:vm'),

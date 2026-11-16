@@ -1,3 +1,4 @@
+import { sqlitePath } from '../infrastructure/database/sqlite-path';
 import Database from 'better-sqlite3';
 import {
   mkdirSync,
@@ -125,7 +126,7 @@ function validateBundle(directory: string): Manifest {
       throw new Error('Hash de backup inválido');
   }
   if (!seen.has('data/mnr-perfumes.db')) throw new Error('Snapshot ausente');
-  const db = new Database(join(directory, 'data/mnr-perfumes.db'), {
+  const db = new Database(sqlitePath(join(directory, 'data/mnr-perfumes.db')), {
     readonly: true,
     fileMustExist: true,
   });
@@ -170,9 +171,9 @@ export function createMediaSnapshot(
     const pending = target + '.partial-' + randomUUID();
     mkdirSync(join(pending, 'data'), { recursive: true });
     const databasePath = join(pending, 'data/mnr-perfumes.db');
-    await db.backup(databasePath);
+    await db.backup(sqlitePath(databasePath));
     await afterDatabase?.();
-    const copy = new Database(databasePath, { readonly: true });
+    const copy = new Database(sqlitePath(databasePath), { readonly: true });
     let rows: FotoArquivo[], identity: ReturnType<typeof inspectDatabase>;
     try {
       copy.pragma('trusted_schema=OFF');

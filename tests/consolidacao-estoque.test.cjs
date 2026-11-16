@@ -360,8 +360,9 @@ test('4G3 purchase return during paginated stock export retains one WAL snapshot
     'All product IDs occur exactly once across export pages',
   );
   const original = rows.find((r) => r[0] === s.productId);
-  assert.equal(original[4], 10);
-  assert.equal(original[5], 20000);
+  assert.equal(original[3], 'UN');
+  assert.equal(original[5], 10);
+  assert.equal(original[6], 20000);
   assert(d.secoes[0].linhas.some((r) => r[1]?.valor === 20205));
   assert.equal(s.stock.consultarSaldo(s.productId).quantidade, 8);
   assert.equal(s.stock.consultarSaldo(s.productId).valorTotalCentavos, 16000);

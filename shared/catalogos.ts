@@ -45,8 +45,7 @@ export interface EntradaProduto extends EntradaReferencia {
   codigoBarras?: string | null;
   marcaId: number;
   categoriaId: number;
-  volumeMicrolitros: number;
-  concentracao?: string | null;
+  unidadeComercial?: UnidadeComercial;
   descricao?: string | null;
   precoVendaCentavos: number;
   estoqueMinimo: number;
@@ -56,12 +55,14 @@ export interface Produto extends Referencia {
   codigoBarras: string | null;
   marcaId: number;
   categoriaId: number;
-  volumeMicrolitros: number;
-  concentracao: string | null;
+  // Absent only in the original cached response of a pre-schema-6 operation.
+  unidadeComercial?: UnidadeComercial;
   descricao: string | null;
   precoVendaCentavos: number;
   estoqueMinimo: number;
 }
+export const UNIDADES_COMERCIAIS = ['UN', 'CX', 'PCT', 'KIT', 'PAR', 'FR'] as const;
+export type UnidadeComercial = (typeof UNIDADES_COMERCIAIS)[number];
 export interface ConsultaCadastro {
   busca?: string;
   ativo?: boolean;

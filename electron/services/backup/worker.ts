@@ -1,8 +1,10 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import { captureSet, packageSet, inspectArchive, validateSet } from './format';
+import { captureSet, packageSet, inspectArchive, validateSet, prepareArchive } from './format';
 import { backupMessage } from './io';
 async function run() {
   switch (workerData.task) {
+    case 'prepare':
+      return prepareArchive(workerData.source, workerData.staging, workerData.target);
     case 'capture':
       return captureSet(
         workerData.database,

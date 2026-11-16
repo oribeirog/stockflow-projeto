@@ -30,7 +30,7 @@ async function fixture(t) {
     sku: 'TEST',
     marcaId: brand.id,
     categoriaId: category.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 100,
     estoqueMinimo: 0,
   };

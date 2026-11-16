@@ -1,4 +1,4 @@
-<section class="stack" aria-label="Estoque do perfume">
+<section class="stack" aria-label="Estoque do produto">
   <a routerLink="/estoque">Voltar ao estoque</a>
   @if(loading()){<mnr-content-state
     kind="loading"
@@ -28,10 +28,12 @@
   } @if(produto(); as p){
   <div class="summary stack">
     <h2>{{p.nome}}</h2>
-    <p>SKU {{p.sku}} · {{p.ativo?'Ativo':'Inativo — ajustes permitidos'}}</p>
     <p>
-      Disponível: <strong>{{p.quantidade}}</strong> · Mínimo: {{p.estoqueMinimo}} · Versão:
-      {{p.versao}}
+      SKU {{p.sku}} · {{p.unidadeComercial}} · {{p.ativo?'Ativo':'Inativo — ajustes permitidos'}}
+    </p>
+    <p>
+      Disponível: <strong>{{p.quantidade}} {{p.unidadeComercial}}</strong> · Mínimo:
+      {{p.estoqueMinimo}} · Versão: {{p.versao}}
     </p>
     <p>
       Valor do saldo: <strong>{{reais(p.valorTotalCentavos)}}</strong> · Custo médio unitário
@@ -45,7 +47,7 @@
     <h2>Ajustes manuais</h2>
     <p>
       Entradas, saídas, perdas e contagens não representam compras nem pagamentos. Para mudar o
-      estoque mínimo, edite o cadastro em Perfumes.
+      estoque mínimo, edite o cadastro em Produtos.
     </p>
     <div class="row" data-actions>
       @for(action of actions; track action){<mnr-button
@@ -67,7 +69,7 @@
           [required]="true"
           [value]="quantidade()"
           [error]="errors()['quantidade'] || ''"
-          hint="Unidades inteiras; até 1 bilhão."
+          hint="Quantidades inteiras na unidade do produto; até 1 bilhão."
           (valueChanged)="changed('quantidade',$event)"
         />
         <mnr-field

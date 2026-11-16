@@ -327,11 +327,12 @@ export function coletarDocumento(
         const r = pages((p) => s.listarSaldos({ ...pedido.filtros, ...p }));
         section(
           'Estoque',
-          'Posição atual com valor total oficial do estoque. Custo médio unitário e movimentos não são apresentados. Não representa estoque histórico.',
+          'Posição atual com valor total oficial do estoque. Custo médio unitário e movimentos não são apresentados. Não representa estoque histórico. Quantidades inteiras na unidade de cada produto, sem conversão entre unidades.',
           [
             C('Produto ID', 'inteiro', 14),
             C('SKU'),
             C('Nome atual', 'texto', 42),
+            C('Unidade'),
             C('Cadastro'),
             C('Disponível', 'inteiro', 16),
             C('Valor atual (R$)', 'moeda'),
@@ -343,6 +344,7 @@ export function coletarDocumento(
             v.produtoId,
             v.skuAtual,
             v.nomeAtual,
+            v.unidadeComercial,
             v.ativo ? 'Ativo' : 'Inativo',
             v.quantidade,
             v.valorCentavos,

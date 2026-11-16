@@ -64,7 +64,7 @@ module.exports = async function run({
     `window.mnrApi.cadastros.formasPagamento.salvar(${cmd({ nome: 'Dinheiro' })})`,
   );
   const product = await api(
-    `window.mnrApi.cadastros.produtos.salvar(${cmd({ nome: 'Perfume vendas', sku: 'VENDA', marcaId: marca.id, categoriaId: categoria.id, volumeMicrolitros: 1000, precoVendaCentavos: 200, estoqueMinimo: 0 })})`,
+    `window.mnrApi.cadastros.produtos.salvar(${cmd({ nome: 'Perfume vendas', sku: 'VENDA', marcaId: marca.id, categoriaId: categoria.id, unidadeComercial: 'UN', precoVendaCentavos: 200, estoqueMinimo: 0 })})`,
   );
   const stock = (q, c) =>
     api(

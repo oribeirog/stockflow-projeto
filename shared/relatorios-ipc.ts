@@ -1,3 +1,4 @@
+import type { UnidadeComercial } from './catalogos';
 import type { Result } from './contracts';
 export interface PeriodoRelatorio {
   dataInicio: string;
@@ -172,6 +173,7 @@ export interface SaldoProdutoRelatorio {
   produtoId: number;
   nomeAtual: string;
   skuAtual: string;
+  unidadeComercial: UnidadeComercial;
   ativo: boolean;
   estoqueMinimo: number;
   quantidade: number;

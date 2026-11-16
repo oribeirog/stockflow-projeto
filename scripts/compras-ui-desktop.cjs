@@ -82,7 +82,7 @@ async function verify(win) {
   const base = {
     marcaId: marca.id,
     categoriaId: categoria.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 0,
     estoqueMinimo: 0,
   };

@@ -90,7 +90,7 @@ test('empty payment catalogue is never seeded; first form, full payment and idem
       .error.code,
     'INVALID_STATE',
   );
-  assert.equal(f.db.pragma('user_version', { simple: true }), 5);
+  assert.equal(f.db.pragma('user_version', { simple: true }), 6);
 });
 test('multiple perfumes, exact official allocations, multiple forms and moving average reuse commercial rules', async (t) => {
   const f = await fixture(t),

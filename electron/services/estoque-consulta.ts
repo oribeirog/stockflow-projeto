@@ -3,7 +3,7 @@ import type { PaginaEstoque, ProdutoEstoque, PaginaMovimentacoes } from '../../s
 import { active, identifier, integer, nameKey, optionalText, record } from './catalog-validation';
 import { createStockService } from './estoque';
 
-const fields = `p.id AS produtoId,p.nome,p.sku,p.ativo,p.estoque_minimo AS estoqueMinimo,
+const fields = `p.id AS produtoId,p.nome,p.sku,p.codigo_barras AS codigoBarras,p.unidade_comercial AS unidadeComercial,p.ativo,p.estoque_minimo AS estoqueMinimo,
   s.quantidade,s.valor_total_centavos AS valorTotalCentavos,s.versao`;
 type Stored = Omit<ProdutoEstoque, 'ativo' | 'baixo' | 'custoMedioDecimal'> & { ativo: number };
 function dto(row: Stored): ProdutoEstoque {
@@ -38,7 +38,8 @@ export function createStockQueryService(db: Database.Database, version: string) 
     obter: (input: unknown) => db.transaction(() => obter(input))(),
     listar: (input: unknown): PaginaEstoque => {
       const f = record(input, ['busca', 'ativo', 'somenteBaixo', 'limite', 'deslocamento']);
-      const busca = nameKey(optionalText(f['busca'], 'busca', 200) ?? '');
+      const texto = optionalText(f['busca'], 'busca', 200) ?? '';
+      const busca = nameKey(texto);
       const ativo = active(f['ativo']);
       const baixo = active(f['somenteBaixo']) ?? false;
       const limite = f['limite'] === undefined ? 25 : integer(f['limite'], 'limite', 1, 200);
@@ -47,10 +48,11 @@ export function createStockQueryService(db: Database.Database, version: string) 
           ? 0
           : integer(f['deslocamento'], 'deslocamento', 0, 1_000_000_000);
       const from = `FROM produtos p JOIN saldos_estoque s ON s.produto_id=p.id
-        WHERE instr(mnr_nome_chave(p.nome || char(32) || p.sku),?)>0
+        WHERE (instr(mnr_nome_chave(p.nome || char(32) || p.sku),?)>0 OR p.codigo_barras=?)
         AND (? IS NULL OR p.ativo=?) AND (?=0 OR s.quantidade<p.estoque_minimo)`;
       const args = [
         busca,
+        texto,
         ativo === undefined ? null : Number(ativo),
         ativo === undefined ? null : Number(ativo),
         Number(baixo),

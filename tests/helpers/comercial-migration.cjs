@@ -1,3 +1,4 @@
+const { approvedRuntime } = require('./approved-v5.cjs');
 const assert = require('node:assert/strict');
 const Database = require('better-sqlite3');
 const { join } = require('node:path');
@@ -8,7 +9,9 @@ const {
   inspectDatabase,
   checkIntegrity,
 } = require('../../dist/electron/infrastructure/database/migrate.js');
-const { createCatalogService } = require('../../dist/electron/services/catalogos.js');
+const { createCatalogService } = require(
+  require('node:path').join(approvedRuntime(), 'dist/electron/services/catalogos'),
+);
 const { createStockService } = require('../../dist/electron/services/estoque.js');
 const {
   reconciliarComercial,

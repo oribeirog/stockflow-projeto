@@ -8,7 +8,7 @@ import { Photo, fotoUrl } from './photo';
   selector: 'mnr-photo-editor',
   imports: [Button, Photo],
   template: `<div class="stack">
-    <h3>Fotografia do perfume</h3>
+    <h3>Fotografia do produto</h3>
     <p>
       Opcional. JPEG ou PNG estático, até 10 MiB e 24 milhões de pixels. A cópia local é preservada
       nas atualizações.
@@ -17,7 +17,7 @@ import { Photo, fotoUrl } from './photo';
       @if (preview()) {
         <img [src]="preview()" alt="Prévia da fotografia selecionada" width="160" height="160" />
       } @else if (produtoId() && !removing()) {
-        <mnr-photo [produtoId]="produtoId()!" name="perfume" [revision]="revision()" />
+        <mnr-photo [produtoId]="produtoId()!" name="produto" [revision]="revision()" />
       } @else {
         <p>Sem fotografia{{ removing() ? ' após salvar' : '' }}.</p>
       }
@@ -121,7 +121,7 @@ export class PhotoEditor implements OnDestroy {
     this.removing.set(false);
     this.mark(true);
     this.failed.set(false);
-    this.message.set('Fotografia selecionada. Ela será aplicada após salvar o perfume.');
+    this.message.set('Fotografia selecionada. Ela será aplicada após salvar o produto.');
     this.busy.set(false);
     this.pending.emit(false);
   }
@@ -181,7 +181,7 @@ export class PhotoEditor implements OnDestroy {
       this.uncertain.set(uncertain);
       this.pending.emit(uncertain);
       this.failed.set(true);
-      this.message.set('Perfume salvo. ' + result.error.message);
+      this.message.set('Produto salvo. ' + result.error.message);
       if (!uncertain) this.intention = undefined;
       this.saved.emit(false);
       return false;

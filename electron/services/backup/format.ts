@@ -1,3 +1,4 @@
+import { sqlitePath } from '../../infrastructure/database/sqlite-path';
 import Database from 'better-sqlite3';
 import { createHash } from 'node:crypto';
 import { crc32 } from 'node:zlib';
@@ -62,23 +63,31 @@ const schemaSql = (db: Database.Database) =>
       )
       .all(),
   );
-let schemaPromise: Promise<string> | undefined;
-function trustedSchema() {
-  return (schemaPromise ??= (async () => {
+const schemaPromises = new Map<number, Promise<string>>();
+function trustedSchema(version: number) {
+  let expected = schemaPromises.get(version);
+  if (expected) return expected;
+  expected = (async () => {
     const db = new Database(':memory:');
     try {
       db.pragma('foreign_keys=ON');
       db.pragma('trusted_schema=OFF');
-      await migrateDatabase(db, {
-        directory: '.',
-        existed: false,
-        appVersion: 'schema-validation',
-      });
+      await migrateDatabase(
+        db,
+        {
+          directory: '.',
+          existed: false,
+          appVersion: 'schema-validation',
+        },
+        migrations.slice(0, version),
+      );
       return schemaSql(db);
     } finally {
       db.close();
     }
-  })());
+  })();
+  schemaPromises.set(version, expected);
+  return expected;
 }
 export function mediaRows(db: Database.Database) {
   return db
@@ -96,19 +105,19 @@ export function mediaFiles(rows: FotoArquivo[]): BackupFile[] {
 }
 export async function databaseInfo(path: string) {
   await regularFile(path, BACKUP_LIMITS.databaseBytes);
-  const expected = await trustedSchema(),
-    db = new Database(path, { readonly: true, fileMustExist: true, timeout: 1500 });
+  const db = new Database(sqlitePath(path), { readonly: true, fileMustExist: true, timeout: 1500 });
   try {
     db.pragma('trusted_schema=OFF');
     db.pragma('foreign_keys=ON');
     db.pragma('query_only=ON');
     db.pragma('cache_size=-8192');
     db.pragma('mmap_size=0');
-    if (db.pragma('user_version', { simple: true }) !== migrations.length)
-      throw new BackupError('INCOMPATIBLE');
+    const version = db.pragma('user_version', { simple: true }) as number;
+    if (![5, 6].includes(version)) throw new BackupError('INCOMPATIBLE');
+    const expected = await trustedSchema(version);
     // Check stored SQL before invoking constraints, domain queries or any write.
     if (schemaSql(db) !== expected) throw new BackupError('INVALID_BACKUP');
-    const identity = inspectDatabase(db);
+    const identity = inspectDatabase(db, migrations.slice(0, version));
     if (
       !reconciliarEstoque(db).consistente ||
       !reconciliarComercial(db) ||
@@ -119,6 +128,7 @@ export async function databaseInfo(path: string) {
       Number((db.prepare(`SELECT count(*) n FROM ${table}`).get() as { n: number }).n);
     const rows = mediaRows(db);
     return {
+      schema: version,
       databaseId: identity.identity!.identificador,
       rows,
       counts: {
@@ -171,7 +181,11 @@ export function decodeManifest(bytes: Buffer): Manifest {
       'files',
     ]);
     if (m['app'] !== BACKUP_APP) throw new BackupError('INVALID_BACKUP');
-    if (m['format'] !== 1 || m['schema'] !== migrations.length)
+    if (
+      m['format'] !== 1 ||
+      ![5, 6].includes(Number(m['schema'])) ||
+      typeof m['schema'] !== 'number'
+    )
       throw new BackupError('INCOMPATIBLE');
     checkedId(m['databaseId']);
     if (
@@ -231,6 +245,7 @@ export async function validateSet(
       throw new BackupError('INVALID_BACKUP');
   }
   const info = await databaseInfo(join(root, 'data/mnr-perfumes.db'));
+  if (info.schema !== manifest.schema) throw new BackupError('INVALID_BACKUP');
   if (info.databaseId !== manifest.databaseId) throw new BackupError('INVALID_BACKUP');
   const expected = mediaFiles(info.rows),
     actual = manifest.files.filter((f) => f.path.startsWith('images/'));
@@ -305,6 +320,7 @@ export async function captureSet(
   images: string,
   target: string,
   appVersion: string,
+  reference?: { createdAt: string },
 ) {
   await safeDirectory(images);
   await safeDirectory(join(images, 'objects'));
@@ -313,7 +329,7 @@ export async function captureSet(
   await ensureDirectory(join(target, 'data'));
   await ensureDirectory(join(target, 'images/objects'));
   const output = join(target, 'data/mnr-perfumes.db'),
-    db = new Database(database, { readonly: true, fileMustExist: true, timeout: 5000 });
+    db = new Database(sqlitePath(database), { readonly: true, fileMustExist: true, timeout: 5000 });
   const started = performance.now();
   // SQLite accepts an empty destination. Claim its identity before VACUUM writes.
   const claimed = await ownedOutput(target, 'data/mnr-perfumes.db');
@@ -321,7 +337,7 @@ export async function captureSet(
   try {
     db.pragma('trusted_schema=OFF');
     db.pragma('synchronous=FULL');
-    db.prepare('VACUUM INTO ?').run(output);
+    db.prepare('VACUUM INTO ?').run(sqlitePath(output));
   } finally {
     db.close();
   }
@@ -359,10 +375,10 @@ export async function captureSet(
   const manifest: Manifest = {
     app: BACKUP_APP,
     format: 1,
-    schema: migrations.length,
+    schema: info.schema,
     databaseId: info.databaseId,
     appVersion,
-    createdAt: new Date().toISOString(),
+    createdAt: reference?.createdAt ?? new Date().toISOString(),
     files,
   };
   const manifestBytes = encodeManifest(manifest),
@@ -543,4 +559,43 @@ export async function inspectArchive(source: string, target: string) {
       throw error;
     throw new BackupError('INVALID_BACKUP');
   }
+}
+
+// Validation of the original version precedes every write. The newly extracted
+// private copy is disposable staging, not an existing active dataset. Migration
+// uses the official transaction; the user archive is never opened for writing.
+export async function prepareArchive(source: string, staging: string, target: string) {
+  await inspectArchive(source, staging);
+  return prepareValidatedSet(staging, target);
+}
+export async function prepareValidatedSet(staging: string, target: string) {
+  const original = (await validateSet(staging)).manifest;
+  if (original.schema === 5) {
+    const db = new Database(sqlitePath(join(staging, 'data/mnr-perfumes.db')), {
+      fileMustExist: true,
+    });
+    try {
+      db.pragma('trusted_schema=OFF');
+      db.pragma('foreign_keys=ON');
+      db.pragma('synchronous=FULL');
+      await migrateDatabase(db, {
+        directory: join(staging, 'data'),
+        existed: false,
+        appVersion: original.appVersion,
+        imagesDirectory: join(staging, 'images'),
+      });
+    } finally {
+      db.close();
+    }
+    if ((await databaseInfo(join(staging, 'data/mnr-perfumes.db'))).schema !== 6)
+      throw new BackupError('INCOMPATIBLE');
+  }
+  const summary = await captureSet(
+    join(staging, 'data/mnr-perfumes.db'),
+    join(staging, 'images'),
+    target,
+    original.appVersion,
+    { createdAt: original.createdAt },
+  );
+  return { ...summary, ...(original.schema === 5 ? { schemaOrigem: 5 } : {}) };
 }

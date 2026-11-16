@@ -1,3 +1,4 @@
+import { sqlitePath } from './sqlite-path';
 import Database from 'better-sqlite3';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
@@ -14,7 +15,7 @@ export async function openDatabase(
 ) {
   const file = join(directory, 'mnr-perfumes.db');
   const existed = existsSync(file);
-  const db = new Database(file, { timeout: 5000 });
+  const db = new Database(sqlitePath(file), { timeout: 5000 });
   try {
     let started = performance.now();
     db.pragma('trusted_schema = OFF');

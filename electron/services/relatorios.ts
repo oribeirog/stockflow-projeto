@@ -459,7 +459,7 @@ export function createReportService(db: Database.Database, clock: () => Date = (
           D.PosicaoEstoque
         >(
           sql.saldosProdutos,
-          'SELECT produtoId,nomeAtual,skuAtual,ativo,estoqueMinimo,quantidade,valorCentavos FROM filtrados',
+          'SELECT produtoId,nomeAtual,skuAtual,unidadeComercial,ativo,estoqueMinimo,quantidade,valorCentavos FROM filtrados',
           stockTotal,
           order === 'ID'
             ? 'produtoId'

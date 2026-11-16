@@ -28,7 +28,7 @@ app
         sku: 'RUNTIME',
         marcaId: brand.id,
         categoriaId: category.id,
-        volumeMicrolitros: 1000,
+        unidadeComercial: 'UN',
         precoVendaCentavos: 0,
         estoqueMinimo: 0,
       }),

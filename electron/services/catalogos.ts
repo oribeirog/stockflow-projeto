@@ -1,5 +1,6 @@
 import type Database from 'better-sqlite3';
 import { createHash } from 'node:crypto';
+import { UNIDADES_COMERCIAIS } from '../../shared/catalogos';
 import type {
   Referencia,
   Pessoa,
@@ -33,7 +34,7 @@ const personTables = { CLIENTE: 'clientes', FORNECEDOR: 'fornecedores' } as cons
 const commonFields = 'id, nome, ativo, criado_em AS criadoEm, atualizado_em AS atualizadoEm';
 const personFields = `${commonFields}, tipo_pessoa AS tipoPessoa, documento, telefone, email, endereco, observacoes`;
 const productFields = `${commonFields}, sku, codigo_barras AS codigoBarras, marca_id AS marcaId,
-  categoria_id AS categoriaId, volume_microlitros AS volumeMicrolitros, concentracao, descricao,
+  categoria_id AS categoriaId, unidade_comercial AS unidadeComercial, descricao,
   preco_venda_centavos AS precoVendaCentavos, estoque_minimo AS estoqueMinimo`;
 const baseKeys = ['id', 'nome', 'ativo'];
 
@@ -77,15 +78,18 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
     return db
       .prepare(
         `SELECT ${fields} FROM ${table}
-      WHERE instr(${expression}, ?) > 0 AND (? IS NULL OR ativo = ?)
+      WHERE (instr(${expression}, ?) > 0 ${table === 'produtos' ? 'OR codigo_barras = ?' : ''}) AND (? IS NULL OR ativo = ?)
       ORDER BY nome, id LIMIT ? OFFSET ?`,
       )
       .all(
-        nameKey(search),
-        isActive === undefined ? null : Number(isActive),
-        isActive === undefined ? null : Number(isActive),
-        limit,
-        offset,
+        ...[
+          nameKey(search),
+          ...(table === 'produtos' ? [search] : []),
+          isActive === undefined ? null : Number(isActive),
+          isActive === undefined ? null : Number(isActive),
+          limit,
+          offset,
+        ],
       )
       .map((row) => mapped<T>(row));
   }
@@ -269,6 +273,11 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
     );
   }
   function saveProduct(command: unknown): Produto {
+    const envelope = record(command, ['operacaoId', 'motivo', 'dados']);
+    const operationId = text(envelope['operacaoId'], 'operacaoId', 100);
+    const replay = db.prepare('SELECT tipo FROM operacoes WHERE id=?').get(operationId) as
+      | { tipo: string }
+      | undefined;
     return write(
       'PRODUTO',
       command,
@@ -281,23 +290,24 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
           'categoriaId',
           'volumeMicrolitros',
           'concentracao',
+          'unidadeComercial',
           'descricao',
           'precoVendaCentavos',
           'estoqueMinimo',
         ]);
-        return {
+        const legacy =
+          Object.hasOwn(value, 'volumeMicrolitros') || Object.hasOwn(value, 'concentracao');
+        if (legacy && (replay?.tipo !== 'PRODUTO' || Object.hasOwn(value, 'unidadeComercial')))
+          invalid('atributo legado: volume/concentracao');
+        const unit = value['unidadeComercial'] === undefined ? 'UN' : value['unidadeComercial'];
+        if (!UNIDADES_COMERCIAIS.includes(unit as (typeof UNIDADES_COMERCIAIS)[number]))
+          invalid('unidadeComercial');
+        const normalized = {
           ...base(value, 200),
           sku: text(value['sku'], 'sku', 64).toUpperCase(),
           codigoBarras: optionalText(value['codigoBarras'], 'codigoBarras', 128),
           marcaId: identifier(value['marcaId']),
           categoriaId: identifier(value['categoriaId']),
-          volumeMicrolitros: integer(
-            value['volumeMicrolitros'],
-            'volumeMicrolitros',
-            1,
-            MAX_QUANTITY,
-          ),
-          concentracao: optionalText(value['concentracao'], 'concentracao', 120),
           descricao: optionalText(value['descricao'], 'descricao', 4000),
           precoVendaCentavos: integer(
             value['precoVendaCentavos'],
@@ -307,6 +317,20 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
           ),
           estoqueMinimo: integer(value['estoqueMinimo'], 'estoqueMinimo', 0, MAX_QUANTITY),
         };
+        // Keep the released normalizer exactly for an already persisted UUID.
+        // No new command can populate or edit the legacy perfume columns.
+        return legacy
+          ? {
+              ...normalized,
+              volumeMicrolitros: integer(
+                value['volumeMicrolitros'],
+                'volumeMicrolitros',
+                1,
+                MAX_QUANTITY,
+              ),
+              concentracao: optionalText(value['concentracao'], 'concentracao', 120),
+            }
+          : { ...normalized, unidadeComercial: unit };
       },
       (data, operationId, reason, now) => {
         const before =
@@ -328,14 +352,18 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
             'VALIDATION',
             'SKU é imutável; inative e cadastre outra apresentação.',
           );
+        if (before && data['unidadeComercial'] !== before.unidadeComercial)
+          throw new CadastroError(
+            'VALIDATION',
+            'Unidade comercial é imutável; use outro SKU para outra unidade.',
+          );
         const values = [
           data['sku'],
           data['codigoBarras'],
           data['nome'],
           data['marcaId'],
           data['categoriaId'],
-          data['volumeMicrolitros'],
-          data['concentracao'],
+          data['unidadeComercial'],
           data['descricao'],
           data['precoVendaCentavos'],
           data['estoqueMinimo'],
@@ -345,15 +373,15 @@ export function createCatalogService(db: Database.Database, appVersion: string) 
         if (before)
           db.prepare(
             `UPDATE produtos SET sku = ?, codigo_barras = ?, nome = ?, marca_id = ?, categoria_id = ?,
-        volume_microlitros = ?, concentracao = ?, descricao = ?, preco_venda_centavos = ?, estoque_minimo = ?, ativo = ?, atualizado_em = ? WHERE id = ?`,
+        unidade_comercial = ?, descricao = ?, preco_venda_centavos = ?, estoque_minimo = ?, ativo = ?, atualizado_em = ? WHERE id = ?`,
           ).run(...values, now, id);
         else
           id = Number(
             db
               .prepare(
-                `INSERT INTO produtos (sku, codigo_barras, nome, marca_id, categoria_id, volume_microlitros,
-        concentracao, descricao, preco_venda_centavos, estoque_minimo, ativo, criado_em, atualizado_em)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO produtos (sku, codigo_barras, nome, marca_id, categoria_id, unidade_comercial,
+        descricao, preco_venda_centavos, estoque_minimo, ativo, criado_em, atualizado_em)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
               )
               .run(...values, now, now).lastInsertRowid,
           );

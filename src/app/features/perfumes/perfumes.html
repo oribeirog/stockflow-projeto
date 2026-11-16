@@ -1,27 +1,27 @@
-﻿<section class="catalog stack" aria-label="Catálogo de perfumes">
+﻿<section class="catalog stack" aria-label="Catálogo de produtos">
   <div class="catalog-heading">
     <div>
       <h2>Seu catálogo</h2>
-      <p>Cadastre e organize as apresentações dos perfumes.</p>
+      <p>Cadastre e organize suas mercadorias.</p>
     </div>
-    <a class="action-link" routerLink="/perfumes/novo">Cadastrar perfume</a>
+    <a class="action-link" routerLink="/produtos/novo">Cadastrar produto</a>
   </div>
   <form class="filters" (submit)="$event.preventDefault(); filter()">
     <div>
-      <label for="perfume-search">Nome ou SKU</label
+      <label for="produto-search">Nome, SKU ou código de barras</label
       ><input
-        id="perfume-search"
+        id="produto-search"
         type="search"
         maxlength="200"
         [value]="search()"
         (input)="searching($any($event.target).value)"
-        placeholder="Pesquisar perfumes"
+        placeholder="Pesquisar produtos"
       />
     </div>
     <div>
-      <label for="perfume-active">Situação</label
+      <label for="produto-active">Situação</label
       ><select
-        id="perfume-active"
+        id="produto-active"
         [value]="active()"
         (change)="active.set($any($event.target).value); filter()"
       >
@@ -35,7 +35,7 @@
   @if (consulta.estado().fase === 'carregando') {
   <mnr-content-state
     kind="loading"
-    title="Carregando perfumes"
+    title="Carregando produtos"
     description="Consultando o catálogo local."
   />
   } @else if (consulta.estado().fase === 'erro') {
@@ -48,19 +48,19 @@
   } @else if (!rows().length) {
   <mnr-content-state
     kind="empty"
-    title="Nenhum perfume encontrado"
-    description="Cadastre um perfume ou ajuste a pesquisa e a situação."
+    title="Nenhum produto encontrado"
+    description="Cadastre um produto ou ajuste a pesquisa e a situação."
   />
   } @else {
   <table>
     <caption class="sr-only">
-      Perfumes cadastrados
+      Produtos cadastrados
     </caption>
     <thead>
       <tr>
-        <th scope="col">Perfume</th>
+        <th scope="col">Produto</th>
         <th scope="col">Classificação</th>
-        <th scope="col">Volume</th>
+        <th scope="col">Unidade</th>
         <th scope="col">Preço</th>
         <th scope="col">Situação</th>
         <th scope="col">Ações</th>
@@ -69,10 +69,14 @@
     <tbody>
       @for (p of rows(); track p.id) {
       <tr>
-        <td data-label="Perfume">
+        <td data-label="Produto">
           <div class="product-info">
             <mnr-photo [produtoId]="p.id" [name]="p.nome" />
-            <div><strong>{{p.nome}}</strong><small>SKU {{p.sku}}</small></div>
+            <div>
+              <strong>{{p.nome}}</strong><small>SKU {{p.sku}}</small>@if(p.codigoBarras){<small
+                >Cód. barras {{p.codigoBarras}}</small
+              >}
+            </div>
           </div>
         </td>
         <td data-label="Classificação">
@@ -80,7 +84,7 @@
             >{{names()['c'+p.categoriaId] || 'Categoria indisponível'}}</small
           >
         </td>
-        <td data-label="Volume">{{volume(p.volumeMicrolitros)}} mL</td>
+        <td data-label="Unidade">{{p.unidadeComercial || 'UN'}}</td>
         <td data-label="Preço">{{price(p.precoVendaCentavos)}}</td>
         <td data-label="Situação">
           <mnr-badge [tone]="p.ativo ? 'success' : 'neutral'"
@@ -89,11 +93,14 @@
         </td>
         <td data-label="Ações">
           <div class="row">
-            <a [routerLink]="['/perfumes', p.id, 'editar']" [attr.aria-label]="'Editar ' + p.nome"
+            <a [routerLink]="['/estoque',p.id]" [attr.aria-label]="'Consultar estoque de '+p.nome"
+              >Estoque</a
+            >
+            <a [routerLink]="['/produtos', p.id, 'editar']" [attr.aria-label]="'Editar ' + p.nome"
               >Editar</a
             >
             <a
-              [routerLink]="['/perfumes', p.id, 'editar']"
+              [routerLink]="['/produtos', p.id, 'editar']"
               [queryParams]="{acao:'situacao'}"
               [attr.aria-label]="(p.ativo ? 'Inativar ' : 'Reativar ') + p.nome"
               >{{p.ativo ? 'Inativar' : 'Reativar'}}</a
@@ -104,7 +111,7 @@
       }
     </tbody>
   </table>
-  <nav class="pagination" aria-label="Páginas de perfumes">
+  <nav class="pagination" aria-label="Páginas de produtos">
     <mnr-button variant="secondary" [disabled]="page() === 0" (pressed)="load(page()-1)"
       >Anterior</mnr-button
     ><span role="status">Página {{page()+1}}</span

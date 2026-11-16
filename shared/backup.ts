@@ -3,6 +3,7 @@ export interface BackupSummary {
   criadoEm: string;
   formato: 1;
   schema: number;
+  schemaOrigem?: number;
   versaoAplicativo: string;
   produtos: number;
   clientes: number;

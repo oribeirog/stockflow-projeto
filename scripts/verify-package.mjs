@@ -24,4 +24,12 @@ assert(files.includes('/node_modules/exceljs/excel.js'), 'XLSX library missing')
 assert(files.includes('/dist/electron/services/backup/worker.js'), 'Backup worker missing');
 assert(files.includes('/node_modules/yauzl/index.js'), 'Backup ZIP reader missing');
 assert(files.includes('/node_modules/yazl/index.js'), 'Backup ZIP writer missing');
+assert(
+  files.includes('/dist/electron/infrastructure/database/migrations/0006-catalogo-generalista.js'),
+  'Universal catalog migration missing',
+);
+assert(
+  files.includes('/dist/electron/infrastructure/database/sqlite-path.js'),
+  'SQLite path support missing',
+);
 console.log('PACKAGE_ISOLATION_OK', renderer.length, 'production renderer bundles');

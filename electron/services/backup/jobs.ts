@@ -2,6 +2,7 @@ import { Worker } from 'node:worker_threads';
 import { join } from 'node:path';
 import { BackupError } from './io';
 export type BackupTask =
+  | { task: 'prepare'; source: string; staging: string; target: string }
   | { task: 'capture'; database: string; images: string; target: string; version: string }
   | { task: 'package' | 'inspect'; source: string; target: string }
   | { task: 'validate'; source: string };

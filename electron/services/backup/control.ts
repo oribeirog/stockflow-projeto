@@ -1,3 +1,4 @@
+import { sqlitePath } from '../../infrastructure/database/sqlite-path';
 import { readFile, readdir, lstat, mkdir, unlink, rmdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -5,7 +6,14 @@ import Database from 'better-sqlite3';
 import { ownedFiles, isOwnedFile } from './ownership';
 import { openDatabase } from '../../infrastructure/database';
 import { record as baseRecord } from '../catalog-validation';
-import { databaseInfo, mediaFiles, validateSet, readArchive } from './format';
+import {
+  databaseInfo,
+  mediaFiles,
+  validateSet,
+  readArchive,
+  captureSet,
+  prepareValidatedSet,
+} from './format';
 import {
   BackupError,
   checkedId,
@@ -171,13 +179,65 @@ export async function armRestore(
   await durableJson(p.pending, { format: 1, id });
   return plan;
 }
+// A legacy pending plan is immutable. This durable binding identifies its privately
+// migrated generation without changing the original payload or protection archive.
+async function upgradeFor(root: string, plan: RestorePlan) {
+  const path = join(recoveryPaths(root).plans, plan.id + '.upgrade.json');
+  if (!(await exists(path))) return undefined;
+  const o = record(await json(path), ['format', 'source', 'id', 'payload']);
+  if (
+    o['format'] !== 1 ||
+    o['source'] !== plan.payload ||
+    !/^[0-9a-f]{64}$/.test(String(o['payload']))
+  )
+    throw new BackupError('RECOVERY_REQUIRED');
+  const id = checkedId(o['id']);
+  if (id === plan.id || id === plan.old) throw new BackupError('RECOVERY_REQUIRED');
+  return { id, payload: String(o['payload']) };
+}
+async function preparedGeneration(root: string, plan: RestorePlan) {
+  const p = recoveryPaths(root),
+    source = join(p.sets, plan.id);
+  const original = await validateSet(source);
+  if (original.manifest.schema === 6) return plan.id;
+  let upgrade = await upgradeFor(root, plan);
+  if (!upgrade) {
+    const work = await newOwnedSet(root, 'work'),
+      target = await newOwnedSet(root, 'sets');
+    // Copy first: never migrate or rewrite the archived schema-5 generation.
+    await captureSet(
+      join(source, 'data/mnr-perfumes.db'),
+      join(source, 'images'),
+      work.path,
+      original.manifest.appVersion,
+      { createdAt: original.manifest.createdAt },
+    );
+    await prepareValidatedSet(work.path, target.path);
+    upgrade = {
+      id: target.id,
+      payload: (await hashFile(join(target.path, 'manifest.json'))).sha256,
+    };
+    await durableJson(join(p.plans, plan.id + '.upgrade.json'), {
+      format: 1,
+      source: plan.payload,
+      ...upgrade,
+    });
+    await removeOwnedSet(root, 'work', work.id);
+  }
+  const target = join(p.sets, upgrade.id);
+  if ((await hashFile(join(target, 'manifest.json'))).sha256 !== upgrade.payload)
+    throw new BackupError('RECOVERY_REQUIRED');
+  if ((await validateSet(target)).manifest.schema !== 6) throw new BackupError('INCOMPATIBLE');
+  return upgrade.id;
+}
 interface Done {
   status: 'restaurado' | 'recuperado';
   criadoEm: string;
   protecao: string;
+  geracao?: string;
 }
 async function readDone(path: string): Promise<Done> {
-  const o = record(await json(path), ['status', 'criadoEm', 'protecao']);
+  const o = record(await json(path), ['status', 'criadoEm', 'protecao', 'geracao']);
   if (
     !['restaurado', 'recuperado'].includes(String(o['status'])) ||
     typeof o['criadoEm'] !== 'string' ||
@@ -186,7 +246,16 @@ async function readDone(path: string): Promise<Done> {
     !/^[0-9a-f-]{36}\.mnrbackup$/.test(o['protecao'])
   )
     throw new BackupError('RECOVERY_REQUIRED');
+  if (o['geracao'] !== undefined) checkedId(o['geracao']);
   return o as unknown as Done;
+}
+async function completedGeneration(root: string, plan: RestorePlan, done: Done) {
+  if (done.geracao !== undefined) {
+    const upgrade = await upgradeFor(root, plan);
+    if (done.status !== 'restaurado' || upgrade?.id !== done.geracao)
+      throw new BackupError('RECOVERY_REQUIRED');
+  }
+  return done.status === 'restaurado' ? (done.geracao ?? plan.id) : plan.old;
 }
 export async function lastRecovery(root: string) {
   const p = recoveryPaths(root);
@@ -204,7 +273,8 @@ export async function removeOwnedSet(root: string, area: 'sets' | 'work', id: st
   if (await exists(p.pending)) {
     const pending = record(await json(p.pending), ['format', 'id']);
     const plan = await planFor(root, String(pending['id']));
-    if (plan.id === id || plan.old === id) throw new BackupError('RECOVERY_REQUIRED');
+    if (plan.id === id || plan.old === id || (await upgradeFor(root, plan))?.id === id)
+      throw new BackupError('RECOVERY_REQUIRED');
   }
   await safeDirectory(dir);
   const owner = record(await json(join(dir, 'owner.json')), ['format', 'id', 'app']);
@@ -224,7 +294,7 @@ export async function removeOwnedSet(root: string, area: 'sets' | 'work', id: st
     // original extraction. Verify their persisted hash before considering removal.
     if (!ledger) {
       await databaseInfo(join(dir, 'data/mnr-perfumes.db'));
-      ledger = new Database(join(dir, 'data/mnr-perfumes.db'), {
+      ledger = new Database(sqlitePath(join(dir, 'data/mnr-perfumes.db')), {
         readonly: true,
         fileMustExist: true,
       });
@@ -290,9 +360,13 @@ export async function pruneProtections(root: string) {
   if (active) protectedSets.add(active);
   for (const plan of completed.slice(0, 3)) {
     protectedSets.add(plan.id);
+    const upgrade = await upgradeFor(root, plan);
+    if (upgrade) protectedSets.add(upgrade.id);
     if (plan.old) protectedSets.add(plan.old);
   }
   for (const plan of completed.slice(3)) {
+    const upgrade = await upgradeFor(root, plan);
+    if (upgrade && !protectedSets.has(upgrade.id)) await removeOwnedSet(root, 'sets', upgrade.id);
     if (!protectedSets.has(plan.id)) await removeOwnedSet(root, 'sets', plan.id);
     if (plan.old && !protectedSets.has(plan.old)) await removeOwnedSet(root, 'sets', plan.old);
     const archive = join(p.protection, plan.id + '.mnrbackup');
@@ -301,7 +375,12 @@ export async function pruneProtections(root: string) {
       await unlink(archive);
     }
     // Retain any plan still needed to prove ownership of a preserved generation.
-    if (!keep.has(plan.id) && !protectedSets.has(plan.id)) {
+    if (
+      !keep.has(plan.id) &&
+      !protectedSets.has(plan.id) &&
+      !(upgrade && protectedSets.has(upgrade.id))
+    ) {
+      if (upgrade) await unlink(join(p.plans, plan.id + '.upgrade.json'));
       await unlink(join(p.plans, plan.id + '.done.json'));
       await unlink(join(p.plans, plan.id + '.json'));
     }
@@ -316,6 +395,8 @@ export async function cleanupRecoveryStaging(root: string) {
   if (current) referenced.add(current);
   for (const plan of await plans(root)) {
     referenced.add(plan.id);
+    const upgrade = await upgradeFor(root, plan);
+    if (upgrade) referenced.add(upgrade.id);
     if (plan.old) referenced.add(plan.old);
   }
   let preserved = false;
@@ -344,7 +425,7 @@ export async function recoverAndOpen(root: string, appVersion: string) {
     let selected: string | null, db: Awaited<ReturnType<typeof openDatabase>> | undefined;
     if (await exists(donePath)) {
       result = await readDone(donePath);
-      selected = result.status === 'restaurado' ? plan.id : plan.old;
+      selected = await completedGeneration(root, plan, result);
       await verifyLive(root, selected);
       await activate(root, selected);
     } else {
@@ -353,14 +434,15 @@ export async function recoverAndOpen(root: string, appVersion: string) {
           throw new BackupError('RECOVERY_REQUIRED');
         if ((await hashFile(join(p.sets, plan.id, 'manifest.json'))).sha256 !== plan.payload)
           throw new BackupError('INVALID_BACKUP');
-        await validateSet(join(p.sets, plan.id));
-        await activate(root, plan.id);
-        const paths = await verifyLive(root, plan.id);
+        const generation = await preparedGeneration(root, plan);
+        await activate(root, generation);
+        const paths = await verifyLive(root, generation);
         db = await openDatabase(paths.data, appVersion, undefined, paths.images);
-        await verifyLive(root, plan.id);
-        selected = plan.id;
+        await verifyLive(root, generation);
+        selected = generation;
         result = {
           status: 'restaurado',
+          ...(generation !== plan.id ? { geracao: generation } : {}),
           criadoEm: new Date().toISOString(),
           protecao: plan.id + '.mnrbackup',
         };
@@ -410,13 +492,14 @@ export async function recoverAndOpen(root: string, appVersion: string) {
       // A failed pending-journal publication can leave a durable plan only.
       // Preserve it and report the incomplete attempt; never silently use an
       // uncommitted generation if its pointer survived an interrupted write.
-      if (current === plan.id) throw new BackupError('RECOVERY_REQUIRED');
+      if (current === plan.id || current === (await upgradeFor(root, plan))?.id)
+        throw new BackupError('RECOVERY_REQUIRED');
       unfinished = true;
     }
   for (const plan of prior)
     if (await exists(join(p.plans, plan.id + '.done.json'))) {
       const done = await readDone(join(p.plans, plan.id + '.done.json'));
-      if (current !== (done.status === 'restaurado' ? plan.id : plan.old))
+      if (current !== (await completedGeneration(root, plan, done)))
         throw new BackupError('RECOVERY_REQUIRED');
       break;
     }

@@ -152,7 +152,7 @@ const documentFields = `id,numero,tipo,estado,versao,cliente_id AS clienteId,for
   data_comercial AS dataComercial,subtotal_centavos AS subtotalCentavos,desconto_itens_centavos AS descontoItensCentavos,
   desconto_global_centavos AS descontoGlobalCentavos,frete_centavos AS freteCentavos,despesas_diretas_centavos AS despesasDiretasCentavos,
   total_centavos AS totalCentavos,observacoes,criado_em AS criadoEm,confirmado_em AS confirmadoEm,operacao_confirmacao_id AS operacaoConfirmacaoId`;
-const itemFields = `id,sequencia,produto_id AS produtoId,sku_historico AS skuHistorico,descricao_historica AS descricaoHistorica,
+const itemFields = `id,sequencia,produto_id AS produtoId,sku_historico AS skuHistorico,unidade_historica AS unidadeHistorica,descricao_historica AS descricaoHistorica,
   quantidade,valor_unitario_centavos AS valorUnitarioCentavos,valor_bruto_centavos AS valorBrutoCentavos,
   desconto_item_centavos AS descontoItemCentavos,desconto_global_rateado_centavos AS descontoGlobalRateadoCentavos,
   frete_rateado_centavos AS freteRateadoCentavos,despesas_rateadas_centavos AS despesasRateadasCentavos,
@@ -308,7 +308,9 @@ export function createCommercialService(
   function save(data: DadosRascunho, _op: string, _reason: string, now: string) {
     if (data.fornecedorId) catalog.getPerson('FORNECEDOR', data.fornecedorId);
     if (data.clienteId) catalog.getPerson('CLIENTE', data.clienteId);
-    for (const item of data.itens) catalog.getProduct(item.produtoId);
+    const products = new Map(
+      data.itens.map((item) => [item.produtoId, catalog.getProduct(item.produtoId)]),
+    );
     const bruto = data.itens.map((i) =>
       dinheiro(BigInt(i.quantidade) * BigInt(i.valorUnitarioCentavos)),
     );
@@ -362,8 +364,8 @@ export function createCommercialService(
     }
     const insert =
       db.prepare(`INSERT INTO itens_documento (documento_id,sequencia,produto_id,quantidade,valor_unitario_centavos,valor_bruto_centavos,
-      desconto_item_centavos,desconto_global_rateado_centavos,frete_rateado_centavos,despesas_rateadas_centavos,valor_liquido_centavos,valor_custo_estoque_centavos,motivo)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,0,?)`);
+      desconto_item_centavos,desconto_global_rateado_centavos,frete_rateado_centavos,despesas_rateadas_centavos,valor_liquido_centavos,valor_custo_estoque_centavos,motivo,unidade_historica)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,0,?,?)`);
     data.itens.forEach((i, n) =>
       insert.run(
         id,
@@ -378,6 +380,7 @@ export function createCommercialService(
         expenses[n],
         liquids[n],
         i.motivo,
+        products.get(i.produtoId)!.unidadeComercial ?? 'UN',
       ),
     );
     return read(id);
@@ -462,8 +465,8 @@ export function createCommercialService(
           throw new ComercialError('BELOW_COST', 'Venda abaixo do custo exige motivo por item.');
       }
       db.prepare(
-        'UPDATE itens_documento SET sku_historico=?,descricao_historica=?,valor_custo_estoque_centavos=? WHERE id=?',
-      ).run(product.sku, product.nome, cost, item.id);
+        'UPDATE itens_documento SET sku_historico=?,descricao_historica=?,unidade_historica=?,valor_custo_estoque_centavos=? WHERE id=?',
+      ).run(product.sku, product.nome, product.unidadeComercial ?? 'UN', cost, item.id);
       item.valorCustoEstoqueCentavos = cost;
     }
     db.prepare(
@@ -553,7 +556,7 @@ export function createCommercialService(
           const current = draft(data.id, data.versaoEsperada);
           if (current.tipo === 'COMPRA') {
             db.prepare(
-              `UPDATE itens_documento SET sku_historico=(SELECT sku FROM produtos WHERE id=produto_id), descricao_historica=(SELECT nome FROM produtos WHERE id=produto_id) WHERE documento_id=?`,
+              `UPDATE itens_documento SET sku_historico=(SELECT sku FROM produtos WHERE id=produto_id), descricao_historica=(SELECT nome FROM produtos WHERE id=produto_id), unidade_historica=(SELECT unidade_comercial FROM produtos WHERE id=produto_id) WHERE documento_id=?`,
             ).run(data.id);
             db.prepare(
               `UPDATE documentos SET estado='DESCARTADO',versao=versao+1,contraparte_nome=(SELECT nome FROM fornecedores WHERE id=fornecedor_id),contraparte_documento=(SELECT documento FROM fornecedores WHERE id=fornecedor_id) WHERE id=?`,

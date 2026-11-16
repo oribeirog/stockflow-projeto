@@ -31,7 +31,7 @@ async function fixture(t) {
     sku: ' sku-01 ',
     marcaId: marca.id,
     categoriaId: categoria.id,
-    volumeMicrolitros: 100000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 10001,
     estoqueMinimo: 0,
     ...overrides,

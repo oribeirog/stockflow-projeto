@@ -100,7 +100,7 @@ app
                 sku: 'BK-PHOTO-' + n,
                 marcaId: base.marca_id,
                 categoriaId: base.categoria_id,
-                volumeMicrolitros: 1000,
+                unidadeComercial: 'UN',
                 precoVendaCentavos: 1000,
                 estoqueMinimo: 0,
               }),

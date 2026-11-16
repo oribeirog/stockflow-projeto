@@ -109,7 +109,7 @@ try {
     `window.mnrApi.cadastros.fornecedores.salvar(${cmd({ nome: 'Fornecedor pacote' })})`,
   );
   const produto = await api(
-    `window.mnrApi.cadastros.produtos.salvar(${cmd({ nome: 'Perfume pacote', sku: 'PACOTE', marcaId: marca.id, categoriaId: categoria.id, volumeMicrolitros: 1000, precoVendaCentavos: 0, estoqueMinimo: 0 })})`,
+    `window.mnrApi.cadastros.produtos.salvar(${cmd({ nome: 'Perfume pacote', sku: 'PACOTE', marcaId: marca.id, categoriaId: categoria.id, unidadeComercial: 'UN', precoVendaCentavos: 0, estoqueMinimo: 0 })})`,
   );
   await click('nav a[href="#/compras"]');
   await click('a[href="#/compras/nova"]');

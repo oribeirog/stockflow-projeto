@@ -176,6 +176,7 @@ export class BackupController {
     this.busy = true;
     this.phase = 'Selecionando backup';
     let prepared: Awaited<ReturnType<typeof newOwnedSet>> | undefined;
+    let staging: Awaited<ReturnType<typeof newOwnedSet>> | undefined;
     try {
       const selected = await this.deps.chooseRestore();
       if (!selected) return null;
@@ -187,10 +188,12 @@ export class BackupController {
       const layout = await initializeRecovery(this.deps.root);
       if ((await readdir(layout.sets)).length >= 8) throw new BackupError('RETENTION');
       prepared = await newOwnedSet(this.deps.root, 'sets');
+      staging = await newOwnedSet(this.deps.root, 'work');
       this.phase = 'Validando formato, banco, histórico e fotografias';
       const summary = await backupJob<BackupSummary>({
-        task: 'inspect',
+        task: 'prepare',
         source: selected,
+        staging: staging.path,
         target: prepared.path,
       });
       const hash = (await hashFile(join(prepared.path, 'manifest.json'))).sha256;
@@ -205,6 +208,13 @@ export class BackupController {
       if (prepared) await this.discardSet(prepared.id);
       throw error;
     } finally {
+      if (staging) {
+        try {
+          await removeOwnedSet(this.deps.root, 'work', staging.id);
+        } catch {
+          this.cleanupWarning = 'Staging de inspeção preservado para verificação.';
+        }
+      }
       this.busy = false;
       this.phase = 'Pronto';
     }

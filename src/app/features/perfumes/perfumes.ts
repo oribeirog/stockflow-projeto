@@ -76,9 +76,6 @@ export class Perfumes implements OnDestroy {
       value / 100,
     );
   }
-  volume(value: number) {
-    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 3 }).format(value / 1000);
-  }
   ngOnDestroy() {
     clearTimeout(this.timer);
     ++this.generation;

@@ -40,7 +40,7 @@ async function fixture(t) {
       sku: 'FOTO',
       marcaId: marca.id,
       categoriaId: categoria.id,
-      volumeMicrolitros: 1000,
+      unidadeComercial: 'UN',
       precoVendaCentavos: 0,
       estoqueMinimo: 0,
     }),
@@ -206,7 +206,12 @@ for (const version of [1, 2, 3, 4])
         { directory, existed: false, appVersion: 'test' },
         migrations.slice(0, version),
       );
-      const c = createCatalogService(db, 'test'),
+      const c = require(
+          require('node:path').join(
+            require('./helpers/approved-v5.cjs').approvedRuntime(),
+            'dist/electron/services/catalogos',
+          ),
+        ).createCatalogService(db, 'test'),
         brand = c.saveReference('MARCA', cmd({ nome: 'Preservar marca' })),
         category = c.saveReference('CATEGORIA', cmd({ nome: 'Preservar categoria' }));
       c.saveProduct(
@@ -234,7 +239,11 @@ for (const version of [1, 2, 3, 4])
         tables.map((table) => [table, db.prepare(`SELECT * FROM ${table} ORDER BY 1`).all()]),
       );
       const history = db.prepare('SELECT * FROM schema_migrations ORDER BY versao').all();
-      await migrateDatabase(db, { directory, existed: true, appVersion: '4B' });
+      await migrateDatabase(
+        db,
+        { directory, existed: true, appVersion: '4B' },
+        migrations.slice(0, 5),
+      );
       assert.equal(inspectDatabase(db).version, 5);
       for (const [table, rows] of Object.entries(before))
         assert.deepEqual(
@@ -326,7 +335,7 @@ test('backup fails closed for unavailable images; restore rejects corruption, tr
   await assert.rejects(createMediaSnapshot(f.db, f.photos, join(f.root, 'invalid-backup'), '4B'));
   assert.equal(existsSync(join(f.root, 'invalid-backup')), false);
 });
-test('future pre-migration backup includes independently restorable v5 images and manifest', async (t) => {
+test('future pre-migration backup includes independently restorable v6 images and manifest', async (t) => {
   const f = await fixture(t),
     staged = await f.photos.prepare(Buffer.from('pre migration'), 1);
   await f.photos.save(cmd({ produtoId: f.product.id, token: staged.token }), 1);
@@ -340,7 +349,7 @@ test('future pre-migration backup includes independently restorable v5 images an
     },
     [
       ...migrations,
-      { version: 6, name: 'fixture6', sql: 'CREATE TABLE fixture6(id INTEGER) STRICT;' },
+      { version: 7, name: 'fixture7', sql: 'CREATE TABLE fixture7(id INTEGER) STRICT;' },
     ],
   );
   const folder = readdirSync(join(f.root, 'backups')).find((name) => name.endsWith('.assets'));

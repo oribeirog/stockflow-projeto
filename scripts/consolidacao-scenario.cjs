@@ -59,7 +59,7 @@ module.exports = async (options) => {
     `cadastros.fornecedores.salvar(${command({ nome: 'Fornecedor ciclo integrado' })})`,
   );
   const product = await api(
-    `cadastros.produtos.salvar(${command({ nome: 'Perfume ciclo integrado', sku: 'INTEGRADO', marcaId: marca.id, categoriaId: categoria.id, volumeMicrolitros: 1000, precoVendaCentavos: 10000, estoqueMinimo: 0 })})`,
+    `cadastros.produtos.salvar(${command({ nome: 'Perfume ciclo integrado', sku: 'INTEGRADO', marcaId: marca.id, categoriaId: categoria.id, unidadeComercial: 'UN', precoVendaCentavos: 10000, estoqueMinimo: 0 })})`,
   );
   const buy = async (quantity, unit, total) => {
     await navigate('compras/nova');

@@ -157,7 +157,7 @@ class Integration {
       sku: 'INTEGRACAO',
       marcaId: marca.id,
       categoriaId: categoria.id,
-      volumeMicrolitros: 100000,
+      unidadeComercial: 'UN' as const,
       precoVendaCentavos: 12345,
       estoqueMinimo: 0,
     };

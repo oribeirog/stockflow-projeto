@@ -1,10 +1,11 @@
+import { sqlitePath } from '../../infrastructure/database/sqlite-path';
 import { parentPort, workerData } from 'node:worker_threads';
 import Database from 'better-sqlite3';
 import { coletarDocumento, ExportacaoError } from './documento';
 import { gerarExcel } from './xlsx';
 import { LIMITES_EXPORTACAO } from '../../../shared/exportacoes';
 async function run() {
-  const db = new Database(workerData.database, {
+  const db = new Database(sqlitePath(workerData.database), {
     readonly: true,
     fileMustExist: true,
     timeout: 1500,

@@ -66,21 +66,21 @@
     <div class="row">
       <mnr-field
         controlId="venda-produto-busca"
-        label="Pesquisar perfume ativo por nome/SKU"
+        label="Pesquisar produto ativo por nome, SKU ou código de barras"
         [value]="productSearch()"
         (valueChanged)="productSearch.set($event); options('product')"
       /><label
-        >Adicionar perfume<select
+        >Adicionar produto<select
           id="venda-produto"
           (change)="addProduct($any($event.target).value); $any($event.target).value='' "
         >
           <option value="">Selecione</option>
           @for (p of productOptions(); track p.id) {
-          <option [value]="p.id">{{p.nome}} · {{p.sku}}</option>
+          <option [value]="p.id">{{p.nome}} · {{p.sku}} · {{p.unidadeComercial ?? 'UN'}}</option>
           }
         </select></label
       >@if (productMore()) {
-      <mnr-button variant="secondary" (pressed)="options('product',true)">Mais perfumes</mnr-button>
+      <mnr-button variant="secondary" (pressed)="options('product',true)">Mais produtos</mnr-button>
       }
     </div>
     @for (i of items(); track i.produtoId; let n=$index) {
@@ -128,7 +128,7 @@
           [value]="i.motivo"
           (valueChanged)="itemChange(n,'motivo',$event)"
         />
-        <mnr-button variant="secondary" (pressed)="remove(n)">Remover perfume {{n+1}}</mnr-button>
+        <mnr-button variant="secondary" (pressed)="remove(n)">Remover produto {{n+1}}</mnr-button>
       </div>
     </fieldset>
     }
@@ -330,7 +330,8 @@
           @for (i of d.itens; track i.id) {
           <tr>
             <td>
-              {{i.descricaoHistorica || i.produtoId}} / {{i.skuHistorico}} @if(i.motivo) {
+              {{i.descricaoHistorica || i.produtoId}} / {{i.skuHistorico}} · {{i.unidadeHistorica ??
+              'UN'}} @if(i.motivo) {
               <p>{{i.motivo}}</p>
               }
             </td>

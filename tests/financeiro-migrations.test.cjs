@@ -1,3 +1,4 @@
+const { approvedRuntime } = require('./helpers/approved-v5.cjs');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const Database = require('better-sqlite3');
@@ -8,9 +9,13 @@ const {
   migrateDatabase,
   inspectDatabase,
 } = require('../dist/electron/infrastructure/database/migrate');
-const { createCatalogService } = require('../dist/electron/services/catalogos');
+const { createCatalogService } = require(
+  require('node:path').join(approvedRuntime(), 'dist/electron/services/catalogos'),
+);
 const { createStockService } = require('../dist/electron/services/estoque');
-const { createCommercialService } = require('../dist/electron/services/comercial');
+const { createCommercialService } = require(
+  require('node:path').join(approvedRuntime(), 'dist/electron/services/comercial'),
+);
 const { reversaoAcumulada } = require('../dist/electron/domain/correcoes');
 const { verifyFinanceiroRuntime } = require('./helpers/financeiro-runtime.cjs');
 const cmd = (id, dados) => ({ operacaoId: id, motivo: 'Preservação', dados });
@@ -132,7 +137,7 @@ for (const version of [1, 2, 3])
             protection.name,
           );
       }
-      assert.equal(inspectDatabase(db).version, 5);
+      assert.equal(inspectDatabase(db).version, 6);
       assert.deepEqual(db.pragma('foreign_key_check'), []);
       assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
     } finally {

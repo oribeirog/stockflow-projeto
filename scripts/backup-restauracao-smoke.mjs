@@ -16,6 +16,7 @@ import assert from 'node:assert/strict';
 import electron from 'electron';
 import { environment } from './env.mjs';
 import { connect, pause } from './exportacoes-cdp.mjs';
+import { catalogScenario } from './catalogo-generalista-scenario.mjs';
 import { auditCheckpoint } from './consolidacao-gerencial-scenario.mjs';
 const require = createRequire(import.meta.url),
   { backupFixture } = require('../tests/helpers/backup-fixture.cjs'),
@@ -29,6 +30,30 @@ const require = createRequire(import.meta.url),
   { coletarDocumento } = require('../dist/electron/services/exportacoes/documento'),
   { readArchive, inspectArchive } = require('../dist/electron/services/backup/format'),
   Database = require('better-sqlite3');
+const catalogo = process.argv.includes('--catalogo-generalista');
+const legacyMode = process.argv.includes('--legacy-schema5');
+const legacy = legacyMode
+  ? await require('../tests/helpers/catalogo-v5-fixture.cjs').legacyFixture()
+  : undefined;
+// Compare every pre-0006 persisted field and migration record against the genuine
+// approved archive. The new unit defaults and migration-6 record are checked separately.
+const snapshotComplete = snapshot;
+const comparable = (value) =>
+  JSON.stringify(
+    JSON.parse(value).map(([name, rows]) => [
+      name,
+      rows
+        .filter((r) => name !== 'schema_migrations' || r.versao <= 5)
+        .map((r) => {
+          const x = { ...r };
+          if (name === 'produtos') delete x.unidade_comercial;
+          if (name === 'itens_documento') delete x.unidade_historica;
+          return x;
+        }),
+    ]),
+  );
+const stateSnapshot = (db) =>
+  legacyMode ? comparable(snapshotComplete(db)) : snapshotComplete(db);
 const packaged = process.argv.includes('--package'),
   supervised = process.argv.includes('--supervised-development'),
   development = supervised || process.argv.includes('--development'),
@@ -39,12 +64,17 @@ mkdirSync('.cache/ui', { recursive: true });
 const launchRoot = mkdtempSync(resolve('.local-data/test/ui-backup-')),
   root = packaged ? join(launchRoot, 'MNR Software/MNR Perfumes') : launchRoot;
 mkdirSync(root, { recursive: true });
-const f = await backupFixture(undefined, true, { root }),
-  before = snapshot(f.db),
-  sequencesA = f.db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all(),
+const f = legacyMode
+    ? await require('../tests/helpers/catalogo-v5-fixture.cjs').legacyUiFixture(root)
+    : await backupFixture(undefined, true, { root }),
+  initialSnapshot = stateSnapshot(f.db),
+  initialSequences = f.db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all(),
   archive = join(f.outputs, 'MNR Teste + @.mnrbackup'),
   manifest = [],
   measurements = [];
+let before = initialSnapshot,
+  sequencesA = initialSequences,
+  catalogAudit;
 let server,
   child,
   main,
@@ -312,6 +342,11 @@ try {
   child = spawnApp();
   await attach(child);
   const oldPid = await m('process.pid');
+  if (catalogo) {
+    catalogAudit = await catalogScenario({ e, until, click, key, call, m, mode });
+    before = stateSnapshot(db);
+    sequencesA = db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all();
+  }
   await navBackup();
   console.log('BACKUP_STEP', mode, 'route');
   await key('Tab');
@@ -319,7 +354,7 @@ try {
   assert(await e('!!document.activeElement'));
   await click('Criar backup');
   await until('document.getElementById("backup-message")?.innerText.includes("cancelada")');
-  assert.equal(snapshot(db), before);
+  assert.equal(stateSnapshot(db), before);
   assert(!existsSync(archive));
   await until('document.activeElement.closest("mnr-button")?.id === "backup-create"');
   await m(`__save.push(${JSON.stringify(archive)})`);
@@ -329,7 +364,7 @@ try {
   await until('document.getElementById("backup-message")?.innerText.includes("Backup concluído")');
   const createMs = performance.now() - createdAt;
   assert(existsSync(archive));
-  assert.equal(snapshot(db), before);
+  assert.equal(stateSnapshot(db), before);
   await readArchive(archive);
   console.log('BACKUP_STEP', mode, 'archive-created');
   await capture('sucesso');
@@ -354,24 +389,24 @@ try {
     true,
   );
   assert.equal(db.prepare("SELECT count(*) n FROM produtos WHERE sku='BACKUP-B-ONLY'").get().n, 1);
-  const changed = snapshot(db);
+  const changed = stateSnapshot(db);
   const sequencesB = db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all();
   console.log('BACKUP_STEP', mode, 'data-changed');
   assert.notEqual(changed, before);
   await click('Selecionar backup para revisão');
   await until('document.getElementById("backup-message")?.innerText.includes("Seleção cancelada")');
-  assert.equal(snapshot(db), changed);
-  await m(`__open.push(${JSON.stringify(archive)})`);
+  assert.equal(stateSnapshot(db), changed);
+  await m(`__open.push(${JSON.stringify(legacy?.archive ?? archive)})`);
   await click('Selecionar backup para revisão');
   await until('!!document.getElementById("backup-review-title")');
-  assert.equal(snapshot(db), changed);
+  assert.equal(stateSnapshot(db), changed);
   await until('document.activeElement.id === "backup-review-title"');
   await capture('revisao');
   console.log('BACKUP_STEP', mode, 'preview');
   await click('Descartar revisão');
   await until('!document.getElementById("backup-review-title")');
-  assert.equal(snapshot(db), changed);
-  await m(`__open.push(${JSON.stringify(archive)})`);
+  assert.equal(stateSnapshot(db), changed);
+  await m(`__open.push(${JSON.stringify(legacy?.archive ?? archive)})`);
   await click('Selecionar backup para revisão');
   await until('!!document.getElementById("backup-ack")');
   assert(await e('document.querySelector("#backup-restore button").matches(":disabled")'));
@@ -380,7 +415,7 @@ try {
   await until('!!document.querySelector("dialog[open]")');
   await key('Escape');
   await until('!document.querySelector("dialog[open]")');
-  assert.equal(snapshot(db), changed);
+  assert.equal(stateSnapshot(db), changed);
   await until('document.activeElement.closest("mnr-button")?.id === "backup-restore"');
   await click('Restaurar este backup');
   await until('!!document.querySelector("dialog[open]")');
@@ -436,9 +471,13 @@ try {
   assert.equal(state.ok, true);
   assert.equal(state.data.resultado.situacao, 'restaurado');
   assert.equal(state.data.bloqueado, false);
+  if (legacyMode) {
+    before = comparable(legacy.stateA);
+    sequencesA = legacy.sequencesA;
+  }
   const paths = selectedPaths(root, await selection(root));
   db = new Database(join(paths.data, 'mnr-perfumes.db'), { readonly: true, fileMustExist: true });
-  assert.equal(snapshot(db), before);
+  assert.equal(stateSnapshot(db), before);
   assert.equal(db.prepare("SELECT count(*) n FROM produtos WHERE sku='BACKUP-B-ONLY'").get().n, 0);
   assert.deepEqual(db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all(), sequencesA);
   assert(!existsSync(recoveryPaths(root).pending));
@@ -459,7 +498,7 @@ try {
     fileMustExist: true,
   });
   try {
-    assert.equal(snapshot(preservedB), changed);
+    assert.equal(stateSnapshot(preservedB), changed);
     assert.deepEqual(
       preservedB.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all(),
       sequencesB,
@@ -470,6 +509,17 @@ try {
     );
   } finally {
     preservedB.close();
+  }
+  assert.equal(db.pragma('user_version', { simple: true }), 6);
+  if (legacyMode) {
+    assert.equal(
+      db.prepare("SELECT count(*) n FROM produtos WHERE unidade_comercial<>'UN'").get().n,
+      0,
+    );
+    assert.equal(
+      (await require('../dist/electron/services/backup/io').hashFile(legacy.archive)).sha256,
+      legacy.archiveSha256,
+    );
   }
   assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
   assert.deepEqual(db.pragma('foreign_key_check'), []);
@@ -489,13 +539,13 @@ try {
     saleId: f.cycle.state.sale.id,
     expected: { commercial: 30000, debt: 5000, pending: 0, paid: 0 },
   });
-  assert.equal(snapshot(db), before);
+  assert.equal(stateSnapshot(db), before);
   db.close();
   await stopApp();
   child = spawnApp();
   await attach(child);
   db = new Database(join(paths.data, 'mnr-perfumes.db'), { readonly: true, fileMustExist: true });
-  assert.equal(snapshot(db), before, 'SECOND opening must still be exactly A');
+  assert.equal(stateSnapshot(db), before, 'SECOND opening must still be exactly A');
   assert.deepEqual(db.prepare('SELECT * FROM sqlite_sequence ORDER BY name').all(), sequencesA);
   assert.equal(db.prepare("SELECT count(*) n FROM produtos WHERE sku='BACKUP-B-ONLY'").get().n, 0);
   const next = f.cycle.stockCommand({
@@ -507,7 +557,7 @@ try {
     (await e(`window.mnrApi.estoque.registrarEntrada(${JSON.stringify(next)})`)).ok,
     true,
   );
-  restoredSnapshot = snapshot(db);
+  restoredSnapshot = stateSnapshot(db);
   assert.notEqual(restoredSnapshot, before);
   db.close();
   await stopApp();
@@ -518,10 +568,10 @@ try {
   child = spawnApp();
   await attach(child);
   db = new Database(join(paths.data, 'mnr-perfumes.db'), { readonly: true, fileMustExist: true });
-  assert.equal(snapshot(db), restoredSnapshot);
+  assert.equal(stateSnapshot(db), restoredSnapshot);
   await generate('ESTOQUE', 'xlsx', 'terceira-abertura', {});
   await generate('ESTOQUE', 'pdf', 'terceira-abertura', {});
-  assert.equal(snapshot(db), restoredSnapshot);
+  assert.equal(stateSnapshot(db), restoredSnapshot);
   db.close();
   await stopApp();
   const manifestPath = join(f.outputs, 'exports.json');
@@ -546,6 +596,8 @@ try {
     createMs,
     reopenMs,
     measurements,
+    catalogAudit,
+    legacySchema5: legacyMode,
     audit,
     exports: manifest.length,
     manifest: manifestPath,
@@ -561,7 +613,10 @@ try {
       startupErrors: 0,
     },
   };
-  writeFileSync(`.cache/5-1-${mode}-smoke.json`, JSON.stringify(report, null, 2));
+  writeFileSync(
+    `.cache/${legacyMode ? 'pre52a-legacy' : catalogo ? 'pre52a-catalogo' : '5-1'}-${mode}-smoke.json`,
+    JSON.stringify(report, null, 2),
+  );
   assert(existsSync(join(recoveryPaths(root).protection, report.protection)));
   console.log('BACKUP_RESTORE_RELAUNCH_AND_SECOND_REOPEN_OK', mode, report.exports, root);
 } finally {

@@ -30,7 +30,7 @@ test('5.1 empty WAL snapshot, structural manifest, exact schema and no source wr
   assert.equal(snapshot(f.db), before);
   const archive = join(f.outputs, 'vazio.mnrbackup');
   await packageSet(owned.path, archive);
-  assert.equal((await readArchive(archive)).schema, 5);
+  assert.equal((await readArchive(archive)).schema, 6);
   const restore = await newOwnedSet(f.root, 'sets');
   assert.equal((await inspectArchive(archive, restore.path)).produtos, 0);
   assert.equal(await selection(f.root), null);
@@ -140,7 +140,7 @@ test('5.1 hostile containers and manifests never modify the active database or p
     ],
     [
       'future-schema',
-      [{ ...files[0], bytes: encodeManifest({ ...manifest, schema: 6 }) }, ...files.slice(1)],
+      [{ ...files[0], bytes: encodeManifest({ ...manifest, schema: 7 }) }, ...files.slice(1)],
     ],
     ['missing-manifest', files.slice(1)],
     ['missing-db', files.filter((p) => !p.name.startsWith('data/'))],
@@ -250,7 +250,7 @@ test('5.1 future/corrupt/foreign-key/SQL-tampered SQLite is rejected even with m
     else {
       const db = new Database(dbFile);
       try {
-        if (kind === 'future') db.pragma('user_version=6');
+        if (kind === 'future') db.pragma('user_version=7');
         if (kind === 'foreign-key') {
           db.pragma('foreign_keys=OFF');
           db.prepare('UPDATE produtos SET marca_id=999999 WHERE id=?').run(f.cycle.productId);

@@ -33,7 +33,7 @@ function error(result, code) {
   assert.equal(result.error.message, MENSAGENS_CADASTRO[code]);
 }
 
-test('18 explicit handlers preserve full saves, idempotency, audit, history and isolated schema v5', async (t) => {
+test('18 explicit handlers preserve full saves, idempotency, audit, history and isolated schema v6', async (t) => {
   const { db, handlers, invoke } = await fixture(t);
   assert.equal(handlers.size, 18);
   assert.equal(handlers.has('cadastros:formas-pagamento:listar'), true);
@@ -47,7 +47,7 @@ test('18 explicit handlers preserve full saves, idempotency, audit, history and 
             sku: 'IPC',
             marcaId: saved.marcas.id,
             categoriaId: saved.categorias.id,
-            volumeMicrolitros: 1000,
+            unidadeComercial: 'UN',
             precoVendaCentavos: 1050,
             estoqueMinimo: 0,
           }
@@ -73,7 +73,7 @@ test('18 explicit handlers preserve full saves, idempotency, audit, history and 
   assert.equal(db.prepare('SELECT count(*) n FROM eventos_auditoria').get().n, 15);
   assert.equal(db.prepare('SELECT count(*) n FROM historico_precos').get().n, 1);
   assert.equal(db.prepare('SELECT count(*) n FROM movimentacoes_estoque').get().n, 0);
-  assert.equal(db.pragma('user_version', { simple: true }), 5);
+  assert.equal(db.pragma('user_version', { simple: true }), 6);
   assert.equal(db.pragma('integrity_check', { simple: true }), 'ok');
 });
 
@@ -126,7 +126,7 @@ test('literal accent-insensitive search, bounded stable pages and business error
     sku: 'P',
     marcaId: 1,
     categoriaId: category.id,
-    volumeMicrolitros: 1,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 0,
     estoqueMinimo: 0,
   };

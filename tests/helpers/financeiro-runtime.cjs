@@ -1,3 +1,4 @@
+const { approvedRuntime } = require('./approved-v5.cjs');
 // Shared acceptance scenario executed by Node tests and by the real Electron runtime.
 const assert = require('node:assert/strict');
 const Database = require('better-sqlite3');
@@ -8,9 +9,13 @@ const {
   migrateDatabase,
   checkIntegrity,
 } = require('../../dist/electron/infrastructure/database/migrate');
-const { createCatalogService } = require('../../dist/electron/services/catalogos');
+const { createCatalogService } = require(
+  require('node:path').join(approvedRuntime(), 'dist/electron/services/catalogos'),
+);
 const { createStockService } = require('../../dist/electron/services/estoque');
-const { createCommercialService } = require('../../dist/electron/services/comercial');
+const { createCommercialService } = require(
+  require('node:path').join(approvedRuntime(), 'dist/electron/services/comercial'),
+);
 const { createFinancialService } = require('../../dist/electron/services/financeiro');
 const { createCorrectionService } = require('../../dist/electron/services/correcoes');
 const { reconciliarComercial } = require('../../dist/electron/services/comercial-reconciliation');

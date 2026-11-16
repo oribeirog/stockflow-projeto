@@ -315,10 +315,19 @@ test('actual 3A product migration initializes zero without inventing movements o
     { directory, existed: false, appVersion: '3A' },
     migrations.slice(0, 1),
   );
-  const catalog = createCatalogService(old, '3A');
+  const catalog = require(
+    require('node:path').join(
+      require('./helpers/approved-v5.cjs').approvedRuntime(),
+      'dist/electron/services/catalogos',
+    ),
+  ).createCatalogService(old, '3A');
   catalog.saveReference('MARCA', cadastro({ nome: 'Marca' }));
   catalog.saveReference('CATEGORIA', cadastro({ nome: 'Categoria' }));
-  const product = catalog.saveProduct(cadastro({ ...productData, ativo: false }));
+  const { unidadeComercial, ...legacyData } = productData;
+  void unidadeComercial;
+  const product = catalog.saveProduct(
+    cadastro({ ...legacyData, volumeMicrolitros: 1000, ativo: false }),
+  );
   const oldTables = [
     'produtos',
     'historico_precos',

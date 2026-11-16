@@ -1,3 +1,4 @@
+import { sqlitePath } from './sqlite-path';
 import type Database from 'better-sqlite3';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -7,6 +8,7 @@ import { estoqueV2 } from './migrations/0002-estoque';
 import { comercialV3, commercialTables } from './migrations/0003-comercial';
 import { financeiroV4, financeiroTables } from './migrations/0004-financeiro';
 import { fotografiasV5 } from './migrations/0005-fotografias';
+import { catalogoV6 } from './migrations/0006-catalogo-generalista';
 import { reconciliarEstoque } from '../../services/estoque-reconciliation';
 import { reconciliarComercial } from '../../services/comercial-reconciliation';
 import { createFotoService } from '../../services/fotos';
@@ -23,6 +25,7 @@ export const migrations: readonly Migration[] = [
   comercialV3,
   financeiroV4,
   fotografiasV5,
+  catalogoV6,
 ];
 export const APPLICATION_ID = 0x4d4e5250;
 export class DatabaseCompatibilityError extends Error {}
@@ -76,6 +79,24 @@ export function inspectDatabase(db: Database.Database, available = migrations) {
       'eventos_auditoria',
     ];
     const tableList = db.pragma('table_list') as { name: string; strict: number }[];
+    if (version >= 6) {
+      if (
+        !db
+          .prepare(
+            "SELECT 1 FROM sqlite_schema WHERE type='trigger' AND name='produto_unidade_imutavel'",
+          )
+          .get() ||
+        !db
+          .prepare('PRAGMA table_info(produtos)')
+          .all()
+          .some((c) => (c as { name: string }).name === 'unidade_comercial') ||
+        !db
+          .prepare('PRAGMA table_info(itens_documento)')
+          .all()
+          .some((c) => (c as { name: string }).name === 'unidade_historica')
+      )
+        throw new Error('Proteção do catálogo ausente');
+    }
     if (version >= 5) {
       requiredTables.push('foto_arquivos', 'produto_fotos');
       const triggers = db.prepare("SELECT name FROM sqlite_schema WHERE type='trigger'").all() as {
@@ -211,7 +232,7 @@ export async function migrateDatabase(
       );
       await createMediaSnapshot(db, photos, path + '.assets', options.appVersion);
     }
-    await db.backup(path);
+    await db.backup(sqlitePath(path));
     writeFileSync(
       `${path}.json`,
       JSON.stringify(
@@ -228,35 +249,46 @@ export async function migrateDatabase(
       { encoding: 'utf8', flag: 'wx' },
     );
   }
-  db.transaction(() => {
-    // Recheck after asynchronous backup. Never migrate a state different from preflight.
-    const current = inspectDatabase(db, available);
-    if (
-      current.version !== initial.version ||
-      current.identity?.identificador !== initial.identity?.identificador
-    )
-      throw new DatabaseCompatibilityError('Banco mudou durante a preparação; tente novamente.');
-    for (const migration of available.slice(current.version)) {
-      db.exec(migration.sql);
-      if (migration.version === 1) {
-        db.prepare(
-          `INSERT INTO metadados_banco VALUES (1, ?, ?, 'BRL', 'MEDIA_PONDERADA_MOVEL', 1)`,
-        ).run(randomUUID(), new Date().toISOString());
-        db.pragma(`application_id = ${APPLICATION_ID}`);
+  const rebuild = initial.version < 6 && available[5]?.name === catalogoV6.name;
+  const foreignKeys = db.pragma('foreign_keys', { simple: true });
+  if (rebuild && db.inTransaction)
+    throw new DatabaseCompatibilityError(
+      'Migração estrutural exige conexão sem transação externa.',
+    );
+  if (rebuild) db.pragma('foreign_keys=OFF');
+  try {
+    db.transaction(() => {
+      // Recheck after asynchronous backup. Never migrate a state different from preflight.
+      const current = inspectDatabase(db, available);
+      if (
+        current.version !== initial.version ||
+        current.identity?.identificador !== initial.identity?.identificador
+      )
+        throw new DatabaseCompatibilityError('Banco mudou durante a preparação; tente novamente.');
+      for (const migration of available.slice(current.version)) {
+        db.exec(migration.sql);
+        if (migration.version === 1) {
+          db.prepare(
+            `INSERT INTO metadados_banco VALUES (1, ?, ?, 'BRL', 'MEDIA_PONDERADA_MOVEL', 1)`,
+          ).run(randomUUID(), new Date().toISOString());
+          db.pragma(`application_id = ${APPLICATION_ID}`);
+        }
+        db.prepare('INSERT INTO schema_migrations VALUES (?, ?, ?, ?, ?)').run(
+          migration.version,
+          migration.name,
+          checksum(migration.sql),
+          new Date().toISOString(),
+          options.appVersion,
+        );
+        db.pragma(`user_version = ${migration.version}`);
       }
-      db.prepare('INSERT INTO schema_migrations VALUES (?, ?, ?, ?, ?)').run(
-        migration.version,
-        migration.name,
-        checksum(migration.sql),
-        new Date().toISOString(),
-        options.appVersion,
-      );
-      db.pragma(`user_version = ${migration.version}`);
-    }
-    checkIntegrity(db);
-    if (available[2]?.name === comercialV3.name && !reconciliarEstoque(db).consistente)
-      throw new DatabaseCompatibilityError('Reconciliação de estoque falhou; banco preservado.');
-    if (available[2]?.name === comercialV3.name && !reconciliarComercial(db))
-      throw new DatabaseCompatibilityError('Reconciliação comercial falhou; banco preservado.');
-  }).immediate();
+      checkIntegrity(db);
+      if (available[2]?.name === comercialV3.name && !reconciliarEstoque(db).consistente)
+        throw new DatabaseCompatibilityError('Reconciliação de estoque falhou; banco preservado.');
+      if (available[2]?.name === comercialV3.name && !reconciliarComercial(db))
+        throw new DatabaseCompatibilityError('Reconciliação comercial falhou; banco preservado.');
+    }).immediate();
+  } finally {
+    if (rebuild) db.pragma(`foreign_keys=${foreignKeys ? 'ON' : 'OFF'}`);
+  }
 }

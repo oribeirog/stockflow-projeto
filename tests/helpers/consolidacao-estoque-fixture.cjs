@@ -5,8 +5,8 @@ const {
   createPurchaseCorrectionService,
 } = require('../../dist/electron/services/correcoes-compras');
 const { createStockReversalService } = require('../../dist/electron/services/estornos-estoque');
-function stockCycle(db) {
-  const s = cycle(db),
+function stockCycle(db, productOverrides = {}) {
+  const s = cycle(db, productOverrides),
     stock = createStockService(db, '4G3', clock),
     buyCorrections = createPurchaseCorrectionService(db, '4G3', clock),
     reversals = createStockReversalService(db, '4G3', clock);

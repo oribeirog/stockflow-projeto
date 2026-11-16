@@ -1,5 +1,37 @@
 # MNR Perfumes
 
+## Pré-5.2 A — Catálogo generalista
+
+**Produtos** permite cadastrar mercadorias de categorias livres, com nome, SKU,
+código de barras opcional, marca, categoria, descrição, preço e estoque mínimo.
+Volume e concentração deixaram de aparecer nos formulários, consultas e seletores.
+A busca aceita nome, SKU e código de barras exato, preservando zeros à esquerda.
+O código de barras permanece único, inclusive em produtos inativos.
+
+A unidade de comercialização é **UN, CX, PCT, KIT, PAR ou FR**. Quantidades continuam
+inteiras, sem conversões: dez CX significam dez caixas. SKU e unidade são imutáveis
+após o cadastro; use outro SKU para outra unidade. Marca e categoria continuam
+obrigatórias conforme o contrato existente. Produtos anteriores recebem UN, sem
+conversão de saldos, custos ou documentos. Dados antigos de volume/concentração
+permanecem apenas como legado interno, sem preenchimentos fictícios.
+
+A migração incremental **0006** preserva IDs, fotografias, preços, custos, auditoria,
+operações e histórico. As migrações 0001–0005 não foram alteradas. Documentos novos
+guardam a unidade histórica; renomeações e inativação não reescrevem seus itens.
+O relatório de estoque XLSX/PDF identifica a unidade por produto.
+
+Backups formato 1 dos schemas 5 e 6 são suportados com validação exata do schema.
+Backups antigos são migrados em staging antes da ativação, preservando o arquivo
+original e a proteção pré-restauração. O journal também trata uma restauração 5.1
+pendente durante a atualização. Um aplicativo antigo não deve abrir o schema 6.
+Não apague journals, gerações ou proteções para contornar incompatibilidades.
+
+Consulte o [relatório técnico e checklist](docs/pre-5-2-A-catalogo-generalista.md).
+Teste específico: `npm.cmd run test:catalogo-generalista`.
+Benchmark isolado: `npm.cmd run benchmark:catalogo-generalista`.
+Pré-5.2 B (fotografias), Pré-5.2 C (visual), 5.2 (instalador) e 5.3
+(homologação final) continuam pendentes. A identidade MNR Perfumes foi preservada.
+
 ## Etapa 5.1 — Backup e restauração segura
 
 Correção da validação manual: o reinício de desenvolvimento agora é coordenado
@@ -25,7 +57,7 @@ Para restaurar, use **Selecionar backup**, confira data, versão e contagens,
 marque o aviso e confirme no diálogo. **A restauração substitui os dados atuais
 pelo estado salvo; operações posteriores poderão deixar de aparecer.** Seleção
 e inspeção não alteram os dados ativos. Esta versão aceita somente formato 1 /
-schema 5; arquivos corrompidos, incompletos ou incompatíveis são recusados.
+schemas 5 e 6. O schema 5 é validado integralmente e migrado pela 0006 somente em staging; o arquivo original permanece imutável. Novos backups usam schema 6; arquivos corrompidos, incompletos ou incompatíveis são recusados.
 
 Antes de ativar o conjunto restaurado, o aplicativo cria e valida uma proteção
 independente dos dados atuais. Depois reinicia e verifica banco e fotografias
@@ -391,9 +423,11 @@ a entrada de desenvolvimento com fixtures e dados isolados:
 Detalhes, arquivos, testes e limitações no
 [relatório da Etapa 4C](docs/etapa-4C-clientes-fornecedores.md).
 
-## Etapa 4B — Cadastro e gestão de perfumes
+## Etapa 4B — Cadastro e gestão de perfumes (registro histórico)
 
-Perfumes agora oferece catálogo real paginado, busca por nome/SKU, filtro de
+Esta seção registra a entrega original, superada pelo catálogo generalista acima.
+
+Perfumes oferecia catálogo real paginado, busca por nome/SKU, filtro de
 situação, cadastro, edição, referências rápidas, inativação/reativação e uma
 fotografia local opcional. Preços são editados em reais e volumes em mL, com
 conversões inteiras para os contratos existentes. Intenções idempotentes e

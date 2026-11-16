@@ -1,3 +1,4 @@
+import type { UnidadeComercial } from './catalogos';
 // Internal service contracts only. No preload/IPC exposure.
 export type TipoDocumento = 'COMPRA' | 'VENDA' | 'DEV_COMPRA' | 'DEV_VENDA' | 'ESTORNO';
 export type EstadoDocumento = 'RASCUNHO' | 'CONFIRMADO' | 'DESCARTADO' | 'ESTORNADO';
@@ -48,6 +49,7 @@ export interface ItemComercial {
   sequencia: number;
   produtoId: number;
   skuHistorico: string | null;
+  unidadeHistorica?: UnidadeComercial;
   descricaoHistorica: string | null;
   quantidade: number;
   valorUnitarioCentavos: number;

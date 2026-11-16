@@ -19,7 +19,7 @@ function seedFinanceiro(db) {
     nome: 'Perfume histórico financeiro',
     marcaId: brand.id,
     categoriaId: category.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 10000,
     estoqueMinimo: 0,
   };

@@ -27,7 +27,7 @@ function seedReembolsos(db) {
         nome: 'Perfume histórico ' + label,
         marcaId: marca.id,
         categoriaId: categoria.id,
-        volumeMicrolitros: 1000,
+        unidadeComercial: 'UN',
         precoVendaCentavos: 10000,
         estoqueMinimo: 0,
       },

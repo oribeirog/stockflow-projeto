@@ -238,7 +238,8 @@ export class CompraEditor implements OnInit, OnDestroy {
     this.items.set(
       d.itens.map((i) => ({
         produtoId: i.produtoId,
-        nome: i.descricaoHistorica ?? `Produto ${i.produtoId}`,
+        nome:
+          (i.descricaoHistorica ?? `Produto ${i.produtoId}`) + ' · ' + (i.unidadeHistorica ?? 'UN'),
         quantidade: String(i.quantidade),
         unitario: decimalText(i.valorUnitarioCentavos, 2),
         descontoTipo: 'CENTAVOS',

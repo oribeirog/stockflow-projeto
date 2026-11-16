@@ -157,14 +157,14 @@ else
       if (typeof window.require !== 'undefined' || typeof window.process !== 'undefined') throw new Error('Node exposed');
       if (!isSecureContext || typeof crypto.randomUUID !== 'function' || !/^[0-9a-f-]{36}$/.test(crypto.randomUUID())) throw new Error('Secure UUID unavailable');
       if (!document.querySelector('app-root h1')) throw new Error('Angular failed');
-      document.querySelector('nav a[href="#/perfumes"]').click();
+      document.querySelector('nav a[href="#/produtos"]').click();
       for(let attempt=0;attempt<100;attempt++) {
         if(document.querySelector('mnr-perfumes') && !document.querySelector('mnr-perfumes .loading'))break;
         await new Promise(resolve=>setTimeout(resolve,50));
       }
-      if(!document.querySelector('mnr-perfumes input[type=search]'))throw new Error('Offline perfumes route failed');
+      if(!document.querySelector('mnr-perfumes input[type=search]'))throw new Error('Offline products route failed');
       const products = await window.mnrApi.cadastros.produtos.listar({limite:1});
-      if(!products.ok)throw new Error('Offline perfume query failed');
+      if(!products.ok)throw new Error('Offline product query failed');
       const until = async predicate => {
         for(let attempt=0;attempt<150;attempt++) {
           if(predicate()) return;

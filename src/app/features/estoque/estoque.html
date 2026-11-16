@@ -60,16 +60,16 @@
   <mnr-content-state
     kind="empty"
     title="Nenhum produto encontrado"
-    description="Ajuste os filtros ou cadastre um perfume."
+    description="Ajuste os filtros ou cadastre um produto."
   />
   } @else {
   <table>
     <caption class="sr-only">
-      Saldos por perfume
+      Saldos por produto
     </caption>
     <thead>
       <tr>
-        <th scope="col">Perfume</th>
+        <th scope="col">Produto</th>
         <th scope="col">Disponível / mínimo</th>
         <th scope="col">Custo médio unitário*</th>
         <th scope="col">Valor do saldo</th>
@@ -79,9 +79,9 @@
     <tbody>
       @for(p of d.itens; track p.produtoId) {
       <tr>
-        <td data-label="Perfume">
+        <td data-label="Produto">
           <strong>{{p.nome}}</strong
-          ><small>SKU {{p.sku}} · {{p.ativo ? 'Ativo' : 'Inativo'}}</small>
+          ><small>SKU {{p.sku}} · {{p.unidadeComercial}} · {{p.ativo ? 'Ativo' : 'Inativo'}}</small>
         </td>
         <td data-label="Quantidade">
           <div>

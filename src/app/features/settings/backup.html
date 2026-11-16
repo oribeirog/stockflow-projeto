@@ -60,7 +60,7 @@
     ><h3>Restaurar um backup</h3>
     <p>
       Primeiro selecione e confira o arquivo. A seleção e a revisão não substituem os dados atuais.
-      Aceita arquivos .mnrbackup de formato 1 e schema 5.
+      Aceita formato 1, schema 5 ou 6. Schema 5 é validado e migrado em uma cópia isolada.
     </p>
     <mnr-button
       id="backup-select"
@@ -80,7 +80,10 @@
       </div>
       <div>
         <dt>Compatibilidade</dt>
-        <dd>Formato {{r.formato}} · schema {{r.schema}} · aplicativo {{r.versaoAplicativo}}</dd>
+        <dd>
+          Formato {{r.formato}} · schema preparado {{r.schema}} · aplicativo {{r.versaoAplicativo}}
+          @if(r.schemaOrigem){ · origem schema {{r.schemaOrigem}}, migrado em staging }
+        </dd>
       </div>
       <div>
         <dt>Produtos / clientes / fornecedores</dt>

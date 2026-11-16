@@ -72,12 +72,18 @@ export async function durableFile(path: string, bytes: Uint8Array) {
   }
 }
 // Trusted static Win32 helper. Paths are environment values, never shell source.
+// Retry only transient Windows access/sharing/lock errors, for at most 2.25s.
 // Same-volume moves only. WRITE_THROUGH + no REPLACE permits external FAT/exFAT
 // media without hard-link support. REPLACE is restricted to our own journal pointer.
 const moveScript = `$ErrorActionPreference='Stop';try {
 Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public static class MnrMove { [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)] public static extern bool MoveFileEx(string source,string target,uint flags); }';
 $flags=[uint32]8;if($env:MNR_MOVE_REPLACE -eq '1'){$flags=[uint32]9};
-if(-not [MnrMove]::MoveFileEx($env:MNR_MOVE_SOURCE,$env:MNR_MOVE_TARGET,$flags)){[Console]::Out.Write([Runtime.InteropServices.Marshal]::GetLastWin32Error());exit 1}
+for($attempt=0;$attempt -le 30;$attempt++){
+if([MnrMove]::MoveFileEx($env:MNR_MOVE_SOURCE,$env:MNR_MOVE_TARGET,$flags)){exit 0};
+$code=[Runtime.InteropServices.Marshal]::GetLastWin32Error();
+if(($code -eq 5 -or $code -eq 32 -or $code -eq 33) -and $attempt -lt 30){Start-Sleep -Milliseconds 75;continue};
+[Console]::Out.Write($code);exit 1
+}
 }catch{[Console]::Out.Write('unavailable');exit 1}`;
 export async function moveDurable(source: string, target: string, replace = false) {
   // No COPY_ALLOWED flag: a cross-volume request fails rather than copying a
@@ -116,6 +122,7 @@ export async function moveDurable(source: string, target: string, replace = fals
           '183': 'EEXIST',
           '5': 'EACCES',
           '32': 'EPERM',
+          '33': 'EPERM',
           '112': 'ENOSPC',
           '3': 'ENOENT',
           '2': 'ENOENT',
@@ -165,7 +172,8 @@ export function backupMessage(error: unknown) {
     VALIDATION: 'Comando inválido. Selecione o backup e confira a revisão antes de confirmar.',
     INVALID_BACKUP:
       'O arquivo não é um backup MNR válido e completo, ou foi alterado. Os dados atuais foram preservados.',
-    INCOMPATIBLE: 'Backup incompatível. Esta versão aceita formato 1 e schema 5 do MNR Perfumes.',
+    INCOMPATIBLE:
+      'Backup incompatível. Esta versão aceita formato 1, schemas oficiais 5 e 6 do MNR Perfumes.',
     MISSING_PHOTO:
       'Uma fotografia vinculada está ausente, inválida ou diferente do registro. Nenhum backup completo foi publicado.',
     BUSY: 'Uma operação de proteção dos dados está em andamento. Aguarde e tente novamente.',

@@ -12,7 +12,7 @@ function seedComprasCorrecoes(db) {
     nome: 'Perfume histórico Águas e flores ' + 'X'.repeat(90),
     marcaId: brand.id,
     categoriaId: category.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 5000,
     estoqueMinimo: 2,
   };

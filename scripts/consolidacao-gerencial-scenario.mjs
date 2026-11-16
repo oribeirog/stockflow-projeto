@@ -369,6 +369,7 @@ export async function auditCheckpoint({
             v.produtoId,
             v.skuAtual,
             v.nomeAtual,
+            v.unidadeComercial,
             v.ativo ? 'Ativo' : 'Inativo',
             v.quantidade,
             v.valorCentavos,

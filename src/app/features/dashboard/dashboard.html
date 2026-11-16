@@ -229,7 +229,8 @@
           <h2 id="dashboard-products-title">Produtos mais vendidos</h2>
           <p>
             Fluxo de {{date(d.period.dataInicio)}} a {{date(d.period.dataFim)}} · até 5, por
-            unidades líquidas decrescentes, ID como desempate. Identificação histórica.
+            unidades líquidas decrescentes, ID como desempate. Identificação histórica. Quantidades
+            na unidade de cada produto, sem conversões.
           </p>
         </div>
         @if (!d.products.itens.length) {
@@ -242,7 +243,7 @@
             </caption>
             <thead>
               <tr>
-                <th scope="col">Perfume / SKU histórico</th>
+                <th scope="col">Produto / SKU histórico</th>
                 <th scope="col">Unidades líquidas</th>
                 <th scope="col">Valor líquido</th>
               </tr>

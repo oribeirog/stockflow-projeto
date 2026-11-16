@@ -1,13 +1,13 @@
-<section class="stack" aria-label="Editor de perfume">
+<section class="stack" aria-label="Editor de produto">
   <div class="row">
-    <a routerLink="/perfumes">← Voltar ao catálogo</a>
-    <h2>{{product() ? 'Editar perfume' : 'Cadastrar perfume'}}</h2>
+    <a routerLink="/produtos">← Voltar ao catálogo</a>
+    <h2>{{product() ? 'Editar produto' : 'Cadastrar produto'}}</h2>
   </div>
   @if (loading()) {
   <mnr-content-state
     kind="loading"
     title="Carregando cadastro"
-    description="Consultando perfume e classificações."
+    description="Consultando produto e classificações."
   />
   } @else if (id !== undefined && !product()) {
   <mnr-content-state kind="error" title="Cadastro indisponível" [description]="message()"
@@ -32,8 +32,8 @@
       <div class="form-grid">
         @for (field of group.fields; track field.key) {
         <mnr-field
-          [class.wide]="field.multiline || field.key === 'nome' || field.key === 'concentracao'"
-          [controlId]="'perfume-'+field.key"
+          [class.wide]="field.multiline || field.key === 'nome'"
+          [controlId]="'produto-'+field.key"
           [label]="field.label"
           [value]="form()[field.key]"
           [required]="!!field.required"
@@ -45,6 +45,28 @@
           [error]="errors()[field.key] || ''"
           (valueChanged)="update(field.key,$event)"
         />
+        } @if (group.title === 'Cadastro comercial') {
+        <div>
+          <label for="produto-unidade">Unidade de comercialização *</label>
+          <select
+            id="produto-unidade"
+            [value]="form().unidade"
+            [disabled]="locked || !!product()"
+            [attr.aria-invalid]="!!errors()['unidade']"
+            [attr.aria-describedby]="errors()['unidade']?'produto-unidade-hint produto-unidade-error':'produto-unidade-hint'"
+            required
+            (change)="update('unidade',$any($event.target).value)"
+          >
+            @for(unit of units; track unit){
+            <option [value]="unit">{{unit}}</option>
+            }</select
+          ><small id="produto-unidade-hint"
+            >Inteiros na unidade escolhida, sem conversões. Imutável após o cadastro.</small
+          >
+          @if(errors()['unidade']){
+          <p id="produto-unidade-error" role="alert">{{errors()['unidade']}}</p>
+          }
+        </div>
         } @if (group.title === 'Classificação') {
         <mnr-reference-picker
           kind="marca"
@@ -72,7 +94,7 @@
       <legend>Justificativa</legend>
       <mnr-field
         class="wide"
-        controlId="perfume-motivo"
+        controlId="produto-motivo"
         label="Justificativa da alteração"
         [required]="true"
         [multiline]="true"
@@ -91,7 +113,7 @@
     />
     <div class="row">
       <mnr-button type="submit" [disabled]="busy() || referencePending() || photoPending()"
-        >{{uncertain() ? 'Tentar confirmar novamente' : 'Salvar perfume'}}</mnr-button
+        >{{uncertain() ? 'Tentar confirmar novamente' : 'Salvar produto'}}</mnr-button
       ><mnr-button
         variant="secondary"
         [disabled]="locked || referencePending() || photoPending()"
@@ -103,14 +125,14 @@
         variant="secondary"
         [disabled]="locked || referencePending() || dirty() || photoDirty() || photoPending()"
         (pressed)="confirmation.set('status')"
-        >{{product()!.ativo ? 'Inativar perfume' : 'Reativar perfume'}}</mnr-button
+        >{{product()!.ativo ? 'Inativar produto' : 'Reativar produto'}}</mnr-button
       >
       }
     </div>
   </form>
   } @if (confirmation()) {
   <mnr-confirm
-    [title]="confirmation() === 'discard' ? 'Descartar alterações?' : product()?.ativo ? 'Inativar perfume?' : 'Reativar perfume?'"
+    [title]="confirmation() === 'discard' ? 'Descartar alterações?' : product()?.ativo ? 'Inativar produto?' : 'Reativar produto?'"
     [description]="confirmation() === 'discard' ? 'As alterações não salvas serão descartadas.' : product()!.nome + ' — SKU ' + product()!.sku + '. O histórico será preservado.'"
     [reasonRequired]="confirmation() === 'status'"
     (confirmed)="confirm($event)"

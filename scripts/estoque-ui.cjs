@@ -29,7 +29,7 @@ module.exports = async function estoqueUi({
   const base = {
     marcaId: marca.id,
     categoriaId: categoria.id,
-    volumeMicrolitros: 1000,
+    unidadeComercial: 'UN',
     precoVendaCentavos: 100,
     estoqueMinimo: 3,
   };

@@ -63,6 +63,6 @@ export const reembolsos = `WITH pagos AS (
  LEFT JOIN pagos p ON p.reembolso_id=r.id WHERE v.tipo='VENDA' AND (@cliente IS NULL OR v.cliente_id=@cliente) AND (@venda IS NULL OR v.id=@venda)
 ), filtrados AS (SELECT id,vendaId,correcaoId,clienteId,clienteNomeHistorico,ativa,originalCentavos,pagoLiquidoCentavos,pendenteCentavos FROM base
  WHERE @situacao='TODAS' OR @situacao='PENDENTES' AND ativa AND pendenteCentavos>0 OR @situacao='QUITADAS' AND ativa AND pendenteCentavos=0 OR @situacao='ANULADAS' AND NOT ativa)`;
-export const saldosProdutos = `WITH filtrados AS (SELECT p.id AS produtoId,p.nome AS nomeAtual,p.sku AS skuAtual,p.ativo,p.estoque_minimo AS estoqueMinimo,s.quantidade,s.valor_total_centavos AS valorCentavos
+export const saldosProdutos = `WITH filtrados AS (SELECT p.id AS produtoId,p.nome AS nomeAtual,p.sku AS skuAtual,p.unidade_comercial AS unidadeComercial,p.ativo,p.estoque_minimo AS estoqueMinimo,s.quantidade,s.valor_total_centavos AS valorCentavos
  FROM produtos p JOIN saldos_estoque s ON s.produto_id=p.id WHERE (@produto IS NULL OR p.id=@produto) AND (@ativo IS NULL OR p.ativo=@ativo)
  AND (@situacao='TODOS' OR @situacao='SEM_ESTOQUE' AND s.quantidade=0 OR @situacao='BAIXO' AND s.quantidade<p.estoque_minimo))`;

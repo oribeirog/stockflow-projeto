@@ -29,7 +29,7 @@ function seedCorrecoes(db) {
       sku: product.sku,
       marcaId: product.marca_id,
       categoriaId: product.categoria_id,
-      volumeMicrolitros: product.volume_microlitros,
+      unidadeComercial: 'UN',
       precoVendaCentavos: product.preco_venda_centavos,
       estoqueMinimo: product.estoque_minimo,
       ativo: false,
