@@ -73,14 +73,14 @@ async function fixture(t) {
   };
 }
 test('signature and bounded header validation reject false types, truncated data, animations and pixel bombs', () => {
-  for (const bytes of [
-    Buffer.from('fake.png'),
-    Buffer.from([0xff, 0xd8, 0xff, 0xd9]),
-    Buffer.alloc(10 * 1024 * 1024 + 1),
+  for (const [bytes, code] of [
+    [Buffer.from('fake.png'), 'PHOTO_INVALID'],
+    [Buffer.from([0xff, 0xd8, 0xff, 0xd9]), 'PHOTO_INVALID'],
+    [Buffer.alloc(10 * 1024 * 1024 + 1), 'PHOTO_SIZE'],
   ])
     assert.throws(
       () => imageHeader(bytes),
-      (e) => e.code === 'PHOTO_INVALID',
+      (e) => e.code === code,
     );
   const png = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j2ioAAAAASUVORK5CYII=',

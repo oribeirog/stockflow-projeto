@@ -1,0 +1,973 @@
+{
+  "at": "2026-11-16T18:23:19.633Z",
+  "allAttempts": [
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T15:34:48.639Z",
+      "finished": "2026-11-16T15:34:54.439Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-34-48-637Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T15-34-48-637Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T15:34:54.439Z",
+      "finished": "2026-11-16T15:35:00.766Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-34-48-637Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T15-34-48-637Z"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T15:35:00.766Z",
+      "finished": "2026-11-16T15:35:09.870Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-34-48-637Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T15-34-48-637Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T15:35:09.870Z",
+      "finished": "2026-11-16T15:36:11.437Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-34-48-637Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T15-34-48-637Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T15:36:11.438Z",
+      "finished": "2026-11-16T15:38:51.879Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-34-48-637Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T15-34-48-637Z"
+    },
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T15:40:47.075Z",
+      "finished": "2026-11-16T15:40:53.369Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T15:40:53.370Z",
+      "finished": "2026-11-16T15:41:00.545Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T15:41:00.545Z",
+      "finished": "2026-11-16T15:41:10.471Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T15:41:10.472Z",
+      "finished": "2026-11-16T15:41:21.901Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T15:41:21.902Z",
+      "finished": "2026-11-16T15:43:48.704Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T15:43:48.705Z",
+      "finished": "2026-11-16T15:47:16.208Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:vendas",
+      "started": "2026-11-16T15:47:16.208Z",
+      "finished": "2026-11-16T15:47:42.124Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:financeiro",
+      "started": "2026-11-16T15:47:42.125Z",
+      "finished": "2026-11-16T15:48:59.664Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes",
+      "started": "2026-11-16T15:48:59.665Z",
+      "finished": "2026-11-16T15:49:26.905Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:reembolsos",
+      "started": "2026-11-16T15:49:26.905Z",
+      "finished": "2026-11-16T15:50:00.859Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes-compras",
+      "started": "2026-11-16T15:50:00.859Z",
+      "finished": "2026-11-16T15:50:26.732Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/11.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:estornos-estoque",
+      "started": "2026-11-16T15:50:26.733Z",
+      "finished": "2026-11-16T15:50:57.320Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/12.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao",
+      "started": "2026-11-16T15:50:57.320Z",
+      "finished": "2026-11-16T15:51:34.508Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/13.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-gerencial",
+      "started": "2026-11-16T15:51:34.508Z",
+      "finished": "2026-11-16T15:55:04.928Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/14.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-estoque",
+      "started": "2026-11-16T15:55:04.928Z",
+      "finished": "2026-11-16T15:57:52.297Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/15.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:relatorios",
+      "started": "2026-11-16T15:57:52.298Z",
+      "finished": "2026-11-16T15:58:08.283Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/16.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:dashboard",
+      "started": "2026-11-16T15:58:08.284Z",
+      "finished": "2026-11-16T15:58:31.636Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/17.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:exportacoes",
+      "started": "2026-11-16T15:58:31.637Z",
+      "finished": "2026-11-16T15:59:51.970Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/18.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T15:59:51.971Z",
+      "finished": "2026-11-16T16:03:34.884Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/19.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T16:03:34.885Z",
+      "finished": "2026-11-16T16:05:53.953Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/20.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T16:05:53.954Z",
+      "finished": "2026-11-16T16:07:01.139Z",
+      "code": 1,
+      "log": ".cache/pre52b-checks-2026-11-16T15-40-47-074Z/21.log",
+      "ledger": "pre52b-checks-2026-11-16T15-40-47-074Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T16:11:17.796Z",
+      "finished": "2026-11-16T16:11:40.429Z",
+      "code": 1,
+      "log": ".cache/pre52b-checks-2026-11-16T16-11-17-795Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T16-11-17-795Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T16:19:59.474Z",
+      "finished": "2026-11-16T16:21:15.565Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "npm.cmd run pack",
+      "started": "2026-11-16T16:21:15.566Z",
+      "finished": "2026-11-16T16:22:23.415Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T16:22:23.415Z",
+      "finished": "2026-11-16T16:22:23.635Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --development",
+      "started": "2026-11-16T16:22:23.636Z",
+      "finished": "2026-11-16T16:23:24.787Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --package",
+      "started": "2026-11-16T16:23:24.788Z",
+      "finished": "2026-11-16T16:24:20.150Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6",
+      "started": "2026-11-16T16:24:20.151Z",
+      "finished": "2026-11-16T16:25:01.696Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --development",
+      "started": "2026-11-16T16:25:01.697Z",
+      "finished": "2026-11-16T16:25:51.487Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --package",
+      "started": "2026-11-16T16:25:51.488Z",
+      "finished": "2026-11-16T16:26:32.629Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --development",
+      "started": "2026-11-16T16:26:32.630Z",
+      "finished": "2026-11-16T16:27:23.241Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --package",
+      "started": "2026-11-16T16:27:23.242Z",
+      "finished": "2026-11-16T16:28:04.878Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T16:32:04.123Z",
+      "finished": "2026-11-16T16:32:10.654Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T16:32:10.655Z",
+      "finished": "2026-11-16T16:32:21.783Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T16:32:21.784Z",
+      "finished": "2026-11-16T16:32:33.754Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T16:32:33.755Z",
+      "finished": "2026-11-16T16:32:45.610Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T16:32:45.610Z",
+      "finished": "2026-11-16T16:35:20.242Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T16:35:20.243Z",
+      "finished": "2026-11-16T16:38:49.940Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T16:38:49.940Z",
+      "finished": "2026-11-16T16:42:38.504Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T16:42:38.505Z",
+      "finished": "2026-11-16T16:43:55.673Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5",
+      "started": "2026-11-16T16:43:55.673Z",
+      "finished": "2026-11-16T16:44:37.162Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "powershell.exe -NoProfile -NonInteractive -File .cache/pre52b/verify-windows.ps1",
+      "started": "2026-11-16T16:44:37.162Z",
+      "finished": "2026-11-16T16:44:37.533Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T16:44:37.534Z",
+      "finished": "2026-11-16T16:44:37.723Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/11.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd audit --omit=dev --json",
+      "started": "2026-11-16T16:44:37.723Z",
+      "finished": "2026-11-16T16:44:39.607Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/12.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:vendas",
+      "started": "2026-11-16T16:45:32.499Z",
+      "finished": "2026-11-16T16:45:58.882Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:financeiro",
+      "started": "2026-11-16T16:45:58.883Z",
+      "finished": "2026-11-16T16:47:16.989Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes",
+      "started": "2026-11-16T16:47:16.989Z",
+      "finished": "2026-11-16T16:47:45.059Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:reembolsos",
+      "started": "2026-11-16T16:47:45.060Z",
+      "finished": "2026-11-16T16:48:20.248Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes-compras",
+      "started": "2026-11-16T16:48:20.248Z",
+      "finished": "2026-11-16T16:48:47.579Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:estornos-estoque",
+      "started": "2026-11-16T16:48:47.580Z",
+      "finished": "2026-11-16T16:49:20.299Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao",
+      "started": "2026-11-16T16:49:20.300Z",
+      "finished": "2026-11-16T16:49:59.704Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-gerencial",
+      "started": "2026-11-16T16:49:59.705Z",
+      "finished": "2026-11-16T16:53:40.626Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-estoque",
+      "started": "2026-11-16T16:53:40.627Z",
+      "finished": "2026-11-16T16:56:36.689Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:relatorios",
+      "started": "2026-11-16T16:56:36.690Z",
+      "finished": "2026-11-16T16:56:53.797Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:dashboard",
+      "started": "2026-11-16T16:56:53.797Z",
+      "finished": "2026-11-16T16:57:17.853Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/11.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:exportacoes",
+      "started": "2026-11-16T16:57:17.853Z",
+      "finished": "2026-11-16T16:58:37.729Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/12.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T16:58:37.730Z",
+      "finished": "2026-11-16T17:00:56.562Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/13.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --development",
+      "started": "2026-11-16T17:00:56.563Z",
+      "finished": "2026-11-16T17:01:57.093Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/14.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --package",
+      "started": "2026-11-16T17:01:57.094Z",
+      "finished": "2026-11-16T17:02:49.651Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/15.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node .cache/pre52b-artifact-audit.mjs",
+      "started": "2026-11-16T17:02:49.651Z",
+      "finished": "2026-11-16T17:02:50.673Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/16.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "powershell.exe -NoProfile -NonInteractive -File .cache/pre52b/verify-windows.ps1",
+      "started": "2026-11-16T17:02:50.674Z",
+      "finished": "2026-11-16T17:02:51.032Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/17.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T17:02:51.032Z",
+      "finished": "2026-11-16T17:02:51.223Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/18.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T18:03:39.325Z",
+      "finished": "2026-11-16T18:03:47.362Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T18:03:47.363Z",
+      "finished": "2026-11-16T18:03:58.930Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T18:03:58.931Z",
+      "finished": "2026-11-16T18:04:15.792Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T18:04:15.793Z",
+      "finished": "2026-11-16T18:04:30.621Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T18:04:30.622Z",
+      "finished": "2026-11-16T18:07:11.804Z",
+      "code": 1,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "node --test --test-reporter=tap tests/*.test.cjs",
+      "started": "2026-11-16T18:08:35.274Z",
+      "finished": "2026-11-16T18:11:01.125Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-08-35-271Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T18-08-35-271Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T18:11:01.125Z",
+      "finished": "2026-11-16T18:13:37.107Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-08-35-271Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T18-08-35-271Z"
+    },
+    {
+      "command": "npm.cmd run test:reembolsos",
+      "started": "2026-11-16T18:13:37.108Z",
+      "finished": "2026-11-16T18:14:12.442Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-08-35-271Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T18-08-35-271Z"
+    },
+    {
+      "command": "node .cache/pre52b-artifact-audit.mjs",
+      "started": "2026-11-16T18:14:12.442Z",
+      "finished": "2026-11-16T18:14:14.403Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-08-35-271Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T18-08-35-271Z"
+    },
+    {
+      "command": "node --test tests/reembolsos-estornos.test.cjs",
+      "started": "2026-11-16T18:14:46.871Z",
+      "finished": "2026-11-16T18:14:53.150Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "node --test tests/reembolsos-estornos.test.cjs",
+      "started": "2026-11-16T18:14:53.151Z",
+      "finished": "2026-11-16T18:14:59.678Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T18:14:59.678Z",
+      "finished": "2026-11-16T18:15:08.160Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T18:15:08.161Z",
+      "finished": "2026-11-16T18:17:45.243Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run test:financeiro",
+      "started": "2026-11-16T18:17:45.243Z",
+      "finished": "2026-11-16T18:19:04.984Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run test:reembolsos",
+      "started": "2026-11-16T18:19:04.985Z",
+      "finished": "2026-11-16T18:19:40.016Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "node .cache/pre52b-artifact-audit.mjs",
+      "started": "2026-11-16T18:19:40.017Z",
+      "finished": "2026-11-16T18:19:41.216Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T18:19:41.217Z",
+      "finished": "2026-11-16T18:19:41.448Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    }
+  ],
+  "latest": [
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T18:03:39.325Z",
+      "finished": "2026-11-16T18:03:47.362Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T18:14:59.678Z",
+      "finished": "2026-11-16T18:15:08.160Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T18:03:58.931Z",
+      "finished": "2026-11-16T18:04:15.792Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run test:fotos-compatibilidade",
+      "started": "2026-11-16T16:42:38.505Z",
+      "finished": "2026-11-16T16:43:55.673Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T18:15:08.161Z",
+      "finished": "2026-11-16T18:17:45.243Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T18:04:15.793Z",
+      "finished": "2026-11-16T18:04:30.621Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-03-39-300Z/04.log",
+      "ledger": "pre52b-checks-2026-11-16T18-03-39-300Z"
+    },
+    {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T16:35:20.243Z",
+      "finished": "2026-11-16T16:38:49.940Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:vendas",
+      "started": "2026-11-16T16:45:32.499Z",
+      "finished": "2026-11-16T16:45:58.882Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:financeiro",
+      "started": "2026-11-16T18:17:45.243Z",
+      "finished": "2026-11-16T18:19:04.984Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes",
+      "started": "2026-11-16T16:47:16.989Z",
+      "finished": "2026-11-16T16:47:45.059Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/03.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:reembolsos",
+      "started": "2026-11-16T18:19:04.985Z",
+      "finished": "2026-11-16T18:19:40.016Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "npm.cmd run test:correcoes-compras",
+      "started": "2026-11-16T16:48:20.248Z",
+      "finished": "2026-11-16T16:48:47.579Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/05.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:estornos-estoque",
+      "started": "2026-11-16T16:48:47.580Z",
+      "finished": "2026-11-16T16:49:20.299Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao",
+      "started": "2026-11-16T16:49:20.300Z",
+      "finished": "2026-11-16T16:49:59.704Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-gerencial",
+      "started": "2026-11-16T16:49:59.705Z",
+      "finished": "2026-11-16T16:53:40.626Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:consolidacao-estoque",
+      "started": "2026-11-16T16:53:40.627Z",
+      "finished": "2026-11-16T16:56:36.689Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:relatorios",
+      "started": "2026-11-16T16:56:36.690Z",
+      "finished": "2026-11-16T16:56:53.797Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:dashboard",
+      "started": "2026-11-16T16:56:53.797Z",
+      "finished": "2026-11-16T16:57:17.853Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/11.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:exportacoes",
+      "started": "2026-11-16T16:57:17.853Z",
+      "finished": "2026-11-16T16:58:37.729Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/12.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T16:38:49.940Z",
+      "finished": "2026-11-16T16:42:38.504Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T16:58:37.730Z",
+      "finished": "2026-11-16T17:00:56.562Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/13.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd run pack",
+      "started": "2026-11-16T16:21:15.566Z",
+      "finished": "2026-11-16T16:22:23.415Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T18:19:41.217Z",
+      "finished": "2026-11-16T18:19:41.448Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --development",
+      "started": "2026-11-16T17:00:56.563Z",
+      "finished": "2026-11-16T17:01:57.093Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/14.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos --package",
+      "started": "2026-11-16T17:01:57.094Z",
+      "finished": "2026-11-16T17:02:49.651Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/15.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6",
+      "started": "2026-11-16T16:24:20.151Z",
+      "finished": "2026-11-16T16:25:01.696Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/06.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --development",
+      "started": "2026-11-16T16:25:01.697Z",
+      "finished": "2026-11-16T16:25:51.487Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --package",
+      "started": "2026-11-16T16:25:51.488Z",
+      "finished": "2026-11-16T16:26:32.629Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/08.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --development",
+      "started": "2026-11-16T16:26:32.630Z",
+      "finished": "2026-11-16T16:27:23.241Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --package",
+      "started": "2026-11-16T16:27:23.242Z",
+      "finished": "2026-11-16T16:28:04.878Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-19-59-472Z/10.log",
+      "ledger": "pre52b-checks-2026-11-16T16-19-59-472Z"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5",
+      "started": "2026-11-16T16:43:55.673Z",
+      "finished": "2026-11-16T16:44:37.162Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/09.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "powershell.exe -NoProfile -NonInteractive -File .cache/pre52b/verify-windows.ps1",
+      "started": "2026-11-16T17:02:50.674Z",
+      "finished": "2026-11-16T17:02:51.032Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-45-32-497Z/17.log",
+      "ledger": "pre52b-checks-2026-11-16T16-45-32-497Z"
+    },
+    {
+      "command": "npm.cmd audit --omit=dev --json",
+      "started": "2026-11-16T16:44:37.723Z",
+      "finished": "2026-11-16T16:44:39.607Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T16-32-04-121Z/12.log",
+      "ledger": "pre52b-checks-2026-11-16T16-32-04-121Z"
+    },
+    {
+      "command": "node .cache/pre52b-artifact-audit.mjs",
+      "started": "2026-11-16T18:19:40.017Z",
+      "finished": "2026-11-16T18:19:41.216Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/07.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    },
+    {
+      "command": "node --test --test-reporter=tap tests/*.test.cjs",
+      "started": "2026-11-16T18:08:35.274Z",
+      "finished": "2026-11-16T18:11:01.125Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-08-35-271Z/01.log",
+      "ledger": "pre52b-checks-2026-11-16T18-08-35-271Z"
+    },
+    {
+      "command": "node --test tests/reembolsos-estornos.test.cjs",
+      "started": "2026-11-16T18:14:53.151Z",
+      "finished": "2026-11-16T18:14:59.678Z",
+      "code": 0,
+      "log": ".cache/pre52b-checks-2026-11-16T18-14-46-869Z/02.log",
+      "ledger": "pre52b-checks-2026-11-16T18-14-46-869Z"
+    }
+  ],
+  "adHocFailureLogs": [
+    ".cache/pre52b/fotos-first.log",
+    ".cache/pre52b/ui-first.log",
+    ".cache/pre52b/ui-second.log",
+    ".cache/pre52b/worker-teardown-probe.json"
+  ]
+}

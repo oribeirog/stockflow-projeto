@@ -19,7 +19,13 @@ export type CodigoErroDesktopCadastro =
   | 'IPC_UNAVAILABLE'
   | 'PHOTO_INVALID'
   | 'PHOTO_EXPIRED'
-  | 'PHOTO_UNAVAILABLE';
+  | 'PHOTO_UNAVAILABLE'
+  | 'PHOTO_FORMAT'
+  | 'PHOTO_SIZE'
+  | 'PHOTO_DIMENSIONS'
+  | 'PHOTO_PROCESSING'
+  | 'PHOTO_WRITE'
+  | 'PHOTO_ACCESS';
 export type ResultadoCadastro<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: CodigoErroDesktopCadastro; message: string } };
@@ -70,9 +76,19 @@ export const CANAIS_CADASTROS = {
 } as const;
 export const MENSAGENS_CADASTRO: Record<CodigoErroDesktopCadastro, string> = {
   PHOTO_INVALID:
-    'Fotografia inválida. Use JPEG ou PNG estático de até 10 MiB e 24 milhões de pixels.',
+    'O arquivo não é uma imagem válida ou está danificado. Selecione outra fotografia.',
   PHOTO_EXPIRED: 'A seleção da fotografia expirou. Selecione o arquivo novamente.',
   PHOTO_UNAVAILABLE: 'Não foi possível acessar a fotografia. O cadastro foi preservado.',
+  PHOTO_FORMAT:
+    'Formato não suportado. Selecione uma fotografia JPG, JPEG, JFIF, PNG ou WebP estática.',
+  PHOTO_SIZE: 'A fotografia ultrapassa o limite de 10 MiB. Escolha um arquivo menor.',
+  PHOTO_DIMENSIONS: 'A fotografia ultrapassa 8192 pixels por lado ou 24 milhões de pixels.',
+  PHOTO_PROCESSING:
+    'Não foi possível processar a fotografia. Selecione outra imagem e tente novamente.',
+  PHOTO_WRITE:
+    'Não foi possível gravar a fotografia. Confira o espaço e a permissão da pasta de dados e tente novamente.',
+  PHOTO_ACCESS:
+    'Não foi possível ler o arquivo selecionado. Confira se ele está disponível e se há permissão de leitura.',
   VALIDATION: 'Confira os campos e os limites informados.',
   NOT_FOUND: 'Cadastro ou referência não encontrado.',
   CONFLICT: 'Já existe um cadastro com esses identificadores ou há uma restrição de integridade.',

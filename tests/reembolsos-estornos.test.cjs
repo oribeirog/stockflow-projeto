@@ -372,6 +372,7 @@ test('4E2D: independent payment writers serialize review conflicts and duplicate
             workerData: { directory: s.directory, gate, command },
           }),
       );
+    const exits = workers.map((w) => new Promise((resolve) => w.once('exit', resolve)));
     try {
       await Promise.all(
         workers.map(
@@ -391,7 +392,11 @@ test('4E2D: independent payment writers serialize review conflicts and duplicate
       );
       Atomics.store(new Int32Array(gate), 0, 1);
       Atomics.notify(new Int32Array(gate), 0);
-      return await Promise.all(results);
+      const values = await Promise.all(results);
+      // Keep simultaneous writers, but let their connections and native resources
+      // close normally. Unexpected worker exit is a test failure, never success.
+      assert.deepEqual(await Promise.all(exits), [0, 0]);
+      return values;
     } finally {
       await Promise.all(workers.map((w) => w.terminate()));
     }

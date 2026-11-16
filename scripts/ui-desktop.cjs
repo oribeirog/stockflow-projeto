@@ -71,7 +71,7 @@ async function verify(window) {
     await until(
       `document.querySelector('h1').textContent === ${JSON.stringify(title)} && document.activeElement === document.querySelector('h1')`,
     );
-    assert.equal(await evaluate('document.title'), `${title} • MNR Perfumes`);
+    assert.equal(await evaluate('document.title'), `${title} • MNR Gestão`);
     assert.equal(
       await evaluate('document.querySelectorAll("#main-navigation [aria-current=page]").length'),
       1,

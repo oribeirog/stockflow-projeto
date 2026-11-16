@@ -41,7 +41,7 @@ test('4F3 every closed model exports a valid styled XLSX, dates, official totals
   for (const { id } of MODELOS_RELATORIO) {
     const d = coletarDocumento(db, { modelo: id, filtros: filtros(id) }, clock),
       wb = await workbook(d);
-    assert.equal(wb.creator, 'MNR Perfumes');
+    assert.equal(wb.creator, 'MNR Gestão');
     assert.equal(wb.worksheets[0].name, 'Resumo');
     assert(wb.getWorksheet('Metodologia'));
     assert(wb.worksheets.length <= 4);
@@ -50,7 +50,7 @@ test('4F3 every closed model exports a valid styled XLSX, dates, official totals
       assert(sheet.pageSetup.printTitlesRow);
     }
     const all = values(wb);
-    assert(all.includes('MNR Perfumes'));
+    assert(all.includes('MNR Gestão'));
     assert(all.includes(d.titulo));
     for (const section of d.secoes)
       for (const row of section.linhas)
@@ -105,7 +105,7 @@ test('4F3 reference 300/250/200/150 export states match official DTOs including 
         assert.equal(row[9], pending);
         if (!pending && commercial === 30000) assert.equal(row[4], 'ANULADA');
       }
-      assert.match(gerarHtml(d), /MNR Perfumes/);
+      assert.match(gerarHtml(d), /MNR Gestão/);
     }
     assert.equal(snapshot(db), before);
   };

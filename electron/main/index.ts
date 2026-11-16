@@ -6,6 +6,7 @@ import { openDatabase } from '../infrastructure/database';
 import { registerIpc } from '../ipc';
 import { createFotoService } from '../services/fotos';
 import { normalizeFoto } from '../services/foto-codec';
+import { fotoDiagnostics } from '../services/foto-diagnostics';
 import { recoverAndOpen, recoveryPaths, cleanupRecoveryStaging } from '../services/backup/control';
 import { BackupController } from '../services/backup/controller';
 import { backupMessage } from '../services/backup/io';
@@ -13,6 +14,10 @@ import { relaunchApplication, recordStartupError, type StartupPhase } from './li
 protocol.registerSchemesAsPrivileged([
   { scheme: 'mnr', privileges: { standard: true, secure: true, supportFetchAPI: true } },
 ]);
+app.setName('MNR Gestão');
+// Chromium request headers must remain ASCII. The public accented brand otherwise
+// reaches the custom-protocol Headers bridge as U+FFFD on Windows/Electron 43.
+app.userAgentFallback = app.userAgentFallback.replaceAll('Gestão', 'Gestao');
 const paths = preparePaths();
 let db: Awaited<ReturnType<typeof openDatabase>> | undefined;
 let maintenance: BackupController | undefined;
@@ -29,7 +34,14 @@ else
       paths.images = opened.images;
       startupPhase = 'photos';
       const cleanupWarning = await cleanupRecoveryStaging(paths.root);
-      const photos = createFotoService(db, paths.images, app.getVersion(), normalizeFoto);
+      const photoDiagnostic = fotoDiagnostics(paths.logs);
+      const photos = createFotoService(
+        db,
+        paths.images,
+        app.getVersion(),
+        (bytes) => normalizeFoto(bytes, photoDiagnostic),
+        { diagnostic: photoDiagnostic },
+      );
       const imageHealth = await photos.reconcile();
       if (imageHealth.missing || imageHealth.preserved)
         console.warn('Fotografias: arquivos ausentes ou preservados para inspeção.', imageHealth);
@@ -61,6 +73,7 @@ else
         });
       });
       const window = new BrowserWindow({
+        title: 'MNR Gestão',
         width: 1000,
         height: 700,
         minWidth: 640,
@@ -102,9 +115,9 @@ else
         ],
         chooseBackup: async (name) => {
           const r = await dialog.showSaveDialog(window, {
-            title: 'Criar backup completo MNR Perfumes',
+            title: 'Criar backup completo MNR Gestão',
             defaultPath: name,
-            filters: [{ name: 'Backup MNR Perfumes', extensions: ['mnrbackup'] }],
+            filters: [{ name: 'Backup MNR Gestão', extensions: ['mnrbackup'] }],
             properties: ['showOverwriteConfirmation', 'dontAddToRecent'],
           });
           return r.canceled ? undefined : r.filePath;
@@ -112,7 +125,7 @@ else
         chooseRestore: async () => {
           const r = await dialog.showOpenDialog(window, {
             title: 'Selecionar backup para revisar',
-            filters: [{ name: 'Backup MNR Perfumes', extensions: ['mnrbackup'] }],
+            filters: [{ name: 'Backup MNR Gestão', extensions: ['mnrbackup'] }],
             properties: ['openFile', 'dontAddToRecent'],
           });
           return r.canceled ? undefined : r.filePaths[0];
@@ -266,8 +279,8 @@ else
       console.error('Inicialização bloqueada:', message.code);
       dialog.showErrorBox(
         startupPhase === 'interface'
-          ? 'MNR Perfumes — interface indisponível'
-          : 'MNR Perfumes — abertura segura',
+          ? 'MNR Gestão — interface indisponível'
+          : 'MNR Gestão — abertura segura',
         startupPhase === 'interface'
           ? 'O banco foi aberto, mas a interface não pôde ser carregada. ' +
               (!app.isPackaged && process.env['MNR_DEV'] === '1'

@@ -1,0 +1,63 @@
+{
+  "artifact": {
+    "at": "2026-11-16T18:19:40.427Z",
+    "compared": 146,
+    "sourceFingerprint": "002b0651305db51de3f90694c19dcb56587991080e830abcf70448e7170336e8",
+    "asarSha256": "01f6cc03d8992b1efe01fdb83a5cb6b4a7fa6687327c6641dbe7a325bcf04a17",
+    "executableSha256": "3eb06d41bccf8783c5bc9afe91cbaad884727d0f2c9e45822dbb4431cf3cdb25",
+    "legacy": {
+      "5": {
+        "commit": "026daa0",
+        "schema": 5,
+        "archiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627"
+      },
+      "6": {
+        "commit": "d359480",
+        "schema": 6,
+        "archiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3"
+      }
+    }
+  },
+  "windows": {
+    "ProductName": "MNR Gestão",
+    "FileDescription": "MNR Gestão",
+    "CompanyName": "MNR Software",
+    "FileVersion": "0.1.0",
+    "ProductVersion": "0.1.0.0"
+  },
+  "migrations": [
+    {
+      "path": "electron/infrastructure/database/migrations/.gitkeep",
+      "sha256Canonical": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0001-cadastros.ts",
+      "sha256Canonical": "26e000956c11cf9ef3ccf51b5e0ff8516b372604032123295903efc92ecfad76"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0002-estoque.ts",
+      "sha256Canonical": "e85edf13507fe589fb90ec4fa573ec56b03ee1fa78d818443fefdf512cb3710e"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0003-comercial.ts",
+      "sha256Canonical": "447e1453fbdf08d06749d6ceb3e9656413903aca0a8dd56bed173197b7d61807"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0004-financeiro.ts",
+      "sha256Canonical": "cf9d467c0afa74ac929cf250b69a7013e47a6b89686916a190bb3d9630303ca5"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0005-fotografias.ts",
+      "sha256Canonical": "dfa0002ce9ad283228178c8529f5b125d47ef25ca7f185c17ded5665904837a2"
+    },
+    {
+      "path": "electron/infrastructure/database/migrations/0006-catalogo-generalista.ts",
+      "sha256Canonical": "fab92b93cdf2de80d02b79f98403b65bb0032a71749165c31a63af1c5508520a"
+    }
+  ],
+  "singleInstance": {
+    "root": "[repositorio]\\.cache\\pre52b\\instance-dDZJxT",
+    "old": "LOCK true",
+    "new": "LOCK false"
+  }
+}

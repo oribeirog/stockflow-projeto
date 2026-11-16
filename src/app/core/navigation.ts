@@ -75,33 +75,33 @@ export const routes: Routes = [
 
   {
     path: 'configuracoes/backup',
-    title: 'Backup e Restauração • MNR Perfumes',
+    title: 'Backup e Restauração • MNR Gestão',
     loadComponent: () => import('../features/settings/backup').then((m) => m.BackupPage),
     canDeactivate: [(c: { canLeave(): boolean }) => c.canLeave()],
   },
   {
     path: 'estoque/:id/ajustes/:movimentoId',
-    title: 'Estorno de Ajuste • MNR Perfumes',
+    title: 'Estorno de Ajuste • MNR Gestão',
     data: { estoqueEditor: true },
     loadComponent: () => import('../features/estoque/estorno').then((m) => m.EstornoEstoque),
     canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
   },
   ...['devolver', 'cancelar'].map((action) => ({
     path: `compras/:id/${action}`,
-    title: 'Correções de Compras • MNR Perfumes',
+    title: 'Correções de Compras • MNR Gestão',
     data: { compraEditor: true, cancelamento: action === 'cancelar' },
     loadComponent: () => import('../features/compras/correcao').then((m) => m.CorrecaoCompra),
     canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
   })),
   {
     path: 'compras/:id/correcoes',
-    title: 'Histórico de Compras • MNR Perfumes',
+    title: 'Histórico de Compras • MNR Gestão',
     data: { compraEditor: true },
     loadComponent: () => import('../features/compras/correcoes').then((m) => m.CompraCorrecoes),
   },
   {
     path: 'relatorios',
-    title: 'Relatórios • MNR Perfumes',
+    title: 'Relatórios • MNR Gestão',
     loadComponent: () => import('../features/relatorios/relatorios').then((m) => m.Relatorios),
     canDeactivate: [(c: { canLeave(): boolean }) => c.canLeave()],
   },
@@ -111,7 +111,7 @@ export const routes: Routes = [
     ['vendas/correcoes/:id/estornar', 'devolucao'],
   ].map(([path, operacaoFinanceira]) => ({
     path,
-    title: 'Reembolsos e Estornos • MNR Perfumes',
+    title: 'Reembolsos e Estornos • MNR Gestão',
     data: { financeiroConsulta: true, operacaoFinanceira },
     loadComponent: () =>
       import('../features/financeiro/operacao').then((m) => m.OperacaoFinanceira),
@@ -119,14 +119,14 @@ export const routes: Routes = [
   })),
   ...['devolver', 'cancelar'].map((action) => ({
     path: `vendas/:id/${action}`,
-    title: 'Correções de Vendas • MNR Perfumes',
+    title: 'Correções de Vendas • MNR Gestão',
     data: { vendaEditor: true, cancelamento: action === 'cancelar' },
     loadComponent: () => import('../features/vendas/correcao').then((m) => m.CorrecaoVenda),
     canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
   })),
   {
     path: 'financeiro/vendas/:id/receber',
-    title: 'Recebimentos • MNR Perfumes',
+    title: 'Recebimentos • MNR Gestão',
     data: { financeiroConsulta: true },
     loadComponent: () => import('../features/financeiro/receber').then((m) => m.Receber),
     canDeactivate: [(c: { canLeave(): boolean | Promise<boolean> }) => c.canLeave()],
@@ -134,7 +134,7 @@ export const routes: Routes = [
   { path: 'financeiro', pathMatch: 'full', redirectTo: 'financeiro/parcelas' },
   ...['parcelas', 'reembolsos'].map((kind) => ({
     path: `financeiro/${kind}`,
-    title: 'Financeiro • MNR Perfumes',
+    title: 'Financeiro • MNR Gestão',
     data: { financeiroTipo: kind, financeiroConsulta: true },
     loadComponent: () => import('../features/financeiro/lista').then((m) => m.FinanceiroLista),
   })),
@@ -146,13 +146,13 @@ export const routes: Routes = [
     ['vendas/correcoes/:id', 'correcao'],
   ].map(([path, kind]) => ({
     path,
-    title: 'Financeiro • MNR Perfumes',
+    title: 'Financeiro • MNR Gestão',
     data: { financeiroTipo: kind, financeiroConsulta: true },
     loadComponent: () => import('../features/financeiro/detalhe').then((m) => m.FinanceiroDetalhe),
   })),
   ...['vendas/nova', 'vendas/:id'].map((path) => ({
     path,
-    title: 'Vendas ? MNR Perfumes',
+    title: 'Vendas ? MNR Gestão',
     data: { vendaEditor: true },
     loadComponent: () => import('../features/vendas/editor').then((m) => m.VendaEditor),
     canDeactivate: [
@@ -161,14 +161,14 @@ export const routes: Routes = [
   })),
   {
     path: 'configuracoes/formas-pagamento',
-    title: 'Configurações • MNR Perfumes',
+    title: 'Configurações • MNR Gestão',
     data: { formasEditor: true },
     loadComponent: () => import('../features/compras/formas').then((m) => m.FormasPagamento),
     canDeactivate: [(component: { canLeave(): boolean }) => component.canLeave()],
   },
   ...['compras/nova', 'compras/:id'].map((path) => ({
     path,
-    title: 'Compras • MNR Perfumes',
+    title: 'Compras • MNR Gestão',
     data: { compraEditor: true },
     loadComponent: () => import('../features/compras/editor').then((m) => m.CompraEditor),
     canDeactivate: [
@@ -177,7 +177,7 @@ export const routes: Routes = [
   })),
   {
     path: 'estoque/:id',
-    title: 'Estoque • MNR Perfumes',
+    title: 'Estoque • MNR Gestão',
     data: { estoqueEditor: true },
     loadComponent: () => import('../features/estoque/detalhe').then((m) => m.EstoqueDetalhe),
     canDeactivate: [
@@ -187,7 +187,7 @@ export const routes: Routes = [
   ...(['clientes', 'fornecedores'] as const).flatMap((path) =>
     ['novo', ':id/editar'].map((suffix) => ({
       path: `${path}/${suffix}`,
-      title: `${path === 'clientes' ? 'Clientes' : 'Fornecedores'} • MNR Perfumes`,
+      title: `${path === 'clientes' ? 'Clientes' : 'Fornecedores'} • MNR Gestão`,
       data: { pessoaEditor: true, pessoa: path === 'clientes' ? 'cliente' : 'fornecedor' },
       loadComponent: () => import('../features/pessoas/editor').then((m) => m.PessoaEditor),
       canDeactivate: [
@@ -197,7 +197,7 @@ export const routes: Routes = [
   ),
   ...['produtos/novo', 'produtos/:id/editar'].map((path) => ({
     path,
-    title: 'Produtos • MNR Perfumes',
+    title: 'Produtos • MNR Gestão',
     data: { perfumeEditor: true },
     loadComponent: () => import('../features/perfumes/editor').then((m) => m.PerfumeEditor),
     canDeactivate: [
@@ -208,7 +208,7 @@ export const routes: Routes = [
     .filter((item) => !['financeiro', 'relatorios'].includes(item.path))
     .map((item) => ({
       path: item.path,
-      title: `${item.title} • MNR Perfumes`,
+      title: `${item.title} • MNR Gestão`,
       data: { ...item, pessoa: item.path === 'fornecedores' ? 'fornecedor' : 'cliente' },
       loadComponent:
         item.path === 'dashboard'

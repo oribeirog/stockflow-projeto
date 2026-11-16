@@ -1,0 +1,1152 @@
+{
+  "environment": {
+    "os": "Windows_NT",
+    "release": "10.0.19045",
+    "arch": "x64",
+    "cpu": "Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz",
+    "memoryGiB": 15.958183288574219,
+    "node": "v26.13.0"
+  },
+  "codec": {
+    "electron": "43.8.6",
+    "results": [
+      {
+        "name": "JPEG comum.jpg",
+        "bytes": 1360,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 678,
+        "ms": 56.93689999999992,
+        "rss": 97808384,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1360,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 5,
+          "validationMs": 0.44470000000001164,
+          "decodeMs": 0.532399999999825,
+          "normalizeMs": 3.552400000000034,
+          "thumbnailMs": 0.0036000000000058208,
+          "encodeMs": 0.4432000000001608
+        }
+      },
+      {
+        "name": "progressivo.JPEG",
+        "bytes": 1006,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 678,
+        "ms": 64.72719999999981,
+        "rss": 98263040,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1006,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.10140000000001237,
+          "decodeMs": 0.25520000000005894,
+          "normalizeMs": 0.9655999999999949,
+          "thumbnailMs": 0.002200000000129876,
+          "encodeMs": 0.24879999999984648
+        }
+      },
+      {
+        "name": "cmyk.jpeg",
+        "bytes": 1080,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 705,
+        "ms": 47.699299999999994,
+        "rss": 98938880,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1080,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 1,
+          "validationMs": 0.02479999999991378,
+          "decodeMs": 0.20270000000004984,
+          "normalizeMs": 0.9227000000000771,
+          "thumbnailMs": 0.0032999999998537533,
+          "encodeMs": 0.2761000000000422
+        }
+      },
+      {
+        "name": "perfil-icc.JPG",
+        "bytes": 1966,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 678,
+        "ms": 50.43299999999999,
+        "rss": 99160064,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1966,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.03470000000015716,
+          "decodeMs": 0.23710000000005493,
+          "normalizeMs": 0.9841000000001259,
+          "thumbnailMs": 0.003100000000131331,
+          "encodeMs": 0.2643999999997959
+        }
+      },
+      {
+        "name": "orientacao-1.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 678,
+        "ms": 64.1878999999999,
+        "rss": 100855808,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.13520000000016807,
+          "decodeMs": 0.1692000000000462,
+          "normalizeMs": 1.0127999999999702,
+          "thumbnailMs": 0.003000000000156433,
+          "encodeMs": 0.28809999999975844
+        }
+      },
+      {
+        "name": "orientacao-2.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 682,
+        "ms": 60.36910000000012,
+        "rss": 101601280,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 2,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.029999999999972715,
+          "decodeMs": 0.13859999999999673,
+          "normalizeMs": 1.7674999999999272,
+          "thumbnailMs": 0.001099999999951251,
+          "encodeMs": 0.18910000000005311
+        }
+      },
+      {
+        "name": "orientacao-3.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 684,
+        "ms": 63.899999999999864,
+        "rss": 102002688,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 3,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.045699999999897045,
+          "decodeMs": 0.17429999999990287,
+          "normalizeMs": 1.8788999999999305,
+          "thumbnailMs": 0.0013000000001284207,
+          "encodeMs": 0.2948999999998705
+        }
+      },
+      {
+        "name": "orientacao-4.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 679,
+        "ms": 48.5146000000002,
+        "rss": 102961152,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 4,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.03910000000018954,
+          "decodeMs": 0.17229999999995016,
+          "normalizeMs": 2.0090999999999894,
+          "thumbnailMs": 0.001099999999951251,
+          "encodeMs": 0.24929999999994834
+        }
+      },
+      {
+        "name": "orientacao-5.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "outputBytes": 703,
+        "ms": 66.89930000000004,
+        "rss": 103604224,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 5,
+          "reductions": 0,
+          "outputWidth": 80,
+          "outputHeight": 120,
+          "ms": 1,
+          "validationMs": 0.055000000000063665,
+          "decodeMs": 0.14850000000001273,
+          "normalizeMs": 1.0101999999999407,
+          "thumbnailMs": 0.001299999999901047,
+          "encodeMs": 0.2717000000002372
+        }
+      },
+      {
+        "name": "orientacao-6.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "outputBytes": 706,
+        "ms": 48.56829999999991,
+        "rss": 104722432,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 6,
+          "reductions": 0,
+          "outputWidth": 80,
+          "outputHeight": 120,
+          "ms": 2,
+          "validationMs": 0.029399999999895954,
+          "decodeMs": 0.17319999999995161,
+          "normalizeMs": 1.6761000000001332,
+          "thumbnailMs": 0.001199999999926149,
+          "encodeMs": 0.2703000000001339
+        }
+      },
+      {
+        "name": "orientacao-7.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "outputBytes": 699,
+        "ms": 60.16650000000004,
+        "rss": 105697280,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 7,
+          "reductions": 0,
+          "outputWidth": 80,
+          "outputHeight": 120,
+          "ms": 2,
+          "validationMs": 0.030700000000024374,
+          "decodeMs": 0.1614999999999327,
+          "normalizeMs": 1.9222000000002026,
+          "thumbnailMs": 0.0014000000001033186,
+          "encodeMs": 0.2590999999997621
+        }
+      },
+      {
+        "name": "orientacao-8.JPG",
+        "bytes": 1462,
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "outputBytes": 699,
+        "ms": 53.81640000000016,
+        "rss": 106876928,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 1462,
+          "width": 120,
+          "height": 80,
+          "orientation": 8,
+          "reductions": 0,
+          "outputWidth": 80,
+          "outputHeight": 120,
+          "ms": 3,
+          "validationMs": 0.07639999999992142,
+          "decodeMs": 0.1630999999999858,
+          "normalizeMs": 2.1090999999998985,
+          "thumbnailMs": 0.0016000000000531145,
+          "encodeMs": 0.2562000000000353
+        }
+      },
+      {
+        "name": "rgb.PNG",
+        "bytes": 664,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 293,
+        "ms": 51.58840000000009,
+        "rss": 107339776,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 664,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 3,
+          "validationMs": 0.17290000000002692,
+          "decodeMs": 0.5106000000000677,
+          "normalizeMs": 1.2725000000000364,
+          "thumbnailMs": 0.0018000000000029104,
+          "encodeMs": 0.9384000000000015
+        }
+      },
+      {
+        "name": "rgba.png",
+        "bytes": 290,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 293,
+        "ms": 54.30230000000006,
+        "rss": 108765184,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 290,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.050200000000131695,
+          "decodeMs": 0.27130000000011023,
+          "normalizeMs": 1.1156000000000859,
+          "thumbnailMs": 0.0019999999999527063,
+          "encodeMs": 0.6282000000001062
+        }
+      },
+      {
+        "name": "png-exif.png",
+        "bytes": 316,
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "outputBytes": 252,
+        "ms": 55.2029,
+        "rss": 109559808,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 316,
+          "width": 120,
+          "height": 80,
+          "orientation": 6,
+          "reductions": 0,
+          "outputWidth": 80,
+          "outputHeight": 120,
+          "ms": 2,
+          "validationMs": 0.042699999999967986,
+          "decodeMs": 0.1512000000000171,
+          "normalizeMs": 0.9211999999999989,
+          "thumbnailMs": 0.0015000000000782165,
+          "encodeMs": 0.5751999999997679
+        }
+      },
+      {
+        "name": "transparência com espaço.png",
+        "bytes": 294,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 307,
+        "ms": 73.20349999999985,
+        "rss": 109981696,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 294,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.04030000000011569,
+          "decodeMs": 0.3302000000001044,
+          "normalizeMs": 0.9289999999998599,
+          "thumbnailMs": 0.0018000000000029104,
+          "encodeMs": 0.5028999999999542
+        }
+      },
+      {
+        "name": "paleta.png",
+        "bytes": 153,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 293,
+        "ms": 54.846000000000004,
+        "rss": 111124480,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 153,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.05690000000004147,
+          "decodeMs": 0.22950000000037107,
+          "normalizeMs": 1.0789000000004307,
+          "thumbnailMs": 0.0015000000003055902,
+          "encodeMs": 0.5215999999995802
+        }
+      },
+      {
+        "name": "16bits.png",
+        "bytes": 204,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 263,
+        "ms": 60.31809999999996,
+        "rss": 108883968,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 204,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.038800000000264845,
+          "decodeMs": 0.17219999999997526,
+          "normalizeMs": 0.9753000000000611,
+          "thumbnailMs": 0.0020000000004074536,
+          "encodeMs": 0.6926999999996042
+        }
+      },
+      {
+        "name": "pequena.png",
+        "bytes": 75,
+        "size": {
+          "width": 1,
+          "height": 2
+        },
+        "outputBytes": 92,
+        "ms": 56.90079999999989,
+        "rss": 109092864,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 75,
+          "width": 1,
+          "height": 2,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 1,
+          "outputHeight": 2,
+          "ms": 0,
+          "validationMs": 0.043400000000019645,
+          "decodeMs": 0.0969000000000051,
+          "normalizeMs": 0.030900000000201544,
+          "thumbnailMs": 0.000600000000304135,
+          "encodeMs": 0.08429999999952997
+        }
+      },
+      {
+        "name": "adam7.png",
+        "bytes": 351,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 293,
+        "ms": 52.62609999999995,
+        "rss": 109613056,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 351,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.037299999999959255,
+          "decodeMs": 0.23309999999992215,
+          "normalizeMs": 0.8538999999996122,
+          "thumbnailMs": 0.0014000000001033186,
+          "encodeMs": 0.5306000000000495
+        }
+      },
+      {
+        "name": "24mp.jpg",
+        "bytes": 375630,
+        "size": {
+          "width": 2048,
+          "height": 1365
+        },
+        "outputBytes": 16800,
+        "ms": 1219.9705000000004,
+        "rss": 381767680,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 375630,
+          "width": 6000,
+          "height": 4000,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2048,
+          "outputHeight": 1365,
+          "ms": 558,
+          "validationMs": 0.021600000000034925,
+          "decodeMs": 98.77129999999988,
+          "normalizeMs": 425.76279999999997,
+          "thumbnailMs": 13.854299999999967,
+          "encodeMs": 20.015800000000127
+        }
+      },
+      {
+        "name": "grande-detalhada.jpg",
+        "bytes": 8311733,
+        "size": {
+          "width": 2048,
+          "height": 1536
+        },
+        "outputBytes": 1744465,
+        "ms": 1341.7930999999999,
+        "rss": 451321856,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 8311733,
+          "width": 4096,
+          "height": 3072,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2048,
+          "outputHeight": 1536,
+          "ms": 610,
+          "validationMs": 0.026899999999841384,
+          "decodeMs": 168.2561999999998,
+          "normalizeMs": 371.8970999999997,
+          "thumbnailMs": 16.85909999999967,
+          "encodeMs": 52.82770000000028
+        }
+      },
+      {
+        "name": "png-grande.png",
+        "bytes": 5447296,
+        "size": {
+          "width": 2000,
+          "height": 1500
+        },
+        "outputBytes": 3805124,
+        "ms": 3018.8597,
+        "rss": 330379264,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 5447296,
+          "width": 2000,
+          "height": 1500,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2000,
+          "outputHeight": 1500,
+          "ms": 1426,
+          "validationMs": 0.9869999999991705,
+          "decodeMs": 75.40980000000036,
+          "normalizeMs": 248.33929999999964,
+          "thumbnailMs": 16.504099999999198,
+          "encodeMs": 1084.9851000000008
+        }
+      },
+      {
+        "name": "png-ruido-rgb.png",
+        "bytes": 9194752,
+        "size": {
+          "width": 1620,
+          "height": 1530
+        },
+        "outputBytes": 7436756,
+        "ms": 2687.2892999999995,
+        "rss": 322375680,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 9194752,
+          "width": 1800,
+          "height": 1700,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1530,
+          "ms": 1198,
+          "validationMs": 1.9194000000006781,
+          "decodeMs": 57.12870000000021,
+          "normalizeMs": 251.46489999999994,
+          "thumbnailMs": 22.794299999999566,
+          "encodeMs": 865.0725000000002
+        }
+      },
+      {
+        "name": "rgba-detalhada.png",
+        "bytes": 8653514,
+        "size": {
+          "width": 1620,
+          "height": 1080
+        },
+        "outputBytes": 7021140,
+        "ms": 2278.7515000000003,
+        "rss": 276406272,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 8653514,
+          "width": 1800,
+          "height": 1200,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1080,
+          "ms": 1010,
+          "validationMs": 1.233299999999872,
+          "decodeMs": 50.46179999999913,
+          "normalizeMs": 178.4395999999997,
+          "thumbnailMs": 8.493999999998778,
+          "encodeMs": 771.0688000000009
+        }
+      },
+      {
+        "name": "pasta com acentuação xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\subpasta yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\\fotografia acentuada.PNG",
+        "bytes": 278,
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "outputBytes": 293,
+        "ms": 77.04889999999978,
+        "rss": 219131904,
+        "codec": {
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 278,
+          "width": 120,
+          "height": 80,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 120,
+          "outputHeight": 80,
+          "ms": 2,
+          "validationMs": 0.02989999999954307,
+          "decodeMs": 0.18959999999970023,
+          "normalizeMs": 0.8157000000010157,
+          "thumbnailMs": 0.001299999999901047,
+          "encodeMs": 0.48840000000018335
+        }
+      }
+    ],
+    "root": "[repositorio]\\.local-data\\test\\backup-WryQKB",
+    "maxRssKiB": 488228
+  },
+  "application": [
+    {
+      "mode": "local",
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 452.94000000000005,
+          "totalUiMs": 530.3716,
+          "memory": {
+            "rss": 236138496,
+            "maxRssKiB": 236432
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1107.9026,
+          "totalUiMs": 1215.9368,
+          "memory": {
+            "rss": 193355776,
+            "maxRssKiB": 291008
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 885.0824000000002,
+          "totalUiMs": 1047.5585,
+          "memory": {
+            "rss": 122150912,
+            "maxRssKiB": 307296
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 782.0150000000003,
+          "totalUiMs": 904.6012000000001,
+          "memory": {
+            "rss": 226316288,
+            "maxRssKiB": 307296
+          }
+        }
+      ],
+      "openUi": [
+        {
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "ms": 12.00689999999986
+        },
+        {
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "ms": 9.82470000000012
+        },
+        {
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "ms": 122.96870000000035
+        }
+      ],
+      "mainCodec": [
+        {
+          "at": "2026-11-16T16:43:06.051Z",
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 8311733,
+          "width": 4096,
+          "height": 3072,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2048,
+          "outputHeight": 1536,
+          "ms": 388,
+          "validationMs": 0.023799999999937427,
+          "decodeMs": 112.99319999999989,
+          "normalizeMs": 227.60400000000027,
+          "thumbnailMs": 10.395499999999629,
+          "encodeMs": 37.387600000000475
+        },
+        {
+          "at": "2026-11-16T16:43:07.213Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 5447296,
+          "width": 2000,
+          "height": 1500,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2000,
+          "outputHeight": 1500,
+          "ms": 1020,
+          "validationMs": 0.6920000000000073,
+          "decodeMs": 35.81890000000021,
+          "normalizeMs": 165.36540000000014,
+          "thumbnailMs": 10.010400000000118,
+          "encodeMs": 808.3389000000002
+        },
+        {
+          "at": "2026-11-16T16:43:08.174Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 9194752,
+          "width": 1800,
+          "height": 1700,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1530,
+          "ms": 763,
+          "validationMs": 0.8742000000002008,
+          "decodeMs": 36.39459999999963,
+          "normalizeMs": 162.29050000000007,
+          "thumbnailMs": 8.229199999999764,
+          "encodeMs": 554.8490999999995
+        },
+        {
+          "at": "2026-11-16T16:43:09.145Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 8653514,
+          "width": 1800,
+          "height": 1200,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1080,
+          "ms": 686,
+          "validationMs": 0.8985999999995329,
+          "decodeMs": 40.248899999999594,
+          "normalizeMs": 117.32720000000063,
+          "thumbnailMs": 5.935599999999795,
+          "encodeMs": 522.0168000000003
+        }
+      ]
+    },
+    {
+      "mode": "http",
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 438.2968000000001,
+          "totalUiMs": 514.4262000000017,
+          "memory": {
+            "rss": 230920192,
+            "maxRssKiB": 231800
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1062.148000000001,
+          "totalUiMs": 1167.9740999999995,
+          "memory": {
+            "rss": 187912192,
+            "maxRssKiB": 285848
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 844.4890999999989,
+          "totalUiMs": 965.4977999999992,
+          "memory": {
+            "rss": 116195328,
+            "maxRssKiB": 302112
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 717.3155999999999,
+          "totalUiMs": 856.8697000000011,
+          "memory": {
+            "rss": 220418048,
+            "maxRssKiB": 302112
+          }
+        }
+      ],
+      "openUi": [
+        {
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "ms": 32.72320000000036
+        },
+        {
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "ms": 10.860399999999572
+        },
+        {
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "ms": 120.07790000000023
+        }
+      ],
+      "mainCodec": [
+        {
+          "at": "2026-11-16T17:01:07.733Z",
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 8311733,
+          "width": 4096,
+          "height": 3072,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2048,
+          "outputHeight": 1536,
+          "ms": 374,
+          "validationMs": 0.024800000000141154,
+          "decodeMs": 107.16249999999991,
+          "normalizeMs": 223.2452000000003,
+          "thumbnailMs": 10.153700000000299,
+          "encodeMs": 33.3141999999998
+        },
+        {
+          "at": "2026-11-16T17:01:08.855Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 5447296,
+          "width": 2000,
+          "height": 1500,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2000,
+          "outputHeight": 1500,
+          "ms": 984,
+          "validationMs": 0.6334999999999127,
+          "decodeMs": 34.19680000000017,
+          "normalizeMs": 159.29050000000007,
+          "thumbnailMs": 9.767899999999827,
+          "encodeMs": 780.1257999999998
+        },
+        {
+          "at": "2026-11-16T17:01:09.785Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 9194752,
+          "width": 1800,
+          "height": 1700,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1530,
+          "ms": 743,
+          "validationMs": 1.538699999999153,
+          "decodeMs": 35.02109999999993,
+          "normalizeMs": 138.66399999999976,
+          "thumbnailMs": 8.177300000000287,
+          "encodeMs": 559.4156000000003
+        },
+        {
+          "at": "2026-11-16T17:01:10.639Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 8653514,
+          "width": 1800,
+          "height": 1200,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1080,
+          "ms": 632,
+          "validationMs": 1.0531000000000859,
+          "decodeMs": 31.34979999999996,
+          "normalizeMs": 110.41700000000037,
+          "thumbnailMs": 5.941799999999603,
+          "encodeMs": 483.1202000000003
+        }
+      ]
+    },
+    {
+      "mode": "package",
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 441.99170000000004,
+          "totalUiMs": 491.4842000000003,
+          "memory": {
+            "rss": 182824960,
+            "maxRssKiB": 259056
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1054.4349000000002,
+          "totalUiMs": 1159.4557999999997,
+          "memory": {
+            "rss": 253775872,
+            "maxRssKiB": 259056
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 846.9748,
+          "totalUiMs": 969.7264000000005,
+          "memory": {
+            "rss": 265510912,
+            "maxRssKiB": 303328
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 707.7729000000008,
+          "totalUiMs": 846.4820000000009,
+          "memory": {
+            "rss": 155643904,
+            "maxRssKiB": 360860
+          }
+        }
+      ],
+      "openUi": [
+        {
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "ms": 13.423600000000079
+        },
+        {
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "ms": 36.86070000000018
+        },
+        {
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "ms": 103.07380000000012
+        }
+      ],
+      "mainCodec": [
+        {
+          "at": "2026-11-16T17:02:00.622Z",
+          "phase": "normalized",
+          "format": "image/jpeg",
+          "bytes": 8311733,
+          "width": 4096,
+          "height": 3072,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2048,
+          "outputHeight": 1536,
+          "ms": 366,
+          "validationMs": 0.03139999999984866,
+          "decodeMs": 105.8150999999998,
+          "normalizeMs": 216.26519999999982,
+          "thumbnailMs": 10.038800000000265,
+          "encodeMs": 33.503099999999904
+        },
+        {
+          "at": "2026-11-16T17:02:01.734Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 5447296,
+          "width": 2000,
+          "height": 1500,
+          "orientation": 1,
+          "reductions": 0,
+          "outputWidth": 2000,
+          "outputHeight": 1500,
+          "ms": 986,
+          "validationMs": 0.8912999999997737,
+          "decodeMs": 34.083900000000085,
+          "normalizeMs": 156.29550000000017,
+          "thumbnailMs": 9.693500000000313,
+          "encodeMs": 785.3417999999997
+        },
+        {
+          "at": "2026-11-16T17:02:02.661Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 9194752,
+          "width": 1800,
+          "height": 1700,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1530,
+          "ms": 752,
+          "validationMs": 1.1341999999995096,
+          "decodeMs": 36.560599999999795,
+          "normalizeMs": 148.7471999999998,
+          "thumbnailMs": 11.129800000000614,
+          "encodeMs": 554.9103999999988
+        },
+        {
+          "at": "2026-11-16T17:02:03.501Z",
+          "phase": "normalized",
+          "format": "image/png",
+          "bytes": 8653514,
+          "width": 1800,
+          "height": 1200,
+          "orientation": 1,
+          "reductions": 1,
+          "outputWidth": 1620,
+          "outputHeight": 1080,
+          "ms": 623,
+          "validationMs": 0.8273000000008324,
+          "decodeMs": 30.14260000000013,
+          "normalizeMs": 97.46880000000056,
+          "thumbnailMs": 5.840100000000348,
+          "encodeMs": 488.91959999999926
+        }
+      ]
+    }
+  ]
+}

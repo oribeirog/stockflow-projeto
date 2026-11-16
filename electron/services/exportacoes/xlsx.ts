@@ -47,10 +47,10 @@ export function celulaExcel(cell: ExcelJS.Cell, raw: ValorCelula, type: TipoCelu
 }
 export async function gerarExcel(d: DocumentoRelatorio): Promise<Uint8Array> {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = 'MNR Perfumes';
+  workbook.creator = 'MNR Gestão';
   workbook.created = new Date(d.geradoEm);
   workbook.title = d.titulo;
-  workbook.subject = 'Relatório oficial MNR Perfumes';
+  workbook.subject = 'Relatório oficial MNR Gestão';
   const sections = [
     ...d.secoes,
     {
@@ -88,7 +88,7 @@ export async function gerarExcel(d: DocumentoRelatorio): Promise<Uint8Array> {
       r.height = Math.max(24, Math.ceil(text.length / (width === 1 ? 95 : 100)) * 16);
       return r;
     };
-    banner('MNR Perfumes', 20, true);
+    banner('MNR Gestão', 20, true);
     banner(d.titulo, 16, true);
     banner(
       `Referência atual: ${d.referencia} | Gerado em: ${new Date(d.geradoEm).toLocaleString('pt-BR')} (${d.geradoEm})`,
@@ -129,7 +129,7 @@ export async function gerarExcel(d: DocumentoRelatorio): Promise<Uint8Array> {
         to: { row: sheet.rowCount, column: width },
       };
     sheet.pageSetup.printTitlesRow = `${header.number}:${header.number}`;
-    sheet.headerFooter.oddFooter = '&CMNR Perfumes | Página &P de &N';
+    sheet.headerFooter.oddFooter = '&CMNR Gestão | Página &P de &N';
   }
   return new Uint8Array(await workbook.xlsx.writeBuffer());
 }

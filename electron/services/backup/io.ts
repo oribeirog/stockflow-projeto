@@ -173,7 +173,7 @@ export function backupMessage(error: unknown) {
     INVALID_BACKUP:
       'O arquivo não é um backup MNR válido e completo, ou foi alterado. Os dados atuais foram preservados.',
     INCOMPATIBLE:
-      'Backup incompatível. Esta versão aceita formato 1, schemas oficiais 5 e 6 do MNR Perfumes.',
+      'Backup incompatível. Esta versão aceita formato 1, schemas oficiais 5 e 6 do MNR Gestão.',
     MISSING_PHOTO:
       'Uma fotografia vinculada está ausente, inválida ou diferente do registro. Nenhum backup completo foi publicado.',
     BUSY: 'Uma operação de proteção dos dados está em andamento. Aguarde e tente novamente.',

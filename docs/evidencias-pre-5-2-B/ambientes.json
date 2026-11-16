@@ -1,0 +1,5309 @@
+[
+  {
+    "origin": "Fotografias novas / schema 6",
+    "mode": "local",
+    "evidence": ".cache/pre52b-fotos-local-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-o9MxON",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\MNR Teste + @.mnrbackup",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "d910942b-e223-4dab-a89a-6c3f64f094e1",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 9516,
+      "newPid": 3888
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\exports.json",
+    "protection": "d910942b-e223-4dab-a89a-6c3f64f094e1.mnrbackup",
+    "photoAudit": {
+      "products": [
+        {
+          "id": 4,
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "hash": "ce7b7569cd483958f28406cef8b5031b3b50af76ce50e57419d41f2bd1085eed",
+          "openUiMs": 12.00689999999986
+        },
+        {
+          "id": 5,
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "hash": "739babc581e3eae61bc68e075d334f99adf1fda1223d2a3ac3058c3dc12adb89",
+          "openUiMs": 9.82470000000012
+        },
+        {
+          "id": 6,
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "hash": "de84d53c88c25b02514c479f4a2d91267efd3341a8fbd455225020a2b1edbfdb",
+          "large": true,
+          "openUiMs": 122.96870000000035
+        }
+      ],
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 452.94000000000005,
+          "totalUiMs": 530.3716,
+          "memory": {
+            "rss": 236138496,
+            "maxRssKiB": 236432
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1107.9026,
+          "totalUiMs": 1215.9368,
+          "memory": {
+            "rss": 193355776,
+            "maxRssKiB": 291008
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 885.0824000000002,
+          "totalUiMs": 1047.5585,
+          "memory": {
+            "rss": 122150912,
+            "maxRssKiB": 307296
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 782.0150000000003,
+          "totalUiMs": 904.6012000000001,
+          "memory": {
+            "rss": 226316288,
+            "maxRssKiB": 307296
+          }
+        }
+      ],
+      "importedVariants": 26,
+      "catalogueThumbnail": true
+    },
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:43:30.889Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:43:30.897Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 6,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 4,
+          "abaixoMinimo": 4
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:43:30.908Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:43:30.909Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 6
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 6
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-zI2YRC\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "Fotografias novas / schema 6",
+    "mode": "http",
+    "evidence": ".cache/pre52b-fotos-http-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-vIMKqp",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\MNR Teste + @.mnrbackup",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "fb966ecd-3922-489b-b68e-248430a8b1fc",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 18220,
+      "newPid": 13832
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\exports.json",
+    "protection": "fb966ecd-3922-489b-b68e-248430a8b1fc.mnrbackup",
+    "photoAudit": {
+      "products": [
+        {
+          "id": 4,
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "hash": "ce7b7569cd483958f28406cef8b5031b3b50af76ce50e57419d41f2bd1085eed",
+          "openUiMs": 32.72320000000036
+        },
+        {
+          "id": 5,
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "hash": "739babc581e3eae61bc68e075d334f99adf1fda1223d2a3ac3058c3dc12adb89",
+          "openUiMs": 10.860399999999572
+        },
+        {
+          "id": 6,
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "hash": "de84d53c88c25b02514c479f4a2d91267efd3341a8fbd455225020a2b1edbfdb",
+          "large": true,
+          "openUiMs": 120.07790000000023
+        }
+      ],
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 438.2968000000001,
+          "totalUiMs": 514.4262000000017,
+          "memory": {
+            "rss": 230920192,
+            "maxRssKiB": 231800
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1062.148000000001,
+          "totalUiMs": 1167.9740999999995,
+          "memory": {
+            "rss": 187912192,
+            "maxRssKiB": 285848
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 844.4890999999989,
+          "totalUiMs": 965.4977999999992,
+          "memory": {
+            "rss": 116195328,
+            "maxRssKiB": 302112
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 717.3155999999999,
+          "totalUiMs": 856.8697000000011,
+          "memory": {
+            "rss": 220418048,
+            "maxRssKiB": 302112
+          }
+        }
+      ],
+      "importedVariants": 26,
+      "catalogueThumbnail": true
+    },
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:01:32.399Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:01:32.404Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 6,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 4,
+          "abaixoMinimo": 4
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:01:32.417Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:01:32.418Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 6
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 6
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bpRWn5\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "Fotografias novas / schema 6",
+    "mode": "package",
+    "evidence": ".cache/pre52b-fotos-package-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-LYzdH0\\MNR Software\\MNR Perfumes",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\MNR Teste + @.mnrbackup",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "3025ff4f-a03d-40f3-abf5-2d165330f897",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 12520,
+      "newPid": 18196
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\exports.json",
+    "protection": "3025ff4f-a03d-40f3-abf5-2d165330f897.mnrbackup",
+    "photoAudit": {
+      "products": [
+        {
+          "id": 4,
+          "mime": "image/png",
+          "width": 120,
+          "height": 80,
+          "hash": "ce7b7569cd483958f28406cef8b5031b3b50af76ce50e57419d41f2bd1085eed",
+          "openUiMs": 13.423600000000079
+        },
+        {
+          "id": 5,
+          "mime": "image/jpeg",
+          "width": 80,
+          "height": 120,
+          "hash": "739babc581e3eae61bc68e075d334f99adf1fda1223d2a3ac3058c3dc12adb89",
+          "openUiMs": 36.86070000000018
+        },
+        {
+          "id": 6,
+          "mime": "image/png",
+          "width": 1620,
+          "height": 1080,
+          "hash": "de84d53c88c25b02514c479f4a2d91267efd3341a8fbd455225020a2b1edbfdb",
+          "large": true,
+          "openUiMs": 103.07380000000012
+        }
+      ],
+      "timings": [
+        {
+          "source": "grande-detalhada.jpg",
+          "selectionMs": 441.99170000000004,
+          "totalUiMs": 491.4842000000003,
+          "memory": {
+            "rss": 182824960,
+            "maxRssKiB": 259056
+          }
+        },
+        {
+          "source": "png-grande.png",
+          "selectionMs": 1054.4349000000002,
+          "totalUiMs": 1159.4557999999997,
+          "memory": {
+            "rss": 253775872,
+            "maxRssKiB": 259056
+          }
+        },
+        {
+          "source": "png-ruido-rgb.png",
+          "selectionMs": 846.9748,
+          "totalUiMs": 969.7264000000005,
+          "memory": {
+            "rss": 265510912,
+            "maxRssKiB": 303328
+          }
+        },
+        {
+          "source": "rgba-detalhada.png",
+          "selectionMs": 707.7729000000008,
+          "totalUiMs": 846.4820000000009,
+          "memory": {
+            "rss": 155643904,
+            "maxRssKiB": 360860
+          }
+        }
+      ],
+      "importedVariants": 26,
+      "catalogueThumbnail": true
+    },
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 4
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 4,
+          "tipo": "inteiro",
+          "dashboard": "4",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 4
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:02:24.820Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:02:24.825Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 6,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 4,
+          "abaixoMinimo": 4
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:02:24.838Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:02:24.839Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 6
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 6
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-eaqX8Y\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 6",
+    "mode": "local",
+    "evidence": ".cache/pre52b-legacy6-local-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-QZne1b",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-KMEsrk\\MNR-Perfumes-schema6-d359480.mnrbackup",
+    "sourceArchiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "bebb09ec-1c12-4efb-948e-530805a26563",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 16628,
+      "newPid": 4164
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\exports.json",
+    "protection": "bebb09ec-1c12-4efb-948e-530805a26563.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:24:36.689Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:24:36.694Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 3,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 1,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:24:36.707Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:24:36.708Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 3
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 3
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-HozbdV\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 6",
+    "mode": "http",
+    "evidence": ".cache/pre52b-legacy6-http-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-pFEc7M",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-KMEsrk\\MNR-Perfumes-schema6-d359480.mnrbackup",
+    "sourceArchiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "30589ee5-80cc-4e44-99b3-cbe4e3ff5b4f",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 13556,
+      "newPid": 14244
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\exports.json",
+    "protection": "30589ee5-80cc-4e44-99b3-cbe4e3ff5b4f.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:25:26.732Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:25:26.739Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 3,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 1,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:25:26.753Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:25:26.753Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 3
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 3
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-bx4eFs\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 6",
+    "mode": "package",
+    "evidence": ".cache/pre52b-legacy6-package-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-VDnHjr\\MNR Software\\MNR Perfumes",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-KMEsrk\\MNR-Perfumes-schema6-d359480.mnrbackup",
+    "sourceArchiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "2bfc59e6-ad31-474e-944b-823593cd762d",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 8772,
+      "newPid": 15764
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\exports.json",
+    "protection": "2bfc59e6-ad31-474e-944b-823593cd762d.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:07.831Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:07.836Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 3,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 1,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:07.849Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:07.850Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 3
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 3
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\pre52b-outputs-qPMioe\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 5",
+    "mode": "local",
+    "evidence": ".cache/pre52a-legacy-local-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-sj1rYr",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-5dS5F3\\schema5-aprovado-026daa0.mnrbackup",
+    "sourceArchiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "c7f419a7-be79-4bf0-9c35-3b88f9183a22",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 11588,
+      "newPid": 17468
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\exports.json",
+    "protection": "c7f419a7-be79-4bf0-9c35-3b88f9183a22.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 2,
+          "tipo": "inteiro",
+          "dashboard": "2",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:00:31.458Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:00:31.463Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 4,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 2,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:00:31.475Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T17:00:31.476Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 4
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 4
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-ccTzcT\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 5",
+    "mode": "http",
+    "evidence": ".cache/pre52a-legacy-http-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-3YQDGl",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-5dS5F3\\schema5-aprovado-026daa0.mnrbackup",
+    "sourceArchiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "4e160148-b499-41dd-a89c-13c15f99a52b",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 13196,
+      "newPid": 6220
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\exports.json",
+    "protection": "4e160148-b499-41dd-a89c-13c15f99a52b.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 2,
+          "tipo": "inteiro",
+          "dashboard": "2",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:58.453Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:58.459Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 4,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 2,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:58.471Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:26:58.472Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 4
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 4
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-nLDN5s\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  },
+  {
+    "origin": "MNR Perfumes aprovado / schema 5",
+    "mode": "package",
+    "evidence": ".cache/pre52a-legacy-package-smoke.json",
+    "root": "[repositorio]\\.local-data\\test\\ui-backup-oqjwCf\\MNR Software\\MNR Perfumes",
+    "restoredArchive": "[repositorio]\\.local-data\\test\\backup-outputs-5dS5F3\\schema5-aprovado-026daa0.mnrbackup",
+    "sourceArchiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "998c04a1-ade7-4b7c-8a88-895a26ace61e",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 4524,
+      "newPid": 16008
+    },
+    "exports": 16,
+    "exportManifest": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\exports.json",
+    "protection": "998c04a1-ade7-4b7c-8a88-895a26ace61e.mnrbackup",
+    "indicators": {
+      "label": "restaurado",
+      "filter": {
+        "dataInicio": "2026-11-01",
+        "dataFim": "2026-11-30",
+        "clienteId": 1
+      },
+      "matrix": [
+        {
+          "indicador": "revenue",
+          "fonte": "fluxoComercial.faturamentoLiquidoCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Faturamento comercial líquido (fluxo)",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "sales",
+          "fonte": "fluxoComercial.vendasConfirmadas",
+          "oficial": 1,
+          "tipo": "inteiro",
+          "dashboard": "1",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Vendas confirmadas (fluxo)",
+            "valor": 1
+          }
+        },
+        {
+          "indicador": "result",
+          "fonte": "fluxoComercial.resultadoBrutoEstimadoCentavos",
+          "oficial": 21000,
+          "tipo": "moeda",
+          "dashboard": "R$ 210,00",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Resultado bruto comercial estimado (fluxo)",
+            "valor": 21000
+          }
+        },
+        {
+          "indicador": "margin",
+          "fonte": "fluxoComercial.margemBrutaPontosBase",
+          "oficial": 7000,
+          "tipo": "percentual",
+          "dashboard": "70,00%",
+          "temporal": "Fluxo comercial",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Comercial · Margem bruta estimada (fluxo)",
+            "valor": 7000
+          }
+        },
+        {
+          "indicador": "ticket",
+          "fonte": "coorteVendas.ticketMedioCentavos",
+          "oficial": 30000,
+          "tipo": "moeda",
+          "dashboard": "R$ 300,00",
+          "temporal": "Coorte atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Coorte · Ticket médio da coorte",
+            "valor": 30000
+          }
+        },
+        {
+          "indicador": "receipts",
+          "fonte": "fluxoFinanceiro.recebidoLiquidoCentavos",
+          "oficial": 25000,
+          "tipo": "moeda",
+          "dashboard": "R$ 250,00",
+          "temporal": "Fluxo financeiro",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Financeiro · Recebimentos líquidos",
+            "valor": 25000
+          }
+        },
+        {
+          "indicador": "debt",
+          "fonte": "posicaoAtual.contas.exigivelCentavos",
+          "oficial": 5000,
+          "tipo": "moeda",
+          "dashboard": "R$ 50,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo exigível atual",
+            "valor": 5000
+          }
+        },
+        {
+          "indicador": "overdue",
+          "fonte": "posicaoAtual.contas.vencidoCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Contas atuais · Saldo atualmente vencido",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "refund",
+          "fonte": "posicaoAtual.reembolsos.pendenteCentavos",
+          "oficial": 0,
+          "tipo": "moeda",
+          "dashboard": "R$ 0,00",
+          "temporal": "Posição atual",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Reembolsos atuais · Reembolso pendente atual",
+            "valor": 0
+          }
+        },
+        {
+          "indicador": "stock-value",
+          "fonte": "estoque.posicaoAtual.valorCentavos",
+          "oficial": 40000,
+          "tipo": "moeda",
+          "dashboard": "R$ 400,00",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Valor atual do estoque",
+            "valor": 40000
+          }
+        },
+        {
+          "indicador": "stock-units",
+          "fonte": "estoque.posicaoAtual.unidades",
+          "oficial": 23,
+          "tipo": "inteiro",
+          "dashboard": "23",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Unidades disponíveis atuais",
+            "valor": 23
+          }
+        },
+        {
+          "indicador": "stock-empty",
+          "fonte": "estoque.posicaoAtual.semEstoque",
+          "oficial": 2,
+          "tipo": "inteiro",
+          "dashboard": "2",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos sem estoque",
+            "valor": 2
+          }
+        },
+        {
+          "indicador": "stock-low",
+          "fonte": "estoque.posicaoAtual.abaixoMinimo",
+          "oficial": 3,
+          "tipo": "inteiro",
+          "dashboard": "3",
+          "temporal": "Posição atual global",
+          "xlsx": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          },
+          "pdf": {
+            "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+            "aba": "Resumo",
+            "indicador": "Estoque atual · Produtos abaixo do mínimo",
+            "valor": 3
+          }
+        }
+      ],
+      "summary": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:27:39.934Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "fluxoComercial": {
+          "vendasConfirmadas": 1,
+          "brutoVendasCentavos": 30000,
+          "vendasAposDescontosCentavos": 30000,
+          "devolucoesRegistradasCentavos": 20000,
+          "cancelamentosCentavos": 0,
+          "estornosDevolucaoCentavos": 20000,
+          "devolucoesEfetivasCentavos": 0,
+          "faturamentoLiquidoCentavos": 30000,
+          "cmvHistoricoLiquidoCentavos": 9000,
+          "unidadesVendidas": 3,
+          "unidadesDevolvidas": 2,
+          "unidadesDevolvidasEfetivas": 0,
+          "unidadesCanceladas": 0,
+          "unidadesEstornoDevolucao": 2,
+          "unidadesLiquidas": 3,
+          "perdasImpropriosLiquidasCentavos": 0,
+          "resultadoBrutoEstimadoCentavos": 21000,
+          "margemBrutaPontosBase": 7000
+        },
+        "fluxoFinanceiro": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        },
+        "posicaoAtual": {
+          "contas": {
+            "exigivelCentavos": 5000,
+            "vencidoCentavos": 0,
+            "aVencerCentavos": 5000,
+            "parcelasAbertas": 1,
+            "parcelasVencidas": 0,
+            "parcelasQuitadas": 2
+          },
+          "reembolsos": {
+            "obrigacoesAtivas": 0,
+            "obrigacoesPendentes": 0,
+            "obrigacoesQuitadas": 0,
+            "valorOriginalAtivoCentavos": 0,
+            "pagoLiquidoAtivoCentavos": 0,
+            "pendenteCentavos": 0
+          }
+        },
+        "coorteVendas": {
+          "comercialLiquidoAtualCentavos": 30000,
+          "vendasComValorPositivo": 1,
+          "ticketMedioCentavos": 30000
+        }
+      },
+      "stock": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:27:39.938Z",
+        "periodo": {
+          "dataInicio": "2026-11-01",
+          "dataFim": "2026-11-30"
+        },
+        "posicaoAtual": {
+          "produtos": 4,
+          "unidades": 23,
+          "valorCentavos": 40000,
+          "semEstoque": 2,
+          "abaixoMinimo": 3
+        },
+        "movimentosPeriodo": [
+          {
+            "natureza": "AJUSTE_ENTRADA",
+            "movimentos": 2,
+            "quantidadeDelta": 15,
+            "valorDeltaCentavos": 1001
+          },
+          {
+            "natureza": "AJUSTE_SAIDA",
+            "movimentos": 2,
+            "quantidadeDelta": -7,
+            "valorDeltaCentavos": -700
+          },
+          {
+            "natureza": "COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": 23,
+            "valorDeltaCentavos": 60006
+          },
+          {
+            "natureza": "DEV_COMPRA",
+            "movimentos": 3,
+            "quantidadeDelta": -4,
+            "valorDeltaCentavos": -12000
+          },
+          {
+            "natureza": "DEV_VENDA",
+            "movimentos": 2,
+            "quantidadeDelta": 2,
+            "valorDeltaCentavos": 6000
+          },
+          {
+            "natureza": "PERDA",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -100
+          },
+          {
+            "natureza": "PERDA_DEVOLUCAO",
+            "movimentos": 1,
+            "quantidadeDelta": -1,
+            "valorDeltaCentavos": -3000
+          },
+          {
+            "natureza": "REVERSAO_ENTRADA",
+            "movimentos": 4,
+            "quantidadeDelta": 9,
+            "valorDeltaCentavos": 3800
+          },
+          {
+            "natureza": "REVERSAO_SAIDA",
+            "movimentos": 4,
+            "quantidadeDelta": -10,
+            "valorDeltaCentavos": -6007
+          },
+          {
+            "natureza": "VENDA",
+            "movimentos": 1,
+            "quantidadeDelta": -3,
+            "valorDeltaCentavos": -9000
+          }
+        ]
+      },
+      "stockFlow": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:27:39.950Z",
+        "itens": [
+          {
+            "produtoId": 1,
+            "nomeAtual": "=Nome atual diferente & inativo",
+            "skuAtual": "CICLO",
+            "movimentos": 12,
+            "unidadesMovimentadas": 33
+          },
+          {
+            "produtoId": 2,
+            "nomeAtual": "@Ajuste cadastral atual",
+            "skuAtual": "AJ-CICLO",
+            "movimentos": 9,
+            "unidadesMovimentadas": 36
+          },
+          {
+            "produtoId": 3,
+            "nomeAtual": "Compra de custo e resíduo",
+            "skuAtual": "CANCEL-CICLO",
+            "movimentos": 2,
+            "unidadesMovimentadas": 6
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "produtos": 3,
+          "movimentos": 23,
+          "unidadesMovimentadas": 75
+        }
+      },
+      "byMethod": {
+        "dataReferencia": "2026-11-16",
+        "consultadoEm": "2026-11-16T16:27:39.951Z",
+        "itens": [
+          {
+            "formaPagamentoId": 1,
+            "formaHistorica": "Pix ciclo",
+            "recebimentosBrutosCentavos": 25000,
+            "estornosRecebimentosCentavos": 0,
+            "recebidoLiquidoCentavos": 25000,
+            "pagamentosReembolsoCentavos": 10000,
+            "estornosReembolsoCentavos": 10000,
+            "reembolsoPagoLiquidoCentavos": 0
+          }
+        ],
+        "temMais": false,
+        "totais": {
+          "recebimentosBrutosCentavos": 25000,
+          "estornosRecebimentosCentavos": 0,
+          "recebidoLiquidoCentavos": 25000,
+          "pagamentosReembolsoCentavos": 10000,
+          "estornosReembolsoCentavos": 10000,
+          "reembolsoPagoLiquidoCentavos": 0
+        }
+      },
+      "details": {
+        "GERENCIAL.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\1-4f4-restaurado-GERENCIAL.xlsx",
+          "registros": 0
+        },
+        "GERENCIAL.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\2-4f4-restaurado-GERENCIAL.pdf",
+          "registros": 0
+        },
+        "VENDAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\3-4f4-restaurado-VENDAS.xlsx",
+          "registros": 1
+        },
+        "VENDAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\4-4f4-restaurado-VENDAS.pdf",
+          "registros": 1
+        },
+        "MOVIMENTOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\5-4f4-restaurado-MOVIMENTOS.xlsx",
+          "registros": 4
+        },
+        "MOVIMENTOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\6-4f4-restaurado-MOVIMENTOS.pdf",
+          "registros": 4
+        },
+        "CONTAS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\7-4f4-restaurado-CONTAS.xlsx",
+          "registros": 3
+        },
+        "CONTAS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\8-4f4-restaurado-CONTAS.pdf",
+          "registros": 3
+        },
+        "REEMBOLSOS.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\9-4f4-restaurado-REEMBOLSOS.xlsx",
+          "registros": 1
+        },
+        "REEMBOLSOS.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\10-4f4-restaurado-REEMBOLSOS.pdf",
+          "registros": 1
+        },
+        "ESTOQUE.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\11-4f4-restaurado-ESTOQUE.xlsx",
+          "registros": 4
+        },
+        "ESTOQUE.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\12-4f4-restaurado-ESTOQUE.pdf",
+          "registros": 4
+        },
+        "DESEMPENHO.xlsx": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\13-4f4-restaurado-DESEMPENHO.xlsx",
+          "registros": 2
+        },
+        "DESEMPENHO.pdf": {
+          "arquivo": "[repositorio]\\.local-data\\test\\catalogo-legacy-outputs-9WiUQc\\14-4f4-restaurado-DESEMPENHO.pdf",
+          "registros": 2
+        }
+      },
+      "rankings": {
+        "products": [
+          {
+            "produtoId": 1,
+            "skuHistorico": "CICLO",
+            "nomeHistorico": "Perfume ciclo histórico",
+            "unidadesLiquidas": 3,
+            "comercialLiquidoCentavos": 30000
+          }
+        ],
+        "clients": [
+          {
+            "clienteId": 1,
+            "nomeHistorico": "Cliente ciclo histórico",
+            "comercialLiquidoAtualCentavos": 30000,
+            "vendas": 1
+          }
+        ],
+        "displayedProducts": [["Perfume ciclo históricoCICLO", "3", "R$ 300,00"]],
+        "displayedClients": [["Cliente ciclo histórico", "1", "R$ 300,00"]]
+      }
+    }
+  }
+]

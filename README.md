@@ -1,4 +1,47 @@
-# MNR Perfumes
+# MNR Gestão
+
+## Pré-5.2 B — Fotografias e nome comercial
+
+MNR Gestão é o novo nome comercial do aplicativo anteriormente denominado MNR
+Perfumes. AppId, protocolo, banco, formato de backup e caminhos anteriores foram
+mantidos para preservar seus dados. A pasta de dados continua sendo
+`%LOCALAPPDATA%/MNR Software/MNR Perfumes`: não mova nem renomeie essa pasta.
+
+Em **Produtos**, selecione uma fotografia JPG, JPEG, JFIF, PNG ou WebP estática pelo botão **Selecionar
+fotografia**. A prévia já utiliza a orientação que será salva. Confirme em **Salvar
+produto**; selecionar não confirma o vínculo. Para substituir, selecione outra
+imagem e salve. Para remover, use **Remover fotografia ao salvar** e salve.
+
+Fotos novas recebem orientação EXIF corrigida, cores sRGB, remoção de metadados
+EXIF/GPS e miniatura. Transparência PNG é preservada. Fotografias anteriores não
+são convertidas nem movidas; para corrigir uma foto antiga girada, reimporte o original.
+
+Arquivos baixados de sites podem ser importados do disco pelo mesmo seletor,
+inclusive WebP lossy/lossless e com transparência. WebP é convertido automaticamente
+para JPEG (sem alfa) ou PNG (com alfa), sem ferramentas externas no computador do
+cliente. GIF, AVIF, WebP animado, SVG e importação por URL não são suportados.
+Limites: 10 MiB, 8192 pixels por lado e 24 milhões de pixels na entrada; cópia local
+até 2048 pixels por lado e miniatura até 160. Os objetos anteriores e backups dos
+schemas 5/6 permanecem compatíveis. Detalhes e checklist de WebP/JFIF estão no
+[complemento do relatório](docs/pre-5-2-B-fotografias-identidade.md#complemento--compatibilidade-com-imagens-baixadas-da-internet).
+Limites: 10 MiB por arquivo, 8192 pixels por lado e
+24 milhões de pixels; cópia de até 2048 pixels e miniatura de até 160, sem ampliar
+imagens pequenas. Se a cópia exceder 8 MiB, o sistema reduz proporcionalmente até
+caber, mantendo o formato e a transparência. JPEG progressivo, CMYK e variantes PNG foram exercitados com
+imagens sintéticas. Não há suporte a SVG, animações ou downloads de imagens.
+
+Erros diferenciam formato, arquivo inválido, tamanho, dimensões, leitura,
+processamento e gravação. Uma falha não confirma a fotografia nem substitui a
+foto anterior. Diagnóstico técnico sem nome/path da imagem fica em
+`logs/foto-importacao.jsonl`, limitado a aproximadamente 1 MiB; preserve-o ao
+solicitar suporte. Não envie fotografias privadas sem necessidade.
+
+Backups `.mnrbackup` dos schemas 5 e 6 continuam usando a identidade técnica
+anterior. Guarde um backup externo válido antes de atualizar seus dados habituais.
+Ensaios de restauração devem usar perfil isolado, conforme o
+[relatório e checklist da Pré-5.2 B](docs/pre-5-2-B-fotografias-identidade.md).
+Teste específico: `npm.cmd run test:fotos-compatibilidade`.
+Pré-5.2 C, instalador 5.2 e homologação 5.3 permanecem pendentes.
 
 ## Pré-5.2 A — Catálogo generalista
 
@@ -29,8 +72,9 @@ Não apague journals, gerações ou proteções para contornar incompatibilidade
 Consulte o [relatório técnico e checklist](docs/pre-5-2-A-catalogo-generalista.md).
 Teste específico: `npm.cmd run test:catalogo-generalista`.
 Benchmark isolado: `npm.cmd run benchmark:catalogo-generalista`.
-Pré-5.2 B (fotografias), Pré-5.2 C (visual), 5.2 (instalador) e 5.3
-(homologação final) continuam pendentes. A identidade MNR Perfumes foi preservada.
+Na Pré-5.2 A, a identidade anterior foi preservada; a mudança pública para MNR
+Gestão é tratada na seção acima. Pré-5.2 C (visual), 5.2 (instalador) e 5.3
+(homologação final) continuam pendentes.
 
 ## Etapa 5.1 — Backup e restauração segura
 
@@ -79,8 +123,8 @@ inspeção antes de novas restaurações, sem excluir arquivos desconhecidos.
 HTTP e executável isolado. `npm.cmd run benchmark:backup-restauracao` mede
 50/200/500 vendas com fotografias de teste. Consulte o
 [relatório técnico da 5.1](docs/etapa-5-1-backup-restauracao.md) para protocolo,
-limites, resultados reais e checklist manual. A etapa aguarda validação manual
-do proprietário. **5.2 (instalador) e 5.3 (homologação final) permanecem pendentes.**
+limites, resultados reais e checklist manual. A 5.1 foi validada manualmente e
+commitada antes destas ampliações. **5.2 (instalador) e 5.3 (homologação final) permanecem pendentes.**
 
 As seções de etapas anteriores abaixo registram seus escopos e pendências na
 data de cada entrega. Referências históricas à Etapa 5 inteira como futura não

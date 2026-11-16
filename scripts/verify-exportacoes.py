@@ -38,7 +38,7 @@ for item in manifest:
                 if name.startswith('xl/worksheets/') and name.endswith('.xml'):
                     assert not re.search(rb'<f(?:\s|>)', archive.read(name)), 'Formula in exported workbook'
         book = load_workbook(path, data_only=False)
-        assert book.properties.creator == 'MNR Perfumes'
+        assert book.properties.creator == 'MNR Gestão'
         assert book.properties.title == document['titulo']
         assert book.sheetnames == [s['nome'] for s in document['secoes']] + ['Metodologia']
         for section in document['secoes']:
@@ -76,7 +76,7 @@ for item in manifest:
         text = '\n'.join(p.extract_text() for p in reader.pages)
         normalized = norm(text)
         cursor = 0
-        for title in ['MNR Perfumes', document['titulo'], document['referencia'], 'Metodologia']:
+        for title in ['MNR Gestão', document['titulo'], document['referencia'], 'Metodologia']:
             assert norm(title) in normalized, (path, title)
         for section in document['secoes']:
             assert norm(section['nome']) in normalized

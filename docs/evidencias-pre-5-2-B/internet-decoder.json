@@ -1,0 +1,239 @@
+{
+  "reproduction": {
+    "at": "2026-11-16T18:54:53.949Z",
+    "method": "former JPEG/PNG imageHeader entry, before WebP dispatch",
+    "code": "PHOTO_FORMAT",
+    "nativeImageEmpty": true,
+    "bytes": 100,
+    "electron": "43.8.6",
+    "isolatedProfile": true
+  },
+  "codec": {
+    "results": [
+      {
+        "name": "produto lossy.webp",
+        "bytes": 156,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 137.5540000000001,
+        "rss": 118161408
+      },
+      {
+        "name": "produto lossless.webp",
+        "bytes": 54,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 66.48199999999997,
+        "rss": 118710272
+      },
+      {
+        "name": "pasta com acentos/fotografia çã.WEBP",
+        "bytes": 74,
+        "mime": "image/png",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 71.28920000000016,
+        "rss": 119091200
+      },
+      {
+        "name": "transparente.webp",
+        "bytes": 74,
+        "mime": "image/png",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 73.4679000000001,
+        "rss": 119345152
+      },
+      {
+        "name": "grande.webp",
+        "bytes": 42756,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 2048,
+          "height": 1365
+        },
+        "ms": 516.4860999999999,
+        "rss": 142266368
+      },
+      {
+        "name": "perfil-icc.webp",
+        "bytes": 768,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 68.66219999999998,
+        "rss": 143773696
+      },
+      {
+        "name": "orientado.webp",
+        "bytes": 210,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "ms": 62.6552999999999,
+        "rss": 144203776
+      },
+      {
+        "name": "produto.JFIF",
+        "bytes": 1110,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 60.65930000000003,
+        "rss": 144769024
+      },
+      {
+        "name": "produto com acentuação.jfif",
+        "bytes": 784,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 120,
+          "height": 80
+        },
+        "ms": 57.83050000000026,
+        "rss": 145178624
+      },
+      {
+        "name": "orientado.JFIF",
+        "bytes": 1146,
+        "mime": "image/jpeg",
+        "size": {
+          "width": 80,
+          "height": 120
+        },
+        "ms": 49.31660000000011,
+        "rss": 145707008
+      }
+    ],
+    "versions": {
+      "aom": "3.15.1",
+      "archive": "3.8.9",
+      "cairo": "1.18.6",
+      "cgif": "0.5.4",
+      "exif": "0.6.26",
+      "expat": "2.8.5",
+      "ffi": "3.8.0",
+      "fontconfig": "2.18.3",
+      "freetype": "2.14.3",
+      "fribidi": "1.0.17",
+      "glib": "2.90.0",
+      "harfbuzz": "14.5.0",
+      "heif": "1.23.5",
+      "highway": "1.4.0",
+      "imagequant": "2.4.1",
+      "lcms": "2.19.1",
+      "mozjpeg": "0826579",
+      "pango": "1.58.2",
+      "pixman": "0.46.4",
+      "png": "1.6.58",
+      "proxy-libintl": "0.5",
+      "rsvg": "2.63.2",
+      "tiff": "4.7.2",
+      "uhdr": "2.0.2",
+      "vips": "8.18.7",
+      "webp": "1.6.0",
+      "xml2": "2.15.4",
+      "zlib-ng": "2.3.3",
+      "sharp": "0.35.5"
+    },
+    "maxRssKiB": 165372
+  },
+  "artifact": {
+    "at": "2026-11-16T19:30:22.017Z",
+    "compared": 147,
+    "sourceFingerprint": "eeb530a12642170d43f43c21622845f8381c954922fb7a46703ed374816f159d",
+    "asarSha256": "4feba7a7b582b3f0064110aacf8a764a747215a69e3ac6d482e88b9339fed77c",
+    "executableSha256": "05cb183c96c9959287643d958e077b5a4430bf8c67a1f8f13fa32aea2254674c",
+    "legacy": {
+      "5": {
+        "commit": "026daa0",
+        "schema": 5,
+        "archiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627"
+      },
+      "6": {
+        "commit": "d359480",
+        "schema": 6,
+        "archiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3"
+      }
+    },
+    "binaries": [
+      {
+        "file": "libvips-42.dll",
+        "bytes": 19018240,
+        "sha256": "06dab07cc386748513337a31672b1d5269fbc770a14ff403080575665bf0813f"
+      },
+      {
+        "file": "libvips-cpp-8.18.7.dll",
+        "bytes": 333312,
+        "sha256": "25001dbd05305a0a29119ab49933622c70b4a20ea12ef1d5d20ca40181db53bf"
+      },
+      {
+        "file": "sharp-win32-x64-0.35.5.node",
+        "bytes": 443904,
+        "sha256": "971048779f9c8598df14641dfc03c625885c93f473a788e65ca2deb50d0b083e"
+      }
+    ],
+    "sharp": {
+      "aom": "3.15.1",
+      "archive": "3.8.9",
+      "cairo": "1.18.6",
+      "cgif": "0.5.4",
+      "exif": "0.6.26",
+      "expat": "2.8.5",
+      "ffi": "3.8.0",
+      "fontconfig": "2.18.3",
+      "freetype": "2.14.3",
+      "fribidi": "1.0.17",
+      "glib": "2.90.0",
+      "harfbuzz": "14.5.0",
+      "heif": "1.23.5",
+      "highway": "1.4.0",
+      "imagequant": "2.4.1",
+      "lcms": "2.19.1",
+      "mozjpeg": "0826579",
+      "pango": "1.58.2",
+      "pixman": "0.46.4",
+      "png": "1.6.58",
+      "proxy-libintl": "0.5",
+      "rsvg": "2.63.2",
+      "tiff": "4.7.2",
+      "uhdr": "2.0.2",
+      "vips": "8.18.7",
+      "webp": "1.6.0",
+      "xml2": "2.15.4",
+      "zlib-ng": "2.3.3"
+    }
+  },
+  "auditProduction": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "auditAll": {
+    "info": 0,
+    "low": 0,
+    "moderate": 14,
+    "high": 0,
+    "critical": 0,
+    "total": 14
+  }
+}

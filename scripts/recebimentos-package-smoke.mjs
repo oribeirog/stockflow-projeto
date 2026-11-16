@@ -14,7 +14,7 @@ const db = await openDatabase(resolve(isolated, 'MNR Software/MNR Perfumes/data'
 const ids = seedRecebimentos(db);
 async function run(reopen = false) {
   const child = spawn(
-    resolve('release/win-unpacked/MNR Perfumes.exe'),
+    resolve('release/win-unpacked/MNR Gestao.exe'),
     ['--remote-debugging-port=19232'],
     {
       cwd: isolated,

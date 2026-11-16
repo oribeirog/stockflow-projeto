@@ -1,0 +1,250 @@
+{
+  "initialCommit": "d359480d4dca3fa5a5e75ec90622e1f5441421ba",
+  "oldDecoder": [
+    {
+      "name": "16bits.png",
+      "bytes": 204,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "24mp.jpg",
+      "bytes": 375630,
+      "native": {
+        "width": 6000,
+        "height": 4000
+      },
+      "ok": true,
+      "size": {
+        "width": 2048,
+        "height": 1365
+      }
+    },
+    {
+      "name": "baseline.jpg",
+      "bytes": 1115,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "cmyk.jpg",
+      "bytes": 1120,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "icc.jpg",
+      "bytes": 1640,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "jpeg-sufixo.jpg",
+      "bytes": 1117,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "code": "PHOTO_INVALID",
+      "message": "PHOTO_INVALID"
+    },
+    {
+      "name": "orientacao.JPG",
+      "bytes": 1136,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "paleta.png",
+      "bytes": 120,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "progressivo.JPEG",
+      "bytes": 790,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "rgb.PNG",
+      "bytes": 645,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "rgba.png",
+      "bytes": 273,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "texto.jpg",
+      "bytes": 12,
+      "native": {
+        "width": 0,
+        "height": 0
+      },
+      "code": "PHOTO_INVALID",
+      "message": "PHOTO_INVALID"
+    },
+    {
+      "name": "transparente.png",
+      "bytes": 279,
+      "native": {
+        "width": 120,
+        "height": 80
+      },
+      "ok": true,
+      "size": {
+        "width": 120,
+        "height": 80
+      }
+    },
+    {
+      "name": "truncado.jpg",
+      "bytes": 1105,
+      "native": {
+        "width": 0,
+        "height": 0
+      },
+      "code": "PHOTO_INVALID",
+      "message": "PHOTO_INVALID"
+    },
+    {
+      "name": "vazio.png",
+      "bytes": 0,
+      "native": {
+        "width": 0,
+        "height": 0
+      },
+      "code": "PHOTO_INVALID",
+      "message": "PHOTO_INVALID"
+    }
+  ],
+  "pngBefore": {
+    "sourceBytes": 9194752,
+    "width": 1800,
+    "height": 1700,
+    "results": [
+      {
+        "label": "approved",
+        "code": "PHOTO_INVALID"
+      },
+      {
+        "label": "new",
+        "code": "PHOTO_PROCESSING"
+      }
+    ]
+  },
+  "writeFailure": [
+    {
+      "label": "approved",
+      "code": "ENOSPC",
+      "files": [
+        {
+          "name": "2b2031da-d0c4-4f4e-890e-3f2ab3ede2c9.image",
+          "bytes": 68
+        },
+        {
+          "name": "2b2031da-d0c4-4f4e-890e-3f2ab3ede2c9.thumb",
+          "bytes": 0
+        }
+      ],
+      "rows": [
+        {
+          "estado": "PREPARADA"
+        }
+      ],
+      "links": 0,
+      "root": "[repositorio]\\.local-data\\test\\backup-rAKjMH"
+    },
+    {
+      "label": "new",
+      "code": "PHOTO_WRITE",
+      "files": [],
+      "rows": [
+        {
+          "estado": "RETIRADA"
+        }
+      ],
+      "links": 0,
+      "root": "[repositorio]\\.local-data\\test\\backup-VfASpY"
+    }
+  ],
+  "metadata": {
+    "ProductName": "MNR Gestão",
+    "FileDescription": "MNR Gestão",
+    "CompanyName": "MNR Software",
+    "FileVersion": "0.1.0",
+    "ProductVersion": "0.1.0.0"
+  },
+  "singleInstance": {
+    "root": "[repositorio]\\.cache\\pre52b\\instance-dDZJxT",
+    "old": "LOCK true",
+    "new": "LOCK false"
+  }
+}

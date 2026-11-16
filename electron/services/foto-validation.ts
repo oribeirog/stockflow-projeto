@@ -1,6 +1,16 @@
 export const MAX_SOURCE = 10 * 1024 * 1024;
+export type FotoErrorCode =
+  | 'PHOTO_INVALID'
+  | 'PHOTO_EXPIRED'
+  | 'PHOTO_UNAVAILABLE'
+  | 'PHOTO_FORMAT'
+  | 'PHOTO_SIZE'
+  | 'PHOTO_DIMENSIONS'
+  | 'PHOTO_PROCESSING'
+  | 'PHOTO_WRITE'
+  | 'PHOTO_ACCESS';
 export class FotoError extends Error {
-  constructor(public readonly code: 'PHOTO_INVALID' | 'PHOTO_EXPIRED' | 'PHOTO_UNAVAILABLE') {
+  constructor(public readonly code: FotoErrorCode) {
     super(code);
   }
 }
@@ -12,7 +22,8 @@ export function imageHeader(bytes: Buffer): {
   const fail = (): never => {
     throw new FotoError('PHOTO_INVALID');
   };
-  if (!bytes.length || bytes.length > MAX_SOURCE) return fail();
+  if (!bytes.length) return fail();
+  if (bytes.length > MAX_SOURCE) throw new FotoError('PHOTO_SIZE');
   let width = 0,
     height = 0;
   let mime: 'image/png' | 'image/jpeg';
@@ -60,8 +71,22 @@ export function imageHeader(bytes: Buffer): {
       pos += size;
     }
     if (bytes[bytes.length - 2] !== 0xff || bytes[bytes.length - 1] !== 0xd9) return fail();
-  } else return fail();
-  if (!width || !height || width > 8192 || height > 8192 || width * height > 24_000_000)
+  } else {
+    if (
+      bytes.toString('ascii', 0, 3) === 'GIF' ||
+      (bytes.toString('ascii', 4, 8) === 'ftyp' &&
+        /avif|avis|heic|heix|mif1/.test(bytes.toString('ascii', 8, 32))) ||
+      bytes.toString('ascii', 8, 12) === 'WEBP' ||
+      bytes.toString('ascii', 0, 2) === 'BM' ||
+      bytes.toString('ascii', 0, 4) === 'II*\0' ||
+      bytes.toString('ascii', 0, 4) === 'MM\0*' ||
+      bytes.toString('utf8', 0, 256).trimStart().startsWith('<svg')
+    )
+      throw new FotoError('PHOTO_FORMAT');
     return fail();
+  }
+  if (!width || !height) return fail();
+  if (width > 8192 || height > 8192 || width * height > 24_000_000)
+    throw new FotoError('PHOTO_DIMENSIONS');
   return { mime, width, height };
 }

@@ -6,6 +6,7 @@ import {
   realpathSync,
   existsSync,
   openSync,
+  fstatSync,
   writeSync,
   fsyncSync,
   closeSync,
@@ -18,6 +19,7 @@ import { join, resolve } from 'node:path';
 import type { ImagemFoto, PreparacaoFoto, VinculoFoto } from '../../shared/fotos';
 import { record, text, identifier, canonical, CadastroError } from './catalog-validation';
 import { FotoError } from './foto-validation';
+import { consoleFotoDiagnostic, type FotoDiagnostic } from './foto-diagnostics';
 
 export interface FotoNormalizada {
   mime: 'image/png' | 'image/jpeg';
@@ -53,13 +55,18 @@ export function createFotoService(
   db: Database.Database,
   directory: string,
   appVersion: string,
-  normalize: (bytes: Buffer) => FotoNormalizada,
-  options: { now?: () => number; fault?: (phase: string) => void } = {},
+  normalize: (bytes: Buffer) => FotoNormalizada | Promise<FotoNormalizada>,
+  options: {
+    now?: () => number;
+    fault?: (phase: string) => void;
+    diagnostic?: (event: FotoDiagnostic) => void;
+  } = {},
 ) {
   const root = resolve(directory),
     staged = join(root, 'staging'),
     objects = join(root, 'objects');
   const now = options.now ?? Date.now;
+  const diagnostic = options.diagnostic ?? consoleFotoDiagnostic;
   const owners = new Map<string, number>();
   let tail: Promise<unknown> = Promise.resolve();
   function safeDirectories() {
@@ -100,12 +107,34 @@ export function createFotoService(
   }
   function durable(path: string, bytes: Buffer) {
     const fd = openSync(path, 'wx');
+    const identity = fstatSync(fd);
     try {
       let offset = 0;
       while (offset < bytes.length) offset += writeSync(fd, bytes, offset, bytes.length - offset);
       fsyncSync(fd);
-    } finally {
+    } catch (error) {
       closeSync(fd);
+      // Only remove the file this call exclusively created, never a replacement.
+      try {
+        const current = lstatSync(path);
+        if (
+          current.isFile() &&
+          !current.isSymbolicLink() &&
+          current.ino === identity.ino &&
+          current.dev === identity.dev &&
+          current.birthtimeMs === identity.birthtimeMs
+        )
+          unlinkSync(path);
+      } catch {
+        /* Preserve uncertain evidence. */
+      }
+      throw error;
+    } finally {
+      try {
+        closeSync(fd);
+      } catch {
+        /* Already closed on failure. */
+      }
     }
   }
   function rowFor(id: string) {
@@ -166,10 +195,13 @@ export function createFotoService(
     return { preserved, missing };
   }
   function prepare(bytes: Buffer, owner: number): Promise<PreparacaoFoto> {
-    return withLock(() => {
+    return withLock(async () => {
       safeDirectories();
-      const image = normalize(bytes),
+      const image = await normalize(bytes),
         id = randomUUID();
+      // Decoding may yield to the event loop. Recheck the managed directories
+      // before the first ledger/file write, not only before asynchronous work.
+      safeDirectories();
       const row: FotoArquivo = {
         id,
         mime: image.mime,
@@ -185,12 +217,37 @@ export function createFotoService(
         expira_em: new Date(now() + 30 * 60_000).toISOString(),
         estado: 'PREPARADA',
       };
+      const persistStart = performance.now();
       db.prepare(
         'INSERT INTO foto_arquivos (id,mime,largura,altura,tamanho,hash,miniatura_tamanho,miniatura_hash,miniatura_largura,miniatura_altura,criado_em,expira_em,estado) VALUES (@id,@mime,@largura,@altura,@tamanho,@hash,@miniatura_tamanho,@miniatura_hash,@miniatura_largura,@miniatura_altura,@criado_em,@expira_em,@estado)',
       ).run(row);
-      durable(pathFor(row, 'image', true), image.image);
-      durable(pathFor(row, 'thumb', true), image.thumb);
+      try {
+        durable(pathFor(row, 'image', true), image.image);
+        durable(pathFor(row, 'thumb', true), image.thumb);
+      } catch (error) {
+        const cause =
+          error instanceof Error &&
+          'code' in error &&
+          ['ENOSPC', 'EACCES', 'EPERM', 'EIO', 'EROFS', 'EBUSY', 'EEXIST'].includes(
+            String(error.code),
+          )
+            ? String(error.code)
+            : 'FILE_IO';
+        diagnostic({ phase: 'prepare', code: 'PHOTO_WRITE', cause });
+        db.prepare("UPDATE foto_arquivos SET estado='RETIRADA' WHERE id=?").run(id);
+        try {
+          cleanupRow({ ...row, estado: 'RETIRADA' });
+        } catch {
+          /* Retain uncertain files. */
+        }
+        throw new FotoError('PHOTO_WRITE');
+      }
       owners.set(id, owner);
+      diagnostic({
+        phase: 'prepared',
+        ms: performance.now() - persistStart,
+        bytes: image.image.length,
+      });
       return {
         token: id,
         previa: {
@@ -339,6 +396,7 @@ export function createFotoService(
     });
   }
   return {
+    diagnostic,
     directory: root,
     withLock,
     prepare,

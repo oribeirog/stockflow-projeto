@@ -8,11 +8,16 @@ import { FotoError, MAX_SOURCE } from '../services/foto-validation';
 import { CadastroError } from '../services/catalog-validation';
 
 export function readSelectedFoto(path: string): Buffer {
-  const fd = openSync(path, 'r');
+  let fd: number;
+  try {
+    fd = openSync(path, 'r');
+  } catch {
+    throw new FotoError('PHOTO_ACCESS');
+  }
   try {
     const stat = fstatSync(fd);
-    if (!stat.isFile() || !stat.size || stat.size > MAX_SOURCE)
-      throw new FotoError('PHOTO_INVALID');
+    if (stat.size > MAX_SOURCE) throw new FotoError('PHOTO_SIZE');
+    if (!stat.isFile() || !stat.size) throw new FotoError('PHOTO_INVALID');
     const bytes = Buffer.alloc(stat.size + 1);
     let count = 0,
       read = 0;
@@ -22,6 +27,9 @@ export function readSelectedFoto(path: string): Buffer {
     } while (read && count < bytes.length);
     if (count !== stat.size) throw new FotoError('PHOTO_INVALID');
     return bytes.subarray(0, count);
+  } catch (error) {
+    if (error instanceof FotoError) throw error;
+    throw new FotoError('PHOTO_ACCESS');
   } finally {
     closeSync(fd);
   }
@@ -39,9 +47,14 @@ export function registerFotos(
       selecting = true;
       try {
         const result = await dialog.showOpenDialog(window, {
-          title: 'Selecionar fotografia do perfume',
+          title: 'Selecionar fotografia do produto',
           properties: ['openFile'],
-          filters: [{ name: 'Fotografia JPEG ou PNG', extensions: ['jpg', 'jpeg', 'png'] }],
+          filters: [
+            {
+              name: 'Imagens de produtos — JPG, JPEG, JFIF, PNG e WebP',
+              extensions: ['jpg', 'jpeg', 'jfif', 'png', 'webp'],
+            },
+          ],
         });
         if (result.canceled || !result.filePaths.length) return null;
         if (window.isDestroyed()) return null;
@@ -64,6 +77,18 @@ export function registerFotos(
           throw new CadastroError('VALIDATION', 'Argumentos inválidos');
         return { ok: true, data: await operations[name](args[0]) };
       } catch (error) {
+        if (
+          error instanceof Error &&
+          'code' in error &&
+          ['EACCES', 'EPERM', 'ENOSPC', 'EIO', 'EROFS', 'EBUSY'].includes(String(error.code))
+        ) {
+          photos.diagnostic({ phase: name, code: 'PHOTO_WRITE', cause: String(error.code) });
+          return erroCadastro(new FotoError('PHOTO_WRITE'));
+        }
+        photos.diagnostic({
+          phase: name,
+          code: error instanceof FotoError ? error.code : 'PHOTO_OPERATION_FAILED',
+        });
         return erroCadastro(error);
       }
     });

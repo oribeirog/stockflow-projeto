@@ -10,8 +10,8 @@ import { Photo, fotoUrl } from './photo';
   template: `<div class="stack">
     <h3>Fotografia do produto</h3>
     <p>
-      Opcional. JPEG ou PNG estático, até 10 MiB e 24 milhões de pixels. A cópia local é preservada
-      nas atualizações.
+      Opcional. JPG, JPEG, JFIF, PNG ou WebP estático, até 10 MiB e 24 milhões de pixels. A cópia
+      local é preservada nas atualizações.
     </p>
     <div class="row">
       @if (preview()) {
@@ -41,6 +41,9 @@ import { Photo, fotoUrl } from './photo';
         >
       }
     </div>
+    @if (busy()) {
+      <p role="status">Processando fotografia. Aguarde…</p>
+    }
     @if (message()) {
       <p [attr.role]="failed() ? 'alert' : 'status'">{{ message() }}</p>
     }
@@ -113,9 +116,16 @@ export class PhotoEditor implements OnDestroy {
     if (!result.data) {
       this.busy.set(false);
       this.pending.emit(false);
+      if (!this.intention) {
+        this.failed.set(false);
+        this.message.set(
+          'Seleção cancelada. A fotografia e as alterações anteriores foram mantidas.',
+        );
+      }
       return;
     }
     await this.clearPreparation();
+    this.intention = undefined;
     this.preparation.set(result.data);
     this.preview.set(fotoUrl(result.data.previa));
     this.removing.set(false);
@@ -140,6 +150,7 @@ export class PhotoEditor implements OnDestroy {
     this.busy.set(true);
     this.pending.emit(true);
     await this.clearPreparation();
+    this.intention = undefined;
     this.removing.set(true);
     this.mark(true);
     this.message.set(
@@ -182,7 +193,9 @@ export class PhotoEditor implements OnDestroy {
       this.pending.emit(uncertain);
       this.failed.set(true);
       this.message.set('Produto salvo. ' + result.error.message);
-      if (!uncertain) this.intention = undefined;
+      // A filesystem failure before publication/association is retryable using
+      // the same prepared object and intent; do not leave the retry button absent.
+      if (!uncertain && result.error.code !== 'PHOTO_WRITE') this.intention = undefined;
       this.saved.emit(false);
       return false;
     }

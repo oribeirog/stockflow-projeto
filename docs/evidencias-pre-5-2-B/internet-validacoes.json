@@ -1,0 +1,364 @@
+{
+  "at": "2026-11-16T19:31:22.896Z",
+  "attempts": [
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T18:44:53.996Z",
+      "finished": "2026-11-16T18:45:01.010Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\01.log"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T18:45:01.010Z",
+      "finished": "2026-11-16T18:45:12.185Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\02.log"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T18:45:12.186Z",
+      "finished": "2026-11-16T18:45:23.548Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\03.log"
+    },
+    {
+      "command": "npm.cmd run test:fotos-internet",
+      "started": "2026-11-16T18:45:23.549Z",
+      "finished": "2026-11-16T18:47:02.451Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\04.log"
+    },
+    {
+      "command": "npm.cmd run pack",
+      "started": "2026-11-16T18:47:02.452Z",
+      "finished": "2026-11-16T18:48:18.745Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\05.log"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T18:48:18.746Z",
+      "finished": "2026-11-16T18:48:19.447Z",
+      "code": 1,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-44-53-994Z\\06.log"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T18:48:40.238Z",
+      "finished": "2026-11-16T18:48:40.598Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\01.log"
+    },
+    {
+      "command": "node --test tests/fotos-internet.test.cjs",
+      "started": "2026-11-16T18:48:40.599Z",
+      "finished": "2026-11-16T18:48:48.259Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\02.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --development",
+      "started": "2026-11-16T18:48:48.260Z",
+      "finished": "2026-11-16T18:49:56.809Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\03.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --package",
+      "started": "2026-11-16T18:49:56.809Z",
+      "finished": "2026-11-16T18:50:58.122Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\04.log"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T18:50:58.123Z",
+      "finished": "2026-11-16T18:54:07.905Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\05.log"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T18:54:07.905Z",
+      "finished": "2026-11-16T18:56:24.274Z",
+      "code": 1,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\06.log"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T18:57:49.276Z",
+      "finished": "2026-11-16T19:01:56.545Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-57-49-274Z\\01.log"
+    },
+    {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T19:01:56.546Z",
+      "finished": "2026-11-16T19:05:32.641Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-57-49-274Z\\02.log"
+    },
+    {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T19:05:32.642Z",
+      "finished": "2026-11-16T19:07:03.373Z",
+      "code": 1,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-57-49-274Z\\03.log"
+    },
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T19:10:35.068Z",
+      "finished": "2026-11-16T19:10:42.191Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\01.log"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T19:10:42.192Z",
+      "finished": "2026-11-16T19:10:52.541Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\02.log"
+    },
+    {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T19:10:52.542Z",
+      "finished": "2026-11-16T19:11:10.145Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\03.log"
+    },
+    {
+      "command": "npm.cmd run test:fotos-internet",
+      "started": "2026-11-16T19:11:10.145Z",
+      "finished": "2026-11-16T19:12:31.323Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\04.log"
+    },
+    {
+      "command": "npm.cmd run pack",
+      "started": "2026-11-16T19:12:31.324Z",
+      "finished": "2026-11-16T19:13:42.542Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\05.log"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T19:13:42.542Z",
+      "finished": "2026-11-16T19:13:42.757Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\06.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --development",
+      "started": "2026-11-16T19:13:42.757Z",
+      "finished": "2026-11-16T19:14:49.816Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\07.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --package",
+      "started": "2026-11-16T19:14:49.817Z",
+      "finished": "2026-11-16T19:15:49.418Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\08.log"
+    },
+    {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T19:15:49.418Z",
+      "finished": "2026-11-16T19:18:23.222Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\09.log"
+    },
+    {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T19:18:23.223Z",
+      "finished": "2026-11-16T19:22:18.057Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\10.log"
+    },
+    {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T19:22:18.058Z",
+      "finished": "2026-11-16T19:24:43.114Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\11.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --package",
+      "started": "2026-11-16T19:24:43.114Z",
+      "finished": "2026-11-16T19:25:26.072Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\12.log"
+    },
+    {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --package",
+      "started": "2026-11-16T19:25:26.072Z",
+      "finished": "2026-11-16T19:26:08.578Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\13.log"
+    },
+    {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T19:26:09.616Z",
+      "finished": "2026-11-16T19:29:50.465Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\01.log"
+    },
+    {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T19:29:50.466Z",
+      "finished": "2026-11-16T19:30:03.269Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\02.log"
+    },
+    {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T19:30:03.270Z",
+      "finished": "2026-11-16T19:30:10.139Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\03.log"
+    },
+    {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T19:30:10.140Z",
+      "finished": "2026-11-16T19:30:21.602Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\04.log"
+    },
+    {
+      "command": "node .cache/pre52b-internet/audit.mjs",
+      "started": "2026-11-16T19:30:21.603Z",
+      "finished": "2026-11-16T19:30:23.763Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\05.log"
+    },
+    {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T19:30:23.763Z",
+      "finished": "2026-11-16T19:30:23.971Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\06.log"
+    }
+  ],
+  "latest": {
+    "npm.cmd run typecheck": {
+      "command": "npm.cmd run typecheck",
+      "started": "2026-11-16T19:30:03.270Z",
+      "finished": "2026-11-16T19:30:10.139Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\03.log"
+    },
+    "npm.cmd run lint": {
+      "command": "npm.cmd run lint",
+      "started": "2026-11-16T19:30:10.140Z",
+      "finished": "2026-11-16T19:30:21.602Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\04.log"
+    },
+    "npm.cmd run format:check": {
+      "command": "npm.cmd run format:check",
+      "started": "2026-11-16T19:10:52.542Z",
+      "finished": "2026-11-16T19:11:10.145Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\03.log"
+    },
+    "npm.cmd run test:fotos-internet": {
+      "command": "npm.cmd run test:fotos-internet",
+      "started": "2026-11-16T19:11:10.145Z",
+      "finished": "2026-11-16T19:12:31.323Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\04.log"
+    },
+    "npm.cmd run pack": {
+      "command": "npm.cmd run pack",
+      "started": "2026-11-16T19:12:31.324Z",
+      "finished": "2026-11-16T19:13:42.542Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\05.log"
+    },
+    "node scripts/verify-package.mjs": {
+      "command": "node scripts/verify-package.mjs",
+      "started": "2026-11-16T19:30:23.763Z",
+      "finished": "2026-11-16T19:30:23.971Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\06.log"
+    },
+    "node --test tests/fotos-internet.test.cjs": {
+      "command": "node --test tests/fotos-internet.test.cjs",
+      "started": "2026-11-16T18:48:40.599Z",
+      "finished": "2026-11-16T18:48:48.259Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T18-48-40-236Z\\02.log"
+    },
+    "node scripts/backup-restauracao-smoke.mjs --fotos-internet --development": {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --development",
+      "started": "2026-11-16T19:13:42.757Z",
+      "finished": "2026-11-16T19:14:49.816Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\07.log"
+    },
+    "node scripts/backup-restauracao-smoke.mjs --fotos-internet --package": {
+      "command": "node scripts/backup-restauracao-smoke.mjs --fotos-internet --package",
+      "started": "2026-11-16T19:14:49.817Z",
+      "finished": "2026-11-16T19:15:49.418Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\08.log"
+    },
+    "npm.cmd test": {
+      "command": "npm.cmd test",
+      "started": "2026-11-16T19:15:49.418Z",
+      "finished": "2026-11-16T19:18:23.222Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\09.log"
+    },
+    "npm.cmd run test:backup-restauracao": {
+      "command": "npm.cmd run test:backup-restauracao",
+      "started": "2026-11-16T19:18:23.223Z",
+      "finished": "2026-11-16T19:22:18.057Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\10.log"
+    },
+    "npm.cmd run test:ui": {
+      "command": "npm.cmd run test:ui",
+      "started": "2026-11-16T19:26:09.616Z",
+      "finished": "2026-11-16T19:29:50.465Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\01.log"
+    },
+    "npm.cmd run test:catalogo-generalista": {
+      "command": "npm.cmd run test:catalogo-generalista",
+      "started": "2026-11-16T19:22:18.058Z",
+      "finished": "2026-11-16T19:24:43.114Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\11.log"
+    },
+    "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --package": {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema6 --package",
+      "started": "2026-11-16T19:24:43.114Z",
+      "finished": "2026-11-16T19:25:26.072Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\12.log"
+    },
+    "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --package": {
+      "command": "node scripts/backup-restauracao-smoke.mjs --legacy-schema5 --package",
+      "started": "2026-11-16T19:25:26.072Z",
+      "finished": "2026-11-16T19:26:08.578Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-10-35-066Z\\13.log"
+    },
+    "npm.cmd run build": {
+      "command": "npm.cmd run build",
+      "started": "2026-11-16T19:29:50.466Z",
+      "finished": "2026-11-16T19:30:03.269Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\02.log"
+    },
+    "node .cache/pre52b-internet/audit.mjs": {
+      "command": "node .cache/pre52b-internet/audit.mjs",
+      "started": "2026-11-16T19:30:21.603Z",
+      "finished": "2026-11-16T19:30:23.763Z",
+      "code": 0,
+      "log": "<repo>\\.cache\\pre52b-checks-2026-11-16T19-26-09-614Z\\05.log"
+    }
+  }
+}

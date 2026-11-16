@@ -47,7 +47,7 @@ export async function gerarPdf(documento: DocumentoRelatorio): Promise<Uint8Arra
         displayHeaderFooter: true,
         headerTemplate: '<span></span>',
         footerTemplate:
-          '<div style="font-family:Arial;font-size:8px;color:#465468;width:100%;text-align:center">MNR Perfumes | Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>',
+          '<div style="font-family:Arial;font-size:8px;color:#465468;width:100%;text-align:center">MNR Gestão | Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>',
       });
       if (bytes.length > LIMITES_EXPORTACAO.arquivoBytes) throw new ExportacaoError('EXPORT_LIMIT');
       return new Uint8Array(bytes);

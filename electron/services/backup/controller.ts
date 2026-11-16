@@ -110,7 +110,7 @@ export class BackupController {
     let work: Awaited<ReturnType<typeof newOwnedSet>> | undefined, external: string | undefined;
     try {
       const selected = await this.deps.chooseBackup(
-        `MNR-Perfumes-${new Date().toISOString().replace(/[:.]/g, '-')}.mnrbackup`,
+        `MNR-Gestao-${new Date().toISOString().replace(/[:.]/g, '-')}.mnrbackup`,
       );
       if (!selected) return null;
       const dest = await this.destination(selected);

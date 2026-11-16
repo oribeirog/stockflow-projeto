@@ -1,0 +1,437 @@
+[
+  {
+    "mode": "local",
+    "root": "<repo>\\.local-data\\test\\ui-backup-f1TCkz",
+    "archive": "<repo>\\.local-data\\test\\pre52b-outputs-BLnX79\\MNR Teste + @.mnrbackup",
+    "archiveSha256": "a4ef048a4a8712a11d4e8937b861c24c2052bc72979e96b1c51f6e8cf0ae42ab",
+    "photos": [
+      {
+        "id": 7,
+        "source": "transparente.webp",
+        "mime": "image/png",
+        "hash": "559b36ee05e95e45b6f89e07d50e88c50a4410c8e7976f536f7caf5bca362219",
+        "width": 120,
+        "height": 80
+      },
+      {
+        "id": 8,
+        "source": "orientado.JFIF",
+        "mime": "image/jpeg",
+        "hash": "fff29cb4fb7b8395444c9b634f4432bf634c97d3cb86f859882e8d61b3641db9",
+        "width": 80,
+        "height": 120
+      }
+    ],
+    "reopenedBeforeBackup": true,
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "4fb8b008-ba18-4ca1-8fa4-9e43749d2f17",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 18644,
+      "newPid": 16432
+    },
+    "exports": 16,
+    "indicators": [
+      {
+        "indicator": "revenue",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "sales",
+        "official": 1,
+        "dashboard": "1",
+        "xlsx": 1,
+        "pdf": 1,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "result",
+        "official": 21000,
+        "dashboard": "R$ 210,00",
+        "xlsx": 21000,
+        "pdf": 21000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "margin",
+        "official": 7000,
+        "dashboard": "70,00%",
+        "xlsx": 7000,
+        "pdf": 7000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "ticket",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Coorte atual"
+      },
+      {
+        "indicator": "receipts",
+        "official": 25000,
+        "dashboard": "R$ 250,00",
+        "xlsx": 25000,
+        "pdf": 25000,
+        "temporal": "Fluxo financeiro"
+      },
+      {
+        "indicator": "debt",
+        "official": 5000,
+        "dashboard": "R$ 50,00",
+        "xlsx": 5000,
+        "pdf": 5000,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "overdue",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "refund",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "stock-value",
+        "official": 40000,
+        "dashboard": "R$ 400,00",
+        "xlsx": 40000,
+        "pdf": 40000,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-units",
+        "official": 23,
+        "dashboard": "23",
+        "xlsx": 23,
+        "pdf": 23,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-empty",
+        "official": 6,
+        "dashboard": "6",
+        "xlsx": 6,
+        "pdf": 6,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-low",
+        "official": 4,
+        "dashboard": "4",
+        "xlsx": 4,
+        "pdf": 4,
+        "temporal": "Posição atual global"
+      }
+    ]
+  },
+  {
+    "mode": "http",
+    "root": "<repo>\\.local-data\\test\\ui-backup-PXjpxz",
+    "archive": "<repo>\\.local-data\\test\\pre52b-outputs-wgQ0x2\\MNR Teste + @.mnrbackup",
+    "archiveSha256": "d6cd3194a1623d8bdf9c3c36cb3c548b6397de39fa80fbc15516bead69bc797f",
+    "photos": [
+      {
+        "id": 7,
+        "source": "transparente.webp",
+        "mime": "image/png",
+        "hash": "559b36ee05e95e45b6f89e07d50e88c50a4410c8e7976f536f7caf5bca362219",
+        "width": 120,
+        "height": 80
+      },
+      {
+        "id": 8,
+        "source": "orientado.JFIF",
+        "mime": "image/jpeg",
+        "hash": "fff29cb4fb7b8395444c9b634f4432bf634c97d3cb86f859882e8d61b3641db9",
+        "width": 80,
+        "height": 120
+      }
+    ],
+    "reopenedBeforeBackup": true,
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "49222777-307f-41d0-91f1-4021ae450071",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 9512,
+      "newPid": 16372
+    },
+    "exports": 16,
+    "indicators": [
+      {
+        "indicator": "revenue",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "sales",
+        "official": 1,
+        "dashboard": "1",
+        "xlsx": 1,
+        "pdf": 1,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "result",
+        "official": 21000,
+        "dashboard": "R$ 210,00",
+        "xlsx": 21000,
+        "pdf": 21000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "margin",
+        "official": 7000,
+        "dashboard": "70,00%",
+        "xlsx": 7000,
+        "pdf": 7000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "ticket",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Coorte atual"
+      },
+      {
+        "indicator": "receipts",
+        "official": 25000,
+        "dashboard": "R$ 250,00",
+        "xlsx": 25000,
+        "pdf": 25000,
+        "temporal": "Fluxo financeiro"
+      },
+      {
+        "indicator": "debt",
+        "official": 5000,
+        "dashboard": "R$ 50,00",
+        "xlsx": 5000,
+        "pdf": 5000,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "overdue",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "refund",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "stock-value",
+        "official": 40000,
+        "dashboard": "R$ 400,00",
+        "xlsx": 40000,
+        "pdf": 40000,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-units",
+        "official": 23,
+        "dashboard": "23",
+        "xlsx": 23,
+        "pdf": 23,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-empty",
+        "official": 6,
+        "dashboard": "6",
+        "xlsx": 6,
+        "pdf": 6,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-low",
+        "official": 4,
+        "dashboard": "4",
+        "xlsx": 4,
+        "pdf": 4,
+        "temporal": "Posição atual global"
+      }
+    ]
+  },
+  {
+    "mode": "package",
+    "root": "<repo>\\.local-data\\test\\ui-backup-qeMrNQ\\MNR Software\\MNR Perfumes",
+    "archive": "<repo>\\.local-data\\test\\pre52b-outputs-XHTgSy\\MNR Teste + @.mnrbackup",
+    "archiveSha256": "f302756a1c9218685e0d80a13686d797f86760f610aa930ef49afee4bf5ce187",
+    "photos": [
+      {
+        "id": 7,
+        "source": "transparente.webp",
+        "mime": "image/png",
+        "hash": "559b36ee05e95e45b6f89e07d50e88c50a4410c8e7976f536f7caf5bca362219",
+        "width": 120,
+        "height": 80
+      },
+      {
+        "id": 8,
+        "source": "orientado.JFIF",
+        "mime": "image/jpeg",
+        "hash": "fff29cb4fb7b8395444c9b634f4432bf634c97d3cb86f859882e8d61b3641db9",
+        "width": 80,
+        "height": 120
+      }
+    ],
+    "reopenedBeforeBackup": true,
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "fb9bfc74-f020-4f45-aa8b-c48e6f03d9b8",
+      "startupErrors": 0
+    },
+    "processes": {
+      "oldPid": 7868,
+      "newPid": 17852
+    },
+    "exports": 16,
+    "indicators": [
+      {
+        "indicator": "revenue",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "sales",
+        "official": 1,
+        "dashboard": "1",
+        "xlsx": 1,
+        "pdf": 1,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "result",
+        "official": 21000,
+        "dashboard": "R$ 210,00",
+        "xlsx": 21000,
+        "pdf": 21000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "margin",
+        "official": 7000,
+        "dashboard": "70,00%",
+        "xlsx": 7000,
+        "pdf": 7000,
+        "temporal": "Fluxo comercial"
+      },
+      {
+        "indicator": "ticket",
+        "official": 30000,
+        "dashboard": "R$ 300,00",
+        "xlsx": 30000,
+        "pdf": 30000,
+        "temporal": "Coorte atual"
+      },
+      {
+        "indicator": "receipts",
+        "official": 25000,
+        "dashboard": "R$ 250,00",
+        "xlsx": 25000,
+        "pdf": 25000,
+        "temporal": "Fluxo financeiro"
+      },
+      {
+        "indicator": "debt",
+        "official": 5000,
+        "dashboard": "R$ 50,00",
+        "xlsx": 5000,
+        "pdf": 5000,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "overdue",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "refund",
+        "official": 0,
+        "dashboard": "R$ 0,00",
+        "xlsx": 0,
+        "pdf": 0,
+        "temporal": "Posição atual"
+      },
+      {
+        "indicator": "stock-value",
+        "official": 40000,
+        "dashboard": "R$ 400,00",
+        "xlsx": 40000,
+        "pdf": 40000,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-units",
+        "official": 23,
+        "dashboard": "23",
+        "xlsx": 23,
+        "pdf": 23,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-empty",
+        "official": 6,
+        "dashboard": "6",
+        "xlsx": 6,
+        "pdf": 6,
+        "temporal": "Posição atual global"
+      },
+      {
+        "indicator": "stock-low",
+        "official": 4,
+        "dashboard": "4",
+        "xlsx": 4,
+        "pdf": 4,
+        "temporal": "Posição atual global"
+      }
+    ]
+  }
+]

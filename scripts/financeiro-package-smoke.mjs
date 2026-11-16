@@ -15,7 +15,7 @@ const ids = seedFinanceiro(db),
   before = snapshot(db);
 async function run(reopen = false) {
   const child = spawn(
-    resolve('release/win-unpacked/MNR Perfumes.exe'),
+    resolve('release/win-unpacked/MNR Gestao.exe'),
     ['--remote-debugging-port=19231'],
     {
       cwd: isolated,

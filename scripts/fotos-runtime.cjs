@@ -9,6 +9,7 @@ const { createCatalogService } = require('../dist/electron/services/catalogos.js
 const { createFotoService } = require('../dist/electron/services/fotos.js');
 const { normalizeFoto } = require('../dist/electron/services/foto-codec.js');
 const { registerFotos } = require('../dist/electron/ipc/fotos.js');
+const { CANAIS_FOTOS } = require('../dist/shared/fotos.js');
 mkdirSync('.local-data/test', { recursive: true });
 const directory = mkdtempSync(resolve('.local-data/test/fotos-runtime-'));
 app.setPath('userData', directory);
@@ -61,7 +62,7 @@ app
     bomb.writeUInt32BE(9000, 16);
     assert.throws(
       () => normalizeFoto(bomb),
-      (e) => e.code === 'PHOTO_INVALID',
+      (e) => e.code === 'PHOTO_DIMENSIONS',
     );
     const path = join(directory, 'photo.png');
     writeFileSync(path, image.toPNG());
@@ -77,6 +78,40 @@ app
     const url = 'data:text/html,<h1>Isolated photo test</h1>';
     registerFotos(window, url, photos);
     await window.loadURL(url);
+    const handlers = new Map();
+    registerFotos(window, url, photos, {
+      handle: (channel, handler) => handlers.set(channel, handler),
+    });
+    const trusted = { sender: window.webContents, senderFrame: window.webContents.mainFrame };
+    assert.equal(
+      (await handlers.get(CANAIS_FOTOS.selecionar)(trusted, { path: 'C:/arbitrary.jpg' })).error
+        .code,
+      'VALIDATION',
+    );
+    assert.equal(
+      (
+        await handlers.get(CANAIS_FOTOS.obter)(trusted, {
+          produtoId: p.id,
+          variante: 'imagem',
+          path: 'C:/arbitrary.jpg',
+        })
+      ).error.code,
+      'VALIDATION',
+    );
+    await assert.rejects(
+      handlers.get(CANAIS_FOTOS.obter)(
+        { ...trusted, senderFrame: { url } },
+        { produtoId: p.id, variante: 'imagem' },
+      ),
+      /não autorizada/,
+    );
+    await assert.rejects(
+      handlers.get(CANAIS_FOTOS.obter)(
+        { ...trusted, sender: {} },
+        { produtoId: p.id, variante: 'imagem' },
+      ),
+      /não autorizada/,
+    );
     const invoke = (expression) => window.webContents.executeJavaScript(expression);
     dialog.showOpenDialog = async () => ({ canceled: true, filePaths: [] });
     assert.deepEqual(await invoke('window.mnrApi.fotos.selecionar()'), { ok: true, data: null });
@@ -110,7 +145,7 @@ app
     writeFileSync(path, 'fake .png');
     assert.equal((await invoke('window.mnrApi.fotos.selecionar()')).error.code, 'PHOTO_INVALID');
     writeFileSync(path, Buffer.alloc(10 * 1024 * 1024 + 1));
-    assert.equal((await invoke('window.mnrApi.fotos.selecionar()')).error.code, 'PHOTO_INVALID');
+    assert.equal((await invoke('window.mnrApi.fotos.selecionar()')).error.code, 'PHOTO_SIZE');
     await window.loadURL('data:text/html,<h1>Untrusted</h1>');
     await assert.rejects(
       invoke(`window.mnrApi.fotos.obter({produtoId:${p.id},variante:'imagem'})`),

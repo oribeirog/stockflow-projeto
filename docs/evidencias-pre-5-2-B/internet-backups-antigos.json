@@ -1,0 +1,32 @@
+[
+  {
+    "schema": 5,
+    "commit": "026daa0",
+    "archiveSha256": "37483776f676ba1496f22bd286f075d8587c42229af9a54dabdf931b2fe27627",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "bd2cdcc8-5121-4742-90d6-e84f241a828f",
+      "startupErrors": 0
+    },
+    "exports": 16
+  },
+  {
+    "schema": 6,
+    "commit": "d359480",
+    "archiveSha256": "703cfa9f1adaead704577f6412933b4b43a83843ac2492ac9e753406a77811e3",
+    "states": {
+      "firstAutomaticOpening": "A",
+      "secondManualOpening": "A",
+      "exclusiveBAbsent": true,
+      "protectionExactlyB": true,
+      "pendingAbsent": true,
+      "activeId": "55d8bc57-8879-4be1-b81a-11cdb38fb142",
+      "startupErrors": 0
+    },
+    "exports": 16
+  }
+]

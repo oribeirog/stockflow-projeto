@@ -91,7 +91,7 @@ try {
   }
   for (const reopen of [false, true]) {
     const child = spawn(
-      packaged ? resolve('release/win-unpacked/MNR Perfumes.exe') : electron,
+      packaged ? resolve('release/win-unpacked/MNR Gestao.exe') : electron,
       [...(packaged ? [] : ['.']), '--inspect=19238', '--remote-debugging-port=19239'],
       {
         cwd: packaged ? root : process.cwd(),

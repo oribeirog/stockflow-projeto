@@ -2,7 +2,7 @@
   "name": "mnr-perfumes",
   "version": "0.1.0",
   "private": true,
-  "description": "Aplicativo desktop local MNR Perfumes",
+  "description": "Aplicativo desktop local MNR Gestão",
   "author": "MNR Software",
   "license": "UNLICENSED",
   "main": "dist/electron/main/index.js",
@@ -42,7 +42,9 @@
     "test:backup-restauracao": "npm run build && node --test tests/backup-restauracao.test.cjs tests/startup-lifecycle.test.cjs && node scripts/backup-restauracao-smoke.mjs && node scripts/backup-restauracao-smoke.mjs --supervised-development",
     "benchmark:backup-restauracao": "node scripts/benchmark-backup-restauracao.mjs",
     "test:catalogo-generalista": "npm run build && node --test tests/catalogo-generalista.test.cjs && node scripts/backup-restauracao-smoke.mjs --catalogo-generalista && node scripts/backup-restauracao-smoke.mjs --legacy-schema5",
-    "benchmark:catalogo-generalista": "npm run build:electron && node scripts/benchmark-catalogo-generalista.cjs"
+    "benchmark:catalogo-generalista": "npm run build:electron && node scripts/benchmark-catalogo-generalista.cjs",
+    "test:fotos-compatibilidade": "npm run build && node --test tests/fotos.test.cjs tests/fotos-runtime.test.cjs tests/fotos-compatibilidade.test.cjs && node scripts/backup-restauracao-smoke.mjs --fotos",
+    "test:fotos-internet": "npm run build && node --test tests/fotos.test.cjs tests/fotos-runtime.test.cjs tests/fotos-compatibilidade.test.cjs tests/fotos-internet.test.cjs && node scripts/backup-restauracao-smoke.mjs --fotos-internet"
   },
   "dependencies": {
     "@angular/common": "22.2.4",
@@ -53,6 +55,7 @@
     "better-sqlite3": "13.0.3",
     "exceljs": "4.4.0",
     "rxjs": "7.8.2",
+    "sharp": "0.35.5",
     "tslib": "2.8.1",
     "yauzl": "3.4.0",
     "yazl": "3.3.1"

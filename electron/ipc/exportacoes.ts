@@ -68,7 +68,7 @@ export function registerExportacoes(
   const execute = criarExportador({
     escolher: async (nome, formato) => {
       const r = await dialog.showSaveDialog(window, {
-        title: 'Salvar relatório MNR Perfumes',
+        title: 'Salvar relatório MNR Gestão',
         defaultPath: nome,
         filters: [
           {

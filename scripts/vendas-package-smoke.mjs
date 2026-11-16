@@ -9,7 +9,7 @@ const root = resolve('.local-data/test');
 mkdirSync(root, { recursive: true });
 const isolated = process.argv[2] ?? mkdtempSync(resolve(root, 'vendas-package-'));
 const child = spawn(
-  resolve('release/win-unpacked/MNR Perfumes.exe'),
+  resolve('release/win-unpacked/MNR Gestao.exe'),
   ['--remote-debugging-port=19230'],
   {
     cwd: isolated,
