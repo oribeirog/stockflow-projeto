@@ -37,7 +37,24 @@ export interface BackupDependencies {
   openProtections: () => Promise<void>;
   warning?: string;
 }
+export interface PublishedBackup {
+  path: string;
+  name: string;
+  createdAt: string;
+  size: number;
+  sha256: string;
+  identity: { dev: number; ino: number; birthtimeMs: number };
+  kind: 'manual' | 'automatico';
+}
+export interface BackupEvents {
+  prepared(proof: PublishedBackup): Promise<void>;
+  completed(proof: PublishedBackup): Promise<void>;
+}
 export class BackupController {
+  private events?: BackupEvents;
+  setEvents(events: BackupEvents) {
+    this.events = events;
+  }
   private busy = false;
   private phase = 'Pronto';
   private review?: { id: string; path: string; hash: string; summary: BackupReview };
@@ -54,6 +71,9 @@ export class BackupController {
   }
   get occupied() {
     return this.busy || this.restarting;
+  }
+  get reviewing() {
+    return !!this.review;
   }
   async status(): Promise<BackupStatus> {
     await initializeRecovery(this.deps.root);
@@ -84,7 +104,7 @@ export class BackupController {
     await this.discardSet(id);
     return null;
   }
-  private async destination(selected: string) {
+  async destination(selected: string) {
     const target = resolve(extname(selected) ? selected : selected + '.mnrbackup'),
       name = basename(target),
       parent = await realpath(dirname(target));
@@ -103,15 +123,29 @@ export class BackupController {
     }
     return { target: join(parent, name), parent, name };
   }
-  async create() {
+  create() {
+    return this.createUsing(
+      () =>
+        this.deps.chooseBackup(
+          `MNR-Gestao-${new Date().toISOString().replace(/[:.]/g, '-')}.mnrbackup`,
+        ),
+      'manual',
+    );
+  }
+  // Main-only entry. Same controller, busy flag, gate, photo lock and publication.
+  createAutomatic(destination: string, kind: PublishedBackup['kind'] = 'automatico') {
+    return this.createUsing(async () => destination, kind);
+  }
+  private async createUsing(
+    choose: () => Promise<string | undefined>,
+    kind: PublishedBackup['kind'],
+  ) {
     if (this.occupied) throw new BackupError('BUSY');
     this.busy = true;
     this.phase = 'Escolhendo destino';
     let work: Awaited<ReturnType<typeof newOwnedSet>> | undefined, external: string | undefined;
     try {
-      const selected = await this.deps.chooseBackup(
-        `MNR-Gestao-${new Date().toISOString().replace(/[:.]/g, '-')}.mnrbackup`,
-      );
+      const selected = await choose();
       if (!selected) return null;
       const dest = await this.destination(selected);
       try {
@@ -146,11 +180,22 @@ export class BackupController {
         source: work.path,
         target: partial,
       });
+      const identity = await regularFile(partial);
+      const proof: PublishedBackup = {
+        path: dest.target,
+        name: dest.name,
+        createdAt: summary.criadoEm,
+        ...result,
+        identity: { dev: identity.dev, ino: identity.ino, birthtimeMs: identity.birthtimeMs },
+        kind,
+      };
+      await this.events?.prepared(proof);
       this.phase = 'Publicando o backup validado';
       await moveDurable(partial, dest.target);
       const final = await hashFile(dest.target);
       if (final.size !== result.size || final.sha256 !== result.sha256)
         throw new BackupError('PUBLISH_FAILED');
+      await this.events?.completed(proof);
       return { nome: dest.name, criadoEm: summary.criadoEm, bytes: result.size };
     } finally {
       if (external) {

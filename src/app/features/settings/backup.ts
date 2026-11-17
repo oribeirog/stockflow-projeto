@@ -3,11 +3,12 @@ import { DesktopService } from '../../core/desktop.service';
 import { Button } from '../../shared/ui/button';
 import { Card } from '../../shared/ui/card';
 import { Confirm } from '../../shared/ui/confirm';
+import { RecurringBackupSettings } from './recurring-backup';
 import type { BackupReview, BackupStatus } from '../../../../shared/backup';
 import type { Result } from '../../../../shared/contracts';
 @Component({
   selector: 'mnr-backup',
-  imports: [Button, Card, Confirm],
+  imports: [Button, Card, Confirm, RecurringBackupSettings],
   templateUrl: './backup.html',
   styleUrl: './backup.scss',
 })

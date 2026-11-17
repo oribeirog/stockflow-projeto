@@ -18,6 +18,7 @@ import { environment } from './env.mjs';
 import { connect, pause } from './exportacoes-cdp.mjs';
 import { catalogScenario } from './catalogo-generalista-scenario.mjs';
 import { fotosScenario } from './fotos-scenario.mjs';
+import { recurringScenario } from './backup-automatico-scenario.mjs';
 import { auditCheckpoint } from './consolidacao-gerencial-scenario.mjs';
 const require = createRequire(import.meta.url),
   { backupFixture } = require('../tests/helpers/backup-fixture.cjs'),
@@ -32,6 +33,7 @@ const require = createRequire(import.meta.url),
   { readArchive, inspectArchive } = require('../dist/electron/services/backup/format'),
   Database = require('better-sqlite3');
 const catalogo = process.argv.includes('--catalogo-generalista');
+const recurringMode = process.argv.includes('--backup-automatico');
 const legacyMode = process.argv.includes('--legacy-schema5');
 const internetMode = process.argv.includes('--fotos-internet');
 const photosMode = internetMode || process.argv.includes('--fotos');
@@ -84,6 +86,7 @@ let before = initialSnapshot,
   sequencesA = initialSequences,
   catalogAudit,
   photoAudit;
+let recurringAudit;
 let server,
   child,
   main,
@@ -377,6 +380,18 @@ try {
   child = spawnApp();
   await attach(child);
   let oldPid = await m('process.pid');
+  if (recurringMode)
+    recurringAudit = await recurringScenario({
+      e,
+      m,
+      until,
+      click,
+      key,
+      call,
+      mode,
+      root,
+      outputs: f.outputs,
+    });
   if (photosMode || legacy6Mode) {
     assert.equal(await m('__e.app.getName()'), 'MNR Gestão');
     assert(!/[^\x20-\x7e]/.test(await m('__e.app.userAgentFallback')));
@@ -451,6 +466,13 @@ try {
   assert.equal(stateSnapshot(db), before);
   await readArchive(archive);
   console.log('BACKUP_STEP', mode, 'archive-created');
+  if (recurringMode) {
+    const state = (await e(`window.mnrApi.backupRecorrente.estado()`)).data;
+    assert.equal(state.dias, 0);
+    assert.equal(state.devido, false);
+    assert.equal(state.ultimoBackup.tipo, 'manual');
+    recurringAudit.manualSatisfied = true;
+  }
   await capture('sucesso');
   const change = f.cycle.stockCommand({
     produtoId: f.cycle.manual.id,
@@ -558,6 +580,15 @@ try {
   await until('document.getElementById("backup-last-result")?.innerText.includes("concluída")');
   const reopenMs = performance.now() - restartAt;
   console.log('BACKUP_STEP', mode, 'actual-relaunch', oldPid, newPid);
+  if (recurringMode) {
+    await until(
+      `window.mnrApi.backupRecorrente.estado().then(r=>r.ok&&r.data.devido&&r.data.destino===${JSON.stringify(f.outputs)})`,
+    );
+    const p = JSON.parse(readFileSync(join(root, 'backup-policy/state.json'), 'utf8'));
+    assert.equal(p.id, recurringAudit.ownerId);
+    assert.equal(p.state.enabled, false);
+    recurringAudit.restoredLocalPolicy = true;
+  }
   const state = await e('window.mnrApi.backup.estado()');
   assert.equal(state.ok, true);
   assert.equal(state.data.resultado.situacao, 'restaurado');
@@ -723,6 +754,7 @@ try {
     measurements,
     catalogAudit,
     photoAudit,
+    recurringAudit,
     legacySchema5: legacyMode,
     audit,
     exports: manifest.length,
@@ -740,7 +772,7 @@ try {
     },
   };
   writeFileSync(
-    `.cache/${internetMode ? 'pre52b-internet' : photosMode ? 'pre52b-fotos' : legacy6Mode ? 'pre52b-legacy6' : legacyMode ? 'pre52a-legacy' : catalogo ? 'pre52a-catalogo' : '5-1'}-${mode}-smoke.json`,
+    `.cache/${recurringMode ? 'backup-auto' : internetMode ? 'pre52b-internet' : photosMode ? 'pre52b-fotos' : legacy6Mode ? 'pre52b-legacy6' : legacyMode ? 'pre52a-legacy' : catalogo ? 'pre52a-catalogo' : '5-1'}-${mode}-smoke.json`,
     JSON.stringify(report, null, 2),
   );
   assert(existsSync(join(recoveryPaths(root).protection, report.protection)));

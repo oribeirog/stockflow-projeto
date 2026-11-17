@@ -1,5 +1,41 @@
 # MNR Gestão
 
+## Backup recorrente por dias de uso
+
+Em **Configurações → Backup e Restauração**, selecione uma pasta para as cópias
+recorrentes. A automação vem habilitada; ao completar **três dias distintos de
+utilização**, o aplicativo solicita e, com destino disponível, executa o backup
+oficial. Reabrir várias vezes no mesmo dia conta uma vez. Dias sem uso não contam;
+se ficar aberto à meia-noite, a próxima interação registra o novo dia.
+
+Uma cópia concluída e verificada reinicia a contagem e satisfaz o dia atual.
+**Criar backup** e **Realizar backup agora** são cópias manuais: também satisfazem
+a obrigação e nunca são apagadas pela retenção automática. Desabilitar a automação
+não desabilita a contagem nem a obrigação. A tela mostra destino, dias, última
+conclusão, estado e histórico resumido.
+
+Se a mídia estiver ausente ou ocorrer erro, o aviso permanece. Reconecte a mídia,
+selecione outra pasta ou tente novamente. É possível continuar temporariamente
+uma operação urgente; o adiamento fica registrado e não equivale a backup. Não
+há bloqueio permanente de vendas por ausência de pendrive nem tentativas infinitas.
+
+A retenção conserva sete cópias automáticas verificadas por padrão, com opções
+3/7/14/30. Somente arquivos próprios identificados e conferidos entram na limpeza,
+depois de validar uma nova cópia. Manuais, desconhecidos e proteções de restauração
+são preservados. Falha de limpeza gera aviso e pode conservar cópias adicionais.
+
+Prefira mídia/unidade independente e protegida: outra pasta no mesmo disco não
+protege contra falha física desse disco. O backup não é criptografado. A configuração
+local permanece fora das gerações restauradas; depois de restaurar, uma nova cópia
+é solicitada. Não apague `backup-policy`, journals ou proteções para ocultar avisos.
+Se a configuração não puder ser verificada, preserve os arquivos, use o botão
+original **Criar backup** e solicite suporte.
+
+Teste isolado com dias simulados, sem alterar o relógio do Windows:
+`npm.cmd run test:backup-automatico`. Consulte o
+[relatório e checklist manual](docs/pre-instalador-backup-automatico.md).
+Não há serviço Windows, Agendador de Tarefas, sincronização ou nuvem.
+
 ## Pré-5.2 B — Fotografias e nome comercial
 
 MNR Gestão é o novo nome comercial do aplicativo anteriormente denominado MNR

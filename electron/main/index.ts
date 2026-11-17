@@ -9,6 +9,8 @@ import { normalizeFoto } from '../services/foto-codec';
 import { fotoDiagnostics } from '../services/foto-diagnostics';
 import { recoverAndOpen, recoveryPaths, cleanupRecoveryStaging } from '../services/backup/control';
 import { BackupController } from '../services/backup/controller';
+import { RecurringBackupService } from '../services/backup/recurring';
+import { registerRecurringBackup } from '../ipc/backup-recorrente';
 import { backupMessage } from '../services/backup/io';
 import { relaunchApplication, recordStartupError, type StartupPhase } from './lifecycle';
 protocol.registerSchemesAsPrivileged([
@@ -21,6 +23,7 @@ app.userAgentFallback = app.userAgentFallback.replaceAll('Gestão', 'Gestao');
 const paths = preparePaths();
 let db: Awaited<ReturnType<typeof openDatabase>> | undefined;
 let maintenance: BackupController | undefined;
+let recurring: RecurringBackupService | undefined;
 let startupPhase: StartupPhase = 'recovery';
 const smoke = process.env['MNR_SMOKE'] === '1';
 if (!app.requestSingleInstanceLock()) app.quit();
@@ -141,7 +144,7 @@ else
         },
       });
       window.on('close', (event) => {
-        if (maintenance?.occupied && !maintenance.restarting) {
+        if ((maintenance?.occupied || recurring?.occupied) && !maintenance?.restarting) {
           event.preventDefault();
           void dialog.showMessageBox(window, {
             type: 'info',
@@ -150,9 +153,28 @@ else
         }
       });
       registerIpc(window, db, url, photos, maintenance);
+      recurring = new RecurringBackupService({
+        root: paths.root,
+        backup: maintenance,
+        chooseFolder: async () => {
+          const r = await dialog.showOpenDialog(window, {
+            title: 'Selecionar pasta para backups recorrentes',
+            properties: ['openDirectory', 'dontAddToRecent'],
+          });
+          return r.canceled ? undefined : r.filePaths[0];
+        },
+      });
+      registerRecurringBackup(window, url, recurring);
       startupPhase = 'interface';
       await window.loadURL(opened.recovery ? url + '#/configuracoes/backup' : url);
       startupPhase = 'ready';
+      // Independent operational policy. Failure cannot become an opening/recovery error.
+      void (async () => {
+        await recurring!.start(maintenance!.status().then((result) => result.resultado));
+        await recurring!.use();
+      })().catch(() =>
+        console.warn('Política de backup indisponível; dados operacionais preservados.'),
+      );
       if (smoke) {
         if (!dev) {
           await window.webContents.debugger.attach('1.3');
@@ -293,9 +315,10 @@ else
     });
 app.on('window-all-closed', () => app.quit());
 app.on('before-quit', (event) => {
-  if (maintenance?.occupied && !maintenance.restarting) {
+  if ((maintenance?.occupied || recurring?.occupied) && !maintenance?.restarting) {
     event.preventDefault();
     return;
   }
+  recurring?.stop();
   if (db?.open) db.close();
 });

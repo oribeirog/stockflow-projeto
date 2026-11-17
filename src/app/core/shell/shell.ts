@@ -11,10 +11,11 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { navigation } from '../navigation';
 import { Icon } from '../../shared/ui/icon';
+import { BackupNotice } from '../../shared/ui/backup-notice';
 
 @Component({
   selector: 'mnr-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, BackupNotice],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })

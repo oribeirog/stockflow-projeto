@@ -169,6 +169,13 @@ export async function spaceFor(directory: string, bytes: number) {
 export function backupMessage(error: unknown) {
   const raw = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
   const messages: Record<string, string> = {
+    POLICY_STORAGE:
+      'A política local de backup não pôde ser gravada ou verificada. Os arquivos foram preservados; crie uma cópia manual e solicite suporte.',
+    DESTINATION_REQUIRED: 'Selecione uma pasta segura para os backups recorrentes.',
+    DESTINATION_CHANGED:
+      'A pasta ou unidade configurada mudou. Selecione novamente a mídia correta pelo aplicativo.',
+    POLICY_LIMIT:
+      'O catálogo de cópias automáticas atingiu o limite de segurança. Cópias existentes foram preservadas; verifique a retenção antes de continuar.',
     VALIDATION: 'Comando inválido. Selecione o backup e confira a revisão antes de confirmar.',
     INVALID_BACKUP:
       'O arquivo não é um backup MNR válido e completo, ou foi alterado. Os dados atuais foram preservados.',

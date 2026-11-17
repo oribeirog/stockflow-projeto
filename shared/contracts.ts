@@ -1,4 +1,5 @@
 import type { VendasApi } from './vendas-ipc';
+import type { RecurringBackupApi } from './backup-policy';
 import type { ExportacoesApi } from './exportacoes';
 import type { RelatoriosApi } from './relatorios-ipc';
 import type { FinanceiroApi } from './financeiro-ipc';
@@ -19,6 +20,7 @@ export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; error: { code: string; message: string } };
 export interface DesktopApi {
+  backupRecorrente: RecurringBackupApi;
   backup: BackupApi;
   estornosEstoque: EstornosEstoqueApi;
   correcoesCompras: CorrecoesComprasApi;

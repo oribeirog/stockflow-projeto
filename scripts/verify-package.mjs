@@ -1,7 +1,7 @@
 // Read-only inspection of the final ASAR; test artifacts must never ship.
 import assert from 'node:assert/strict';
 import { normalize } from 'node:path';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { listPackage, extractFile } from '@electron/asar';
 const archive = process.argv[2] ?? 'release/win-unpacked/resources/app.asar';
 const files = listPackage(archive).map((file) => file.replaceAll('\\', '/'));
@@ -43,6 +43,31 @@ assert(
 assert(files.includes('/dist/electron/services/exportacoes/worker.js'), 'Export worker missing');
 assert(files.includes('/node_modules/exceljs/excel.js'), 'XLSX library missing');
 assert(files.includes('/dist/electron/services/backup/worker.js'), 'Backup worker missing');
+for (const file of [
+  '/dist/shared/backup-policy.js',
+  '/dist/electron/ipc/backup-recorrente.js',
+  '/dist/electron/services/backup/policy-store.js',
+  '/dist/electron/services/backup/recurring.js',
+])
+  assert(files.includes(file), 'Recurring backup module missing: ' + file);
+for (const file of [
+  'dist/shared/backup-policy.js',
+  'dist/electron/main/index.js',
+  'dist/electron/preload/index.cjs',
+  'dist/electron/ipc/backup-recorrente.js',
+  'dist/electron/services/backup/controller.js',
+  'dist/electron/services/backup/policy-store.js',
+  'dist/electron/services/backup/recurring.js',
+])
+  assert.deepEqual(
+    extractFile(archive, normalize(file)),
+    readFileSync(file),
+    'Stale packaged module: ' + file,
+  );
+for (const file of files.filter((file) => /^\/dist\/.*\.(js|cjs)$/.test(file))) {
+  const source = extractFile(archive, normalize(file.slice(1))).toString();
+  assert(!source.includes('__policyDay'), 'Test clock shipped: ' + file);
+}
 assert(files.includes('/node_modules/yauzl/index.js'), 'Backup ZIP reader missing');
 assert(files.includes('/node_modules/yazl/index.js'), 'Backup ZIP writer missing');
 assert(

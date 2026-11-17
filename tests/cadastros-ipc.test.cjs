@@ -284,6 +284,7 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
   });
   assert.deepEqual(Object.keys(exposed).sort(), [
     'backup',
+    'backupRecorrente',
     'cadastros',
     'compras',
     'correcoes',
@@ -298,6 +299,18 @@ test('bundled preload exposes only the approved fixed namespaces and cadastral A
     'vendas',
   ]);
   const { CANAIS_BACKUP } = require('../dist/shared/backup');
+  const { CANAIS_BACKUP_RECORRENTE } = require('../dist/shared/backup-policy');
+  assert.deepEqual(
+    Object.keys(exposed.backupRecorrente).sort(),
+    Object.keys(CANAIS_BACKUP_RECORRENTE).sort(),
+  );
+  for (const [method, channel] of Object.entries(CANAIS_BACKUP_RECORRENTE)) {
+    const input = ['configurar', 'adiar'].includes(method);
+    if (input) await exposed.backupRecorrente[method]({});
+    else await exposed.backupRecorrente[method]();
+    assert.equal(calls.at(-1).channel, channel);
+    assert.equal(calls.at(-1).args.length, input ? 1 : 0);
+  }
   assert.deepEqual(Object.keys(exposed.backup).sort(), Object.keys(CANAIS_BACKUP).sort());
   for (const [method, channel] of Object.entries(CANAIS_BACKUP)) {
     const withInput = ['descartar', 'restaurar'].includes(method);

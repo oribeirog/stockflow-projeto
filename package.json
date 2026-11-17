@@ -44,7 +44,8 @@
     "test:catalogo-generalista": "npm run build && node --test tests/catalogo-generalista.test.cjs && node scripts/backup-restauracao-smoke.mjs --catalogo-generalista && node scripts/backup-restauracao-smoke.mjs --legacy-schema5",
     "benchmark:catalogo-generalista": "npm run build:electron && node scripts/benchmark-catalogo-generalista.cjs",
     "test:fotos-compatibilidade": "npm run build && node --test tests/fotos.test.cjs tests/fotos-runtime.test.cjs tests/fotos-compatibilidade.test.cjs && node scripts/backup-restauracao-smoke.mjs --fotos",
-    "test:fotos-internet": "npm run build && node --test tests/fotos.test.cjs tests/fotos-runtime.test.cjs tests/fotos-compatibilidade.test.cjs tests/fotos-internet.test.cjs && node scripts/backup-restauracao-smoke.mjs --fotos-internet"
+    "test:fotos-internet": "npm run build && node --test tests/fotos.test.cjs tests/fotos-runtime.test.cjs tests/fotos-compatibilidade.test.cjs tests/fotos-internet.test.cjs && node scripts/backup-restauracao-smoke.mjs --fotos-internet",
+    "test:backup-automatico": "npm run build && node --test tests/backup-automatico.test.cjs tests/cadastros-ipc.test.cjs && node scripts/backup-restauracao-smoke.mjs --backup-automatico"
   },
   "dependencies": {
     "@angular/common": "22.2.4",
